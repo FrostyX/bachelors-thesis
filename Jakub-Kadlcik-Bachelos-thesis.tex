@@ -45,9 +45,9 @@
 		packages = seznam balíčků modifikovaných od spuštění systému
 		processes = seznam všech spuštěných procesů
 		for package in packages:
-			for process in processes:
-				if množinový_průnik(package_files, process_files) != prázdná množina
-					print process		
+		    for process in processes:
+		        if množinový_průnik(package_files, process_files) != prázdná množina
+		            print process
 		\end{verbatim}
 		
 		Algoritmus na první pohled vypadá velmi jednoduše a zřejmě vypíše korektní množinu procesů. Mohlo by se tedy zdát, že máme hotovo, nicméně jsme nevzali v úvahu časovou složitost takového algoritmu. Ta je bohužel velmi nepříznivá, což by činilo vyhledávání útrpně pomalé.
@@ -63,10 +63,10 @@
 		packages = seznam balíčků modifikovaných od spuštění systému
 		processes_files = BTree(...)
 		for package in packages:
-			for package_file in package_files:
-				processes = processes_files[package_file]
-				if processes != prázdná množina:
-					print processes		
+		    for package_file in package_files:
+		        processes = processes_files[package_file]
+		        if processes != prázdná množina:
+		            print processes
 		\end{verbatim}
 		
 		% Výpočet složitosti algoritmu
