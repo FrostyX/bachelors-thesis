@@ -89,11 +89,35 @@
 
 		Nás ovšem zajímá pouze práce s procesy.
 
-		% Základní kód pro práci s procesy
+		\begin{verbatim}
+		>>> import psutil
+		>>> p = psutil.Process(pid)
+
+		>>> p.pid
+		13005
+
+		>>> p.name
+		'gvim'
+
+		>>> p.username
+		'frostyx'
+
+		>>> p.create_time
+		1408897172.2
+
+		>>> p
+		<psutil.Process(pid=13005, name='gvim') at 3071122124>
+
+		\end{verbatim}
 		
 		Pokročilejší funkcí může být zjištění souborů, které proces využívá.
 		
-		% Ukázka mmaps.		
+		\begin{verbatim}
+		import psutil
+		p = psutil.Process(pid)
+		for mmap in p.get_memory_maps():
+		    print mmap.path
+		\end{verbatim}
 				
 		\subsection{Práce s balíčky}
 		\subsection{DNF plugin}
