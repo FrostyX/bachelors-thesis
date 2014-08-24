@@ -82,7 +82,19 @@
 	
 	\section{Implementace}
 		\subsection{Úvod}
+		Projekt je vyvíjen pod názvem tracer. Požadovalo se, aby byl implementován v jazyce Python. V současné době se nejčastěji pouužívá Python2.7, který lze nalézt na všech distribucích a pro který existuje velká spousta uživatelských knihoven. Z tohoto důvodu jsem zvolil právě verzi 2.7, přestože aktuální stabilní verzí je 3.x.		
+		
 		\subsection{Práce s procesy}
+		Správu procesů v jazyce python zajišťuje balík psutil, který je ve Fedoře k dispozici pod názvem python-psutil. Umožňuje přístup ke všem atributům procesu, které lze v linuxových systémech zjistit. Mimo to poskytuje rozhraní pro získávání informací o paměti, procesoru, pevných discích a síťových rozhraních.		
+
+		Nás ovšem zajímá pouze práce s procesy.
+
+		% Základní kód pro práci s procesy
+		
+		Pokročilejší funkcí může být zjištění souborů, které proces využívá.
+		
+		% Ukázka mmaps.		
+				
 		\subsection{Práce s balíčky}
 		\subsection{DNF plugin}
 		\subsection{Testování}
