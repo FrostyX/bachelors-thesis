@@ -36,6 +36,50 @@
 	Tato práce si klade za cíl vytvořit aplikaci, která bude řešit dříve zmíněný problém. Aplikace by měla najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést. Aplikace by měla disponovat textovým uživatelským rozhraním a mělo by být možné ji používat jako modul přímo v balíčkovacím systému DNF\@. Vývoj by měl probíhat pod otevřenou licencí a na libovolném veřejném úložišti. Dále by měl být k dispozici instalační balíček pro distribuci Fedora.
 
 	\section{Analýza}
+	Rozložme si problém na menší části a projděme je jednu po druhé. Stěžení částí aplikace má být vypsání jistého seznamu aplikací. Nejdříve se tedy zaměříme na jeho získání. Dále potřebujeme konstrukt, který zjistí informace o  dané aplikaci. Nakonec nás bude zajímat zjištění způsobu, jak aplikaci restartovat.
+	
+		\subsection{Získání seznamu ovlivněných aplikací}
+		Stěžejní část aplikace. [..] Nabízí se přímočaré řešení. Zjistit seznam balíčků, které byly od spuštění systému modifikovány. Následně pro každý balíček zjistit seznam souborů, které poskytuje. Poté zjistit, které procesy využívají některý z množiny modifikovaných souborů. Tedy pro každý spuštěný proces zjistit seznam souborů jež využívá a najít shodu s modifikovanými balíčky.
+		
+		\begin{verbatim}
+		packages = seznam balíčků modifikovaných od spuštění systému
+		processes = seznam všech spuštěných procesů
+		for package in packages:
+			for process in processes:
+				if množinový_průnik(package_files, process_files) != prázdná množina
+					print process		
+		\end{verbatim}
+		
+		Algoritmus na první pohled vypadá velmi jednoduše a zřejmě vypíše korektní množinu procesů. Mohlo by se tedy zdát, že máme hotovo, nicméně jsme nevzali v úvahu časovou složitost takového algoritmu. Ta je bohužel velmi nepříznivá, což by činilo vyhledávání útrpně pomalé.
+		
+		% vypočítání složitosti
+		% Vysvětlení a ukázka kódu množinového průniku
+		
+		Klíčem k rychlejšímu získání chtěných procesů je zvolení vhodné vyhledávací struktury pro data. Vezměme si fakt, že mnoho procesů využívá stejné soubory (knihovny, etc). Naivní algoritmus tedy jeden konkrétní soubor musí ověřit hned několikrát - pro každý proces, který jej využívá.
+		
+		Tento nedostatek můžeme řešit tak, že nebudueme zkoumat proces po procesu, ale místo toho vezmeme množinu všech\footnote{} souborů v paměti, přičemž ke každému si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, je budeme ukládat do vyhledávacího stromu typu BTree.
+		
+		\begin{verbatim}
+		packages = seznam balíčků modifikovaných od spuštění systému
+		processes_files = BTree(...)
+		for package in packages:
+			for package_file in package_files:
+				processes = processes_files[package_file]
+				if processes != prázdná množina:
+					print processes		
+		\end{verbatim}
+		
+		% Výpočet složitosti algoritmu
+		
+		\subsection{Informace o aplikaci}
+		Rozlišujme dva druhy informací. Pracujeme se spuštěnými aplikacemi, v tom případě lze hovořit o procesech spuštěných v systému. Každý proces má nějaký PID\footnote{}, spustil jej nějaký uživatel, běží určitou dobu, etc.
+		
+		Dále lze uvažovat, že každá\footnote{Každá standardně nainstalovaná} aplikace je poskytována některým balíčkem. Každý takový balíček poskytuje informace o tom, k čemu slouží, v jaké je verzi, jak dlouho je nainstalován, etc.
+		
+		Lze předpokládat, že informace o procesech budou získatelné jednotným způsobem napříč celým spektrem linuxových distribucí, avšak informace o balíčku budou závislé na jeho typu.
+		
+		\subsection{Jak aplikaci restartovat?} 
+	
 	\section{Implementace}
 		\subsection{Testování}
 
