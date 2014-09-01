@@ -89,14 +89,12 @@
 		\subsection{Získání seznamu ovlivněných aplikací}
 		Stěžejní část aplikace. [..] Nabízí se přímočaré řešení. Zjistit seznam balíčků, které byly od spuštění systému modifikovány. Následně pro každý balíček zjistit seznam souborů, které poskytuje. Poté zjistit, které procesy využívají některý z množiny modifikovaných souborů. Tedy pro každý spuštěný proces zjistit seznam souborů jež využívá a najít shodu s modifikovanými balíčky.
 
-		\begin{verbatim}
-		packages = seznam balíčků modifikovaných od spuštění systému
-		processes = seznam všech spuštěných procesů
-		for package in packages:
-		    for process in processes:
-		        if množinový_průnik(package_files, process_files) != prázdná množina
-		            print process
-		\end{verbatim}
+		\lstinputlisting
+		[
+			language={Python},
+			label=naive-tracer-algorithm,
+			caption={Algoritmus pro vypsání seznamu ovlivněných aplikací}
+		]{sources/naive_tracer_algorithm.py}
 
 		Algoritmus na první pohled vypadá velmi jednoduše a zřejmě vypíše korektní množinu procesů. Mohlo by se tedy zdát, že máme hotovo, nicméně jsme nevzali v úvahu časovou složitost takového algoritmu. Ta je bohužel velmi nepříznivá, což by činilo vyhledávání útrpně pomalé.
 
@@ -107,15 +105,12 @@
 
 		Tento nedostatek můžeme řešit tak, že nebudueme zkoumat proces po procesu, ale místo toho vezmeme množinu všech\footnote{} souborů v paměti, přičemž ke každému si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, je budeme ukládat do vyhledávacího stromu typu BTree.
 
-		\begin{verbatim}
-		packages = seznam balíčků modifikovaných od spuštění systému
-		processes_files = BTree(...)
-		for package in packages:
-		    for package_file in package_files:
-		        processes = processes_files[package_file]
-		        if processes != prázdná množina:
-		            print processes
-		\end{verbatim}
+		\lstinputlisting
+		[
+			language={Python},
+			label=tracer-algorithm,
+			caption={Vylepšený algoritmus pro vypsání seznamu ovlivněných aplikací}
+		]{sources/tracer_algorithm.py}
 
 		% Výpočet složitosti algoritmu
 
@@ -137,53 +132,35 @@
 
 		Nás ovšem zajímá pouze práce s procesy.
 
-		\begin{verbatim}
-		>>> import psutil
-		>>> p = psutil.Process(pid)
-
-		>>> p.pid
-		13005
-
-		>>> p.name
-		'gvim'
-
-		>>> p.username
-		'frostyx'
-
-		>>> p.create_time
-		1408897172.2
-
-		>>> p
-		<psutil.Process(pid=13005, name='gvim') at 3071122124>
-
-		\end{verbatim}
+		\lstinputlisting
+		[
+			language={Python},
+			label=psutil,
+			caption={Základní práce s procesy v psutil}
+		]{sources/psutil.py}
 
 		Pokročilejší funkcí může být zjištění souborů, které proces využívá.
 
-		\begin{verbatim}
-		import psutil
-		p = psutil.Process(pid)
-		for mmap in p.get_memory_maps():
-		    print mmap.path
-		\end{verbatim}
+		\lstinputlisting
+		[
+			language={Python},
+			label=process-files,
+			caption={Výpis všech souborů, kter proces využívá}
+		]{sources/process_files.py}
 
 		Výpis tohoto ukázkového kódů může vypadat následovně:
-		\begin{verbatim}
-			/usr/lib/libxcb-dri2.so.0.0.0
-			/usr/lib/python2.7/lib-dynload/array.so
-			/usr/lib/gio/modules/libgvfsdbus.so
-			/usr/lib/libgio-2.0.so.0.4000.0
-			/home/frostyx/.cache/fontconfig/c930fb9cfe873e28f677c512e5c2fd74-le32d4.cache-4
-			/usr/lib/python2.7/lib-dynload/datetime.so
-			/usr/lib/libXt.so.6.0.0
-			...
-		\end{verbatim}
+
+		\lstinputlisting
+		[
+			label=process-files-output,
+			caption={Výpis všech souborů, kter proces využívá}
+		]{sources/process_files_output}
 
 		\subsection{Práce s balíčky}
 			Především nás budou zajímat tři operace. Zjištění seznamu balíčků, které byly od daného času modifikovány, zjištění základních informací o balíčku jako například název, popis, etc a nakonec zjištění souborů, které balíček poskytuje.
 
 			\subsubsection{Historie balíčků}
-			Balíčkovacím systémem distribuce Fedora je program zvaný DNF. Pro uchovávání historie prováděných operací s balíčky, využívá sqlite databázi v adresáři /var/lib/dnf/history. Z ní se můžeme dozvědět, který balíček byl nainstalován, či odinstalován a kdy.
+			Balíčkovacím systémem distribuce Fedora je program zvaný DNF\@. Pro uchovávání historie prováděných operací s balíčky, využívá sqlite databázi v adresáři /var/lib/dnf/history. Z ní se můžeme dozvědět, který balíček byl nainstalován, či odinstalován a kdy.
 
 			% Obrázek databáze
 
@@ -191,55 +168,41 @@
 			Pro zjištění všech informací o balíčku můžeme použít příkaz
 
 			% Pozor, balíček musí být nainstalován
-			\begin{verbatim}
+			\begin{lstlisting}
 				rpm -qi nazev_balicku
-			\end{verbatim}
+			\end{lstlisting}
 
 			Výpis těch zajímavějších můžeme vidět zde
-			\begin{verbatim}
-				[frostyx@localhost ~]$ rpm -qi vim-X11
-				Name        : vim-X11
-				Epoch       : 2
-				Version     : 7.4.179
-				Release     : 1.fc20
-				Architecture: i686
-				Install Date: Ne 17. srpen 2014, 17:16:24 CEST
-				Group       : Applications/Editors
-				Size        : 2472759
-				License     : Vim
-				Packager    : Fedora Project
-				URL         : http://www.vim.org/
-				Summary     : The VIM version of the vi editor for the X Window System
-				Description :
-				VIM (VIsual editor iMproved) is an updated and improved version of the
-				vi editor.  Vi was the first real screen-based editor for UNIX, and is
-				still very popular.  VIM improves on vi by adding new features:
-				...
-			\end{verbatim}
+			\lstinputlisting
+			[
+				label=fedora-package-info-output,
+				caption={Informace o balíčku}
+			]{sources/fedora_package_info_output}
 
 			Tyto informace můžeme v prostředí Pythonu získat a zpracovat například takto
-			\begin{verbatim}
-				>>> import subprocess
-				>>> process = subprocess.Popen(['rpm', '-qi', 'vim-X11'], stdout=subprocess.PIPE)
-				>>> out = process.communicate()[0]
-				>>> out = out.split('\n')
-			\end{verbatim}
+			\lstinputlisting
+			[
+				language=Python,
+				label=fedora-package-info-parse,
+				caption={Parsování informací o balíčku}
+			]{sources/fedora_package_info_parse.py}
 
 			\subsection{Seznam souborů poskytovaných balíčkem}
 			Ke zjištění seznamu všech souborů, které daný balíček poskytuje, máme k dispozici příkaz
 
 			% Pozor, balíček musí být nainstalován
-			\begin{verbatim}
+			\begin{lstlisting}
 				rpm -ql nazev_balicku
-			\end{verbatim}
+			\end{lstlisting}
 
 			Zpracovat jej v Pythonu můžeme následovně
 
-			\begin{verbatim}
-				>>> process = subprocess.Popen(['rpm', '-ql', 'vim-X11'], stdout=subprocess.PIPE)
-				>>> files = process.communicate()[0]
-				>>> files = files.split('\n')[:-1]
-			\end{verbatim}
+			\lstinputlisting
+			[
+				language=Python,
+				label=fedora-package-files-parse,
+				caption={Parsování souborů poskytovaných balíčkem}
+			]{sources/fedora_package_files_parse.py}
 
 		\subsection{DNF plugin}
 		\subsection{Testování}
