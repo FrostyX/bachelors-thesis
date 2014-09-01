@@ -132,6 +132,67 @@
 		\end{verbatim}
 
 		\subsection{Práce s balíčky}
+			Především nás budou zajímat tři operace. Zjištění seznamu balíčků, které byly od daného času modifikovány, zjištění základních informací o balíčku jako například název, popis, etc a nakonec zjištění souborů, které balíček poskytuje.
+
+			\subsubsection{Historie balíčků}
+			Balíčkovacím systémem distribuce Fedora je program zvaný DNF. Pro uchovávání historie prováděných operací s balíčky, využívá sqlite databázi v adresáři /var/lib/dnf/history. Z ní se můžeme dozvědět, který balíček byl nainstalován, či odinstalován a kdy.
+
+			% Obrázek databáze
+
+			\subsection{Informace o balíčku}
+			Pro zjištění všech informací o balíčku můžeme použít příkaz
+
+			% Pozor, balíček musí být nainstalován
+			\begin{verbatim}
+				rpm -qi nazev_balicku
+			\end{verbatim}
+
+			Výpis těch zajímavějších můžeme vidět zde
+			\begin{verbatim}
+				[frostyx@localhost ~]$ rpm -qi vim-X11
+				Name        : vim-X11
+				Epoch       : 2
+				Version     : 7.4.179
+				Release     : 1.fc20
+				Architecture: i686
+				Install Date: Ne 17. srpen 2014, 17:16:24 CEST
+				Group       : Applications/Editors
+				Size        : 2472759
+				License     : Vim
+				Packager    : Fedora Project
+				URL         : http://www.vim.org/
+				Summary     : The VIM version of the vi editor for the X Window System
+				Description :
+				VIM (VIsual editor iMproved) is an updated and improved version of the
+				vi editor.  Vi was the first real screen-based editor for UNIX, and is
+				still very popular.  VIM improves on vi by adding new features:
+				...
+			\end{verbatim}
+
+			Tyto informace můžeme v prostředí Pythonu získat a zpracovat například takto
+			\begin{verbatim}
+				>>> import subprocess
+				>>> process = subprocess.Popen(['rpm', '-qi', 'vim-X11'], stdout=subprocess.PIPE)
+				>>> out = process.communicate()[0]
+				>>> out = out.split('\n')
+			\end{verbatim}
+
+			\subsection{Seznam souborů poskytovaných balíčkem}
+			Ke zjištění seznamu všech souborů, které daný balíček poskytuje, máme k dispozici příkaz
+
+			% Pozor, balíček musí být nainstalován
+			\begin{verbatim}
+				rpm -ql nazev_balicku
+			\end{verbatim}
+
+			Zpracovat jej v Pythonu můžeme následovně
+
+			\begin{verbatim}
+				>>> process = subprocess.Popen(['rpm', '-ql', 'vim-X11'], stdout=subprocess.PIPE)
+				>>> files = process.communicate()[0]
+				>>> files = files.split('\n')[:-1]
+			\end{verbatim}
+
 		\subsection{DNF plugin}
 		\subsection{Testování}
 
