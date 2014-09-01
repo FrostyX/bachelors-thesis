@@ -22,18 +22,18 @@
 		\subsection{Správa software v GNU/Linux}
 		Ve většině distribucí GNU/Linuxu se software standardně spravuje prostřednictvím balíčkovacího systému. Nové distribuce většinou vznikají odvozením jiné, již existující distribuce a v tomto případě bývá zachován typ balíčků i balíčkovací systém. Můžeme tedy říct, že distribucí je mnoho, ale balíčkovaích systémů se používá jen velmi málo. Konkrétně lze hovořit o distribucích GNU/Linuxu používající balíčky RPM\footnote{RPM = Red Hat Package Manager}, DEB\footnote{DEB = Debian software package} a nebo jiný typ balíčku. V posledním případě se jedná případ od případu o velmi specifický předpis balíčku. V rámci této práce se budeme zabývat linuxovou distribucí Fedora jako reprezentantem první skupiny a distribucí Gentoo, jako reprezentantem poslední skupiny.
 
-		\subsection{Balíčkovací systém distribuce Fedora}
-		Fedora vznikla jako nekomerční odnož Red Hat Linuxu a zachovala stávající systém balíčků RPM\@. Od své první verze využívá nástavbu nad RPM zvanou YUM\@. Ten se po čase stal téměř neudržovatelný a proto se objevila alternativa pojmenovaná DNF\@. V současné době lze paralelně využívat oba tyto nástroje, avšak je snaha YUM kompletně nahradit za pomocí DNF\@. Mělo by k tomu dojít již ve Fedoře 21. Aktuální stabilní verze je 20, jde tedy o příští vydání.
+			\subsubsection{Balíčkovací systém distribuce Fedora}
+			Fedora vznikla jako nekomerční odnož Red Hat Linuxu a zachovala stávající systém balíčků RPM\@. Od své první verze využívá nástavbu nad RPM zvanou YUM\@. Ten se po čase stal téměř neudržovatelný a proto se objevila alternativa pojmenovaná DNF\@. V současné době lze paralelně využívat oba tyto nástroje, avšak je snaha YUM kompletně nahradit za pomocí DNF\@. Mělo by k tomu dojít již ve Fedoře 21. Aktuální stabilní verze je 20, jde tedy o příští vydání.
 
-		\subsection{Balíčkovací systém distribuce Gentoo}
+			\subsubsection{Balíčkovací systém distribuce Gentoo}
 
-	\section{Problém}
-	Když spustíme aplikaci, do paměti se načtou knihovny a soubory potřebné k jejímu běhu. Pokud je některá z knihoven, nebo samotná aplikace po dobu jejího běhu aktualizována, v paměti stále zůstanou původní soubory, přestože fyzicky už nemusí existovat (mohou být smazány, nebo nahrazeny novějšími verzemi).
-	\\\\
-	Zjistit, které, v systému spuštěné, aplikace využívají takto neaktuální soubory, není pro uživatele triviální. V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné.
+		\subsection{Problém}
+		Když spustíme aplikaci, do paměti se načtou knihovny a soubory potřebné k jejímu běhu. Pokud je některá z knihoven, nebo samotná aplikace po dobu jejího běhu aktualizována, v paměti stále zůstanou původní soubory, přestože fyzicky už nemusí existovat (mohou být smazány, nebo nahrazeny novějšími verzemi).
+		\\\\
+		Zjistit, které, v systému spuštěné, aplikace využívají takto neaktuální soubory, není pro uživatele triviální. V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné.
 
-	\section{Požadavky}
-	Tato práce si klade za cíl vytvořit aplikaci, která bude řešit dříve zmíněný problém. Aplikace by měla najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést. Aplikace by měla disponovat textovým uživatelským rozhraním a mělo by být možné ji používat jako modul přímo v balíčkovacím systému DNF\@. Vývoj by měl probíhat pod otevřenou licencí a na libovolném veřejném úložišti. Dále by měl být k dispozici instalační balíček pro distribuci Fedora.
+		\subsection{Požadavky}
+		Tato práce si klade za cíl vytvořit aplikaci, která bude řešit dříve zmíněný problém. Aplikace by měla najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést. Aplikace by měla disponovat textovým uživatelským rozhraním a mělo by být možné ji používat jako modul přímo v balíčkovacím systému DNF\@. Vývoj by měl probíhat pod otevřenou licencí a na libovolném veřejném úložišti. Dále by měl být k dispozici instalační balíček pro distribuci Fedora.
 
 	\section{Analýza}
 	Rozložme si problém na menší části a projděme je jednu po druhé. Stěžení částí aplikace má být vypsání jistého seznamu aplikací. Nejdříve se tedy zaměříme na jeho získání. Dále potřebujeme konstrukt, který zjistí informace o  dané aplikaci. Nakonec nás bude zajímat zjištění způsobu, jak aplikaci restartovat.
