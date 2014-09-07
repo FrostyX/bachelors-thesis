@@ -84,10 +84,10 @@
 		Tato práce si klade za cíl vytvořit aplikaci, která bude řešit dříve zmíněný problém. Aplikace by měla najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést. Aplikace by měla disponovat textovým uživatelským rozhraním a mělo by být možné ji používat jako modul přímo v balíčkovacím systému DNF\@. Vývoj by měl probíhat pod otevřenou licencí a na libovolném veřejném úložišti. Dále by měl být k dispozici instalační balíček pro distribuci Fedora.
 
 	\section{Analýza}
-	Rozložme si problém na menší části a projděme je jednu po druhé. Stěžení částí aplikace má být vypsání jistého seznamu aplikací. Nejdříve se tedy zaměříme na jeho získání. Dále potřebujeme konstrukt, který zjistí informace o  dané aplikaci. Nakonec nás bude zajímat zjištění způsobu, jak aplikaci restartovat.
+	Rozložme si problém na menší části a projděme je jednu po druhé. Stěžení funkcí má být vypsání jistého seznamu aplikací. Nejdříve se tedy zaměříme na jeho získání. Dále potřebujeme konstrukt, který zjistí informace o  dané aplikaci. Nakonec se budeme zajímat o to, jakým způsobem lze nalezené aplikace restartovat.
 
 		\subsection{Získání seznamu ovlivněných aplikací}
-		Stěžejní část aplikace. [..] Nabízí se přímočaré řešení. Zjistit seznam balíčků, které byly od spuštění systému modifikovány. Následně pro každý balíček zjistit seznam souborů, které poskytuje. Poté zjistit, které procesy využívají některý z množiny modifikovaných souborů. Tedy pro každý spuštěný proces zjistit seznam souborů jež využívá a najít shodu s modifikovanými balíčky.
+		Stěžejní funkcí bude nalezení aktualizacemi ovlivněných, běžících aplikací. Řešení se zdá být velmi přímočaré. Nejdříve zjistit seznam balíčků, které byly od spuštění systému modifikovány. Následně pro každý balíček zjistit seznam souborů, které poskytuje. Poté zjistit, které procesy využívají některý z množiny modifikovaných souborů. Tedy pro každý spuštěný proces zjistit seznam souborů jež využívá a najít shodu se soubory poskytovanými modifikovanými balíčky.
 
 		\lstinputlisting
 		[
@@ -96,14 +96,14 @@
 			caption={Algoritmus pro vypsání seznamu ovlivněných aplikací}
 		]{sources/naive_tracer_algorithm.py}
 
-		Algoritmus na první pohled vypadá velmi jednoduše a zřejmě vypíše korektní množinu procesů. Mohlo by se tedy zdát, že máme hotovo, nicméně jsme nevzali v úvahu časovou složitost takového algoritmu. Ta je bohužel velmi nepříznivá, což by činilo vyhledávání útrpně pomalé.
+		Algoritmus na první pohled vypadá velmi jednoduše a zřejmě vypíše korektní množinu procesů. Mohlo by se tedy zdát, že máme hotovo, nicméně jsme nevzali v úvahu časovou složitost takového algoritmu. Ta je bohužel velmi nepříznivá, což by vedlo k útrpně pomalému vyhledávání.
 
 		% vypočítání složitosti
 		% Vysvětlení a ukázka kódu množinového průniku
 
-		Klíčem k rychlejšímu získání chtěných procesů je zvolení vhodné vyhledávací struktury pro data. Vezměme si fakt, že mnoho procesů využívá stejné soubory (knihovny, etc). Naivní algoritmus tedy jeden konkrétní soubor musí ověřit hned několikrát - pro každý proces, který jej využívá.
+		Klíčem k rychlejšímu získání chtěných procesů je zvolení vhodné vyhledávací struktury pro data. Vezměme si fakt, že mnoho procesů využívá stejné soubory (knihovny, etc). Naivní algoritmus tedy jeden konkrétní soubor musí ověřit hned několikrát -- pro každý proces, který jej využívá.
 
-		Tento nedostatek můžeme řešit tak, že nebudueme zkoumat proces po procesu, ale místo toho vezmeme množinu všech\footnote{} souborů v paměti, přičemž ke každému si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, je budeme ukládat do vyhledávacího stromu typu BTree.
+		Tento nedostatek můžeme řešit tak, že nebudueme zkoumat proces po procesu, ale místo toho vezmeme množinu všech\footnote{} souborů v paměti, přičemž ke každému souboru si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, zvolíme strom typu BTree jako strukturu pro uložení dat.
 
 		\lstinputlisting
 		[
@@ -115,9 +115,9 @@
 		% Výpočet složitosti algoritmu
 
 		\subsection{Informace o aplikaci}
-		Rozlišujme dva druhy informací. Pracujeme se spuštěnými aplikacemi, v tom případě lze hovořit o procesech spuštěných v systému. Každý proces má nějaký PID\footnote{}, spustil jej nějaký uživatel, běží určitou dobu, etc.
+		Rozlišujme dva druhy informací. Pracujeme se spuštěnými aplikacemi, tedy lze hovořit o procesech spuštěných v systému. Každý proces má nějaký PID\footnote{}, spustil jej nějaký uživatel, běží určitou dobu, etc.
 
-		Dále lze uvažovat, že každá\footnote{Každá standardně nainstalovaná} aplikace je poskytována některým balíčkem. Každý takový balíček poskytuje informace o tom, k čemu slouží, v jaké je verzi, jak dlouho je nainstalován, etc.
+		Dále lze uvažovat, že každá\footnote{Každá standardně nainstalovaná} aplikace je poskytována distribučním balíčkem. Každý takový balíček poskytuje informace o tom, k čemu slouží, v jaké je verzi, jak dlouho je nainstalován, etc.
 
 		Lze předpokládat, že informace o procesech budou získatelné jednotným způsobem napříč celým spektrem linuxových distribucí, avšak informace o balíčku budou závislé na jeho typu.
 
@@ -125,7 +125,7 @@
 
 	\section{Implementace}
 		\subsection{Úvod}
-		Projekt je vyvíjen pod názvem tracer. Požadovalo se, aby byl implementován v jazyce Python. V současné době se nejčastěji pouužívá Python2.7, který lze nalézt na všech distribucích a pro který existuje velká spousta uživatelských knihoven. Z tohoto důvodu jsem zvolil právě verzi 2.7, přestože aktuální stabilní verzí je 3.x.
+		Projekt je vyvíjen pod názvem tracer. Požadovalo se, aby byl implementován v jazyce Python. V současné době se nejčastěji používá Python2.7, který lze nalézt na všech distribucích a pro který existuje velká spousta uživatelských knihoven. Z tohoto důvodu jsem zvolil právě verzi 2.7, přestože aktuální stabilní verzí je 3.x.
 
 		\subsection{Práce s procesy}
 		Správu procesů v jazyce python zajišťuje balík psutil, který je ve Fedoře k dispozici pod názvem python-psutil. Umožňuje přístup ke všem atributům procesu, které lze v linuxových systémech zjistit. Mimo to poskytuje rozhraní pro získávání informací o paměti, procesoru, pevných discích a síťových rozhraních.
