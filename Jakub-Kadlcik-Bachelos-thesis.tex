@@ -96,10 +96,22 @@
 			caption={Algoritmus pro vypsání seznamu ovlivněných aplikací}
 		]{sources/naive_tracer_algorithm.py}
 
-		Algoritmus na první pohled vypadá velmi jednoduše a zřejmě vypíše korektní množinu procesů. Mohlo by se tedy zdát, že máme hotovo, nicméně jsme nevzali v úvahu časovou složitost takového algoritmu. Ta je bohužel velmi nepříznivá, což by vedlo k útrpně pomalému vyhledávání.
+		Algoritmus na první pohled vypadá velmi jednoduše a zřejmě vypíše korektní množinu procesů. Mohlo by se tedy zdát, že máme hotovo, nicméně jsme nevzali v úvahu časovou složitost takového algoritmu. Ta, jak si ukážeme níže, je bohužel velmi nepříznivá, což by vedlo k útrpně pomalému vyhledávání.
 
-		% vypočítání složitosti
-		% Vysvětlení a ukázka kódu množinového průniku
+			\subsubsection*{Časová složitost}
+			Časovou složitost lze vyjádřit následovně. První průchod přes všechny balíky je lineární, tedy $O(n)$. Pro každý balík se prochází všemi procesy, takže násobíme $* O(m)$. Protože jsou obě $m$ i $n$ spočetně velké a nejsou to konstanty, místo $O(n*m)$ vyjádříme $O(n^2)$.
+			\\
+			\\
+			Dále počítáme složitost množinového průniku. V případě jeho naivní implementace, která porovnává každý prvek jedné množiny s každým prvkem druhé, dostaneme kvadratickou složitost $O(n^2)$. V případě optimalizovanějšího návrhu si polepšíme na $O(n)$.
+			\\
+			\\
+			Množinový průnik je zjišťován pro každou kombinaci balíčku a procesu, proto původní $O(n^2)$ násobíme $O(n)$ (případně $O(n^2)$ při naivní implementaci). Výslednou časovou složitost ukázaného algoritmu tedy vyčíslíme jako $O(n^3)$.
+
+			% Vysvětlení a ukázka kódu množinového průniku
+			% Úvaha, zda to půjde lépe + graf
+
+			\subsubsection{Existuje způsob, jak to udělat lépe?}
+			Nyní se dostáváme do situace, kdy si musíme položit následující otázku -- Existuje vůbec způsob, jak to udělat lépe?
 
 		Klíčem k rychlejšímu získání chtěných procesů je zvolení vhodné vyhledávací struktury pro data. Vezměme si fakt, že mnoho procesů využívá stejné soubory (knihovny, etc). Naivní algoritmus tedy jeden konkrétní soubor musí ověřit hned několikrát -- pro každý proces, který jej využívá.
 
