@@ -86,7 +86,7 @@
 	\section{Analýza}
 	Rozložme si problém na menší části a projděme je jednu po druhé. Stěžení funkcí má být vypsání jistého seznamu aplikací. Nejdříve se tedy zaměříme na jeho získání. Dále potřebujeme konstrukt, který zjistí informace o  dané aplikaci. Nakonec se budeme zajímat o to, jakým způsobem lze nalezené aplikace restartovat.
 
-		\subsection{Získání seznamu ovlivněných aplikací}
+		\subsection{Seznam ovlivněných aplikací -- Ilustrativně}
 		Stěžejní funkcí bude nalezení aktualizacemi ovlivněných, běžících aplikací. Řešení se zdá být velmi přímočaré. Nejdříve zjistit seznam balíčků, které byly od spuštění systému modifikovány. Následně pro každý balíček zjistit seznam souborů, které poskytuje. Poté zjistit, které procesy využívají některý z množiny modifikovaných souborů. Tedy pro každý spuštěný proces zjistit seznam souborů jež využívá a najít shodu se soubory poskytovanými modifikovanými balíčky.
 
 		\lstinputlisting
@@ -113,6 +113,7 @@
 			\subsubsection*{Existuje způsob, jak to udělat lépe?}
 			Nyní se dostáváme do situace, kdy si musíme položit následující otázku -- Existuje vůbec způsob, jak to udělat lépe?
 
+		\subsection{Seznam ovlivněných aplikací -- Vylepšení}
 		Klíčem k rychlejšímu získání chtěných procesů je zvolení vhodné vyhledávací struktury pro data. Vezměme si fakt, že mnoho procesů využívá stejné soubory (knihovny, etc). Naivní algoritmus tedy jeden konkrétní soubor musí ověřit hned několikrát -- pro každý proces, který jej využívá.
 
 		Tento nedostatek můžeme řešit tak, že nebudueme zkoumat proces po procesu, ale místo toho vezmeme množinu všech\footnote{} souborů v paměti, přičemž ke každému souboru si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, zvolíme strom typu BTree jako strukturu pro uložení dat.
