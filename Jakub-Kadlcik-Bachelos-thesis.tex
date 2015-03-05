@@ -200,13 +200,25 @@
 				caption={Informace o balíčku}
 			]{sources/fedora_package_info_output}
 
-			Tyto informace můžeme v prostředí Pythonu získat a zpracovat například takto
+			Tyto informace můžeme v prostředí Pythonu získat a zpracovat v zásadě dvěma způsoby. Prvním je použití modulu \texttt{subprocess} ke spuštění výše zmíněného příkazu a získání jeho výstupu.
 			\lstinputlisting
 			[
 				language=Python,
 				label=fedora-package-info-parse,
 				caption={Parsování informací o balíčku}
 			]{sources/fedora_package_info_parse.py}
+
+			Tato varianta však není ideální. Vyžaduje ruční parsování výtupu jakožto textového řetězce. Navíc dochází k drobnému zpomalení z důvodu spouštění nového procesu. Tato prodleva by byla zanedbatelná v případě jednorázového volání, ale zjišťování informací může být prováděno na větším množství balíčků, což by vedlo k výraznému zpomalení programu.
+
+			Mnohem lepší variantou je použití aplikačního rozhraní poskytovaného modulem \texttt{rpm}, které nabídne čistějsí řešení, netrpící zmíněnými neduhy.
+
+			% @TODO Popsat TransactionSet(), dbMatch(), next(), RPMTAG_*
+			\lstinputlisting
+			[
+				language=Python,
+				label=fedora-package-info-api,
+				caption={Získání informací o balíčku pomocí rpm API}
+			]{sources/fedora_package_info_api.py}
 
 			\subsubsection{Seznam souborů poskytovaných balíčkem}
 			Ke zjištění seznamu všech souborů, které daný balíček poskytuje, máme k dispozici příkaz
@@ -216,19 +228,22 @@
 				rpm -ql nazev_balicku
 			\end{lstlisting}
 
-			Zpracovat jej v Pythonu můžeme následovně
+			Pro získání a zpracování tohoto seznamu platí totéž co v předchozím případě. Varianta využívající modul \texttt{subprocess} by vypadala velmi podobně. Oproti předchozímu použití by se změnil pouze spouštěný příkaz. Navíc jsme tuto variantu implementace z dobrých důvodů vyloučili. Proto se budeme zabývat především použitím aplikačního rozhraní modulu \texttt{rpm}.
 
+			% @TODO Popsat TransactionSet(), dbMatch(), next(), fi(), klíče f[]
 			\lstinputlisting
 			[
 				language=Python,
-				label=fedora-package-files-parse,
-				caption={Parsování souborů poskytovaných balíčkem}
-			]{sources/fedora_package_files_parse.py}
+				label=fedora-package-files-api,
+				caption={Získání seznamu souborů poskyovaných balíčkem}
+			]{sources/fedora_package_files_api.py}
 
 		\subsection{Rozšíření pro balíčkovací systém DNF}
 		\subsection{Tracer}
 			V předchozích kapitolách jsme představili problematiku hledání aktualizacemi ovlivněných aplikací, popsali algoritmy pro jejich hledání a způsob, jak je lze implementovat v jazyce python pro linuxovou distribuci Fedora. Nyní se podíváme na produkt nesoucí název Tracer, jenž na těchto základech vznikl.
 			\subsubsection{Uživatelská příručka}
+				Následuje pouze nástin možných případů užití. Kompletní uživatelskou dokumentaci a manuálovou stránku programu naleznete v příloze XY.
+
 				\paragraph{Standardní použití}
 				Primárním a zároveň nejjednodušším způsobem, jak program spustit, je příkazem\footnote{Oprávnění superuživatele je nutné, protože program potřebuje číst databázi balíčkovacího systému.} \texttt{sudo tracer}. Na výstupu obdržíme seznam ovlivněných aplikací, tak jak byl požadován v zadání. Ukázkový výstup můžeme vidět na následujícím příkladu.
 
