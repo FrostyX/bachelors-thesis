@@ -225,7 +225,34 @@
 				caption={Parsování souborů poskytovaných balíčkem}
 			]{sources/fedora_package_files_parse.py}
 
+		\subsection{Rozšíření pro balíčkovací systém DNF}
 		\subsection{Tracer}
+			V předchozích kapitolách jsme představili problematiku hledání aktualizacemi ovlivněných aplikací, popsali algoritmy pro jejich hledání a způsob, jak je lze implementovat v jazyce python pro linuxovou distribuci Fedora. Nyní se podíváme na produkt nesoucí název Tracer, jenž na těchto základech vznikl.
+			\subsubsection{Uživatelská příručka}
+				\paragraph{Standardní použití}
+				Primárním a zároveň nejjednodušším způsobem, jak program spustit, je příkazem\footnote{Oprávnění superuživatele je nutné, protože program potřebuje číst databázi balíčkovacího systému.} \texttt{sudo tracer}. Na výstupu obdržíme seznam ovlivněných aplikací, tak jak byl požadován v zadání. Ukázkový výstup můžeme vidět na následujícím příkladu.
+
+				% @TODO Aktualizovat výstup (i na docs.tracer-package.com)
+				\lstinputlisting
+				[
+					label=tracer-standard-usage-output,
+					caption={Ukázkový výstup příkazu \texttt{sudo tracer}}
+				]{sources/tracer_standard_usage_output}
+
+				\paragraph{Zobrazení konkrétní aplikace}
+				Uživatel může ve výstupu narazit na aplikaci, kteoru například nezná, nebo netuší, proč a jak je potřeba ji restartovat. Z tohoto důvodu existuje přepínač \texttt{-s} neboli \texttt{--show}, který zobrazí všechny informace, které Tracer o aplikaci zná a se kterými pracuje.
+
+				\lstinputlisting
+				[
+					label=tracer-helper-output,
+					caption={Ukázkový výstup příkazu \texttt{sudo tracer -s apache2}}
+				]{sources/tracer_helper_output}
+
+				Stejně jako u většiny UNIXových programů, lze množství vypisovaných informací ovlivnit přepínači \texttt{-v} a \texttt{-vv}. První varianta zobrazí i seznam balíčků jenž aplikaci ovlivnil. Druhá varianta pak zobrazí i seznam konkrétních souborů, které balíčky aktualizovali a aplikace je využívá. Konečně, pro výpis těchto pomocných informací ke každé nalezené aplikaci lze zobrazit přepínačem \texttt{--helpers}.
+
+				\paragraph{Interaktivní mód}
+				V určitých případech může uživatel chtít zobrazit pomocné informace pouze k několika aplikacím, ale nechce vypisovat jejich názvy. Pro tento účel byl zaveden interaktivní režim. Pokud spustíme Tracer s parametrem \texttt{-i}, nebo \texttt{--interactive}, obdržíme na výstupu očíslovaný seznam aplikací zakončený promptem. Postupně zadáváme čísla aplikací, které nás zajímají a dostáváme výpis pomocných informací.
+
 			\subsubsection{Adresářová struktura}
 			\subsubsection{MVC}
 

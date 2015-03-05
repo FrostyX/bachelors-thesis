@@ -1,0 +1,11 @@
+$[FrostyX  ~]-> sudo tracer
+You should restart:
+  chromium
+  gvim
+  mpd
+  dolphin
+  apache2
+
+Please note that there are:
+  - 6 processes requiring restarting your session (i.e. Logging out & Logging in again)
+  - 2 processes requiring reboot

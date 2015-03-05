@@ -1,0 +1,9 @@
+$[FrostyX  ~]-> tracer -s apache2
+* apache2
+    Package:     www-servers/apache
+    Description: The Apache Web Server.
+    Type:        Daemon
+    State:       apache2 has been started by root 34 minutes ago. PID - 18816
+
+    How to restart:
+         service apache2 restart
