@@ -143,6 +143,14 @@
 		Lze předpokládat, že informace o procesech budou získatelné jednotným způsobem napříč celým spektrem linuxových distribucí, avšak informace o balíčku budou závislé na jeho typu.
 
 		\subsection{Jak aplikaci restartovat?}
+		Aplikace můžeme rozdělit do několika kategorií. Zřejmě budou existovat takové, jež nemůžeme restartovat jinak, než rebootováním celého operačního systému. Příkladem budiž init, či jaderné procesy. Dále jistě budou v systémech s grafickým uživatelským rozhraním aplikace, k jejichž restartování bude potřeba řestartovat celé grafické prostředí. Příkladem mohou být správci oken a aplikace související s uživatelským sezením\footnote{Známnějsí spíše v anglickém originale jako session}. V těchto případech nezbývá jiná možnost, než provést požadovanou operaci jako reboot počítače, či odhlášení a opětovné přihlášení uživatele do grafického režimu.
+		\\
+		\\
+		Zajímavější situace je v případě aplikací, které lze restartovat pomocí příkazu v příkazové řádce. Ta je typická pro tzv.\ daemony, či služby. Napříč velkým spektrem distribucí a správců služeb, lze k jejich restartování standardně použít příkaz \texttt{service} \textit{název\_služby} \texttt{restart}. Využití u daemonů není výhradní, protože lze tímto způsobem přistupovat i ke spoustě běžných aplikací. U nich se ale budou jednotlivé příkazy fundamentálně lišit.
+		\\
+		\\
+		Všechy ostatní aplikace spadají do poslední skupiny. Uživatel je musí ručně ukončit a znovu spustit. Nezáleží na tom, zda jsou grafické a bude tak učiněno křížkem v záhlaví okna, nebo spuštěné v příkazové řádce a budou ukončeny jiným způsobem. Tato poslední kategorie není bezpečně automatizovatelná a proto musí zůstat v plné režii uživatele.
+
 
 	\pagebreak
 	\section{Implementace}
