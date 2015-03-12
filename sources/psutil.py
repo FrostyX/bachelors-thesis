@@ -4,13 +4,13 @@
 >>> p.pid
 13005
 
->>> p.name
+>>> p.name()
 'gvim'
 
->>> p.username
+>>> p.username()
 'frostyx'
 
->>> p.create_time
+>>> p.create_time()
 1408897172.2
 
 >>> p
