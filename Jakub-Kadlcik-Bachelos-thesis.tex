@@ -123,7 +123,7 @@
 		\subsection{Seznam ovlivněných aplikací -- Vylepšení}
 		Klíčem k rychlejšímu získání chtěných procesů je zvolení vhodné vyhledávací struktury pro data. Vezměme si fakt, že mnoho procesů využívá stejné soubory (knihovny, etc). Naivní algoritmus tedy jeden konkrétní soubor musí ověřit hned několikrát -- pro každý proces, který jej využívá.
 
-		Tento nedostatek můžeme řešit tak, že nebudueme zkoumat proces po procesu, ale místo toho vezmeme množinu všech\footnote{} souborů v paměti, přičemž ke každému souboru si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, zvolíme strom typu BTree jako strukturu pro uložení dat.
+		Tento nedostatek můžeme řešit tak, že nebudueme zkoumat proces po procesu, ale místo toho vezmeme množinu všech\footnote{} souborů v paměti, přičemž ke každému souboru si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, zvolíme strom typu BTree jako strukturu pro uložení dat. Zaplatíme sice zvýšenou spotřebou paměti, ale jak si ukážeme v kapitole XY, rychlostní zlepšení bude na první pohled zjevné.
 
 		\lstinputlisting
 		[
@@ -133,7 +133,7 @@
 		]{sources/tracer_algorithm.py}
 
 			\subsubsection*{Časová složitost}
-			@TODO Výpočet složitosti algoritmu
+			Při vyhledávání je pro každý balíček v seznamu procházen seznam jím poskytovaných souborů. Složitost tohoto problému je analogická předchozí situaci -- Tedy $O(n^2)$. Co se ovšem změnilo, je problém nalezení všech procesů, využívajících daný soubor. Nyní si stačí vyzvednout jejich seznam jednorázovým přístupem do stromové struktury typu BTree. Složitost tohoto problému je $O(log(n)$. Poskládáním jednotlivých kousků problému dohromady, získáváme časové složitost algoritmu vyjádřenou jako $O(n^2 * log(n))$.
 
 		\subsection{Informace o aplikaci}
 		Rozlišujme dva druhy informací. Pracujeme se spuštěnými aplikacemi, tedy lze hovořit o procesech spuštěných v systému. Každý proces má nějaký PID\footnote{}, spustil jej nějaký uživatel, běží určitou dobu, etc.
