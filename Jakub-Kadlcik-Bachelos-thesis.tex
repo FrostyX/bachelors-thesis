@@ -223,13 +223,16 @@
 
 			Mnohem lepší variantou je použití aplikačního rozhraní poskytovaného modulem \texttt{rpm}, které nabídne čistějsí řešení, netrpící zmíněnými neduhy.
 
-			% @TODO Popsat TransactionSet(), dbMatch(), next(), RPMTAG_*
 			\lstinputlisting
 			[
 				language=Python,
 				label=fedora-package-info-api,
 				caption={Získání informací o balíčku pomocí rpm API}
 			]{sources/fedora_package_info_api.py}
+
+			V tomto kódu se vyskytuje spousta neobjasněných elementů. Pojďme si je postupně projít a vysvětlit jejich význam. Každý skript pracující s balíčkem RPM musí zákonitě začínat instancováním třídy \texttt{TransactionSet}. Ta se postará o otevření databáze balíčků a poskytne rozhraní pro dotazování se vůči ní. Tím je metoda \texttt{dbMatch} použitá na následujícím řádku. Jejím výsledkem je vždy iterátor obsahující nalezené balíčky. To, jaké balíčky budou vráceny lze ovlivnit nastavením patřičných argumentů. V případě jejich vynechání, bude vrácen iterátor množiny všech nainstalovaných balíčků. Samozřejmě lze i vyhledávat pouze balíčky splňující určitá kritéria. V ukázkovém příkladu jsou vyhledány všechny balíčky, které se jmenují \texttt{vim-X11}. Jméno balíčku je však unikátní vlastnost, takže iterátor obsahuje pouze jednu položku (případně žádnou pokud nebyla nalezena shoda). Získáme ji pomocí metody \texttt{next()}.
+			\\
+			Jednotlivé balíčky jsou reprezentovány pomocí slovníků\footnote{Jiný název pro konstrukci známější především jako asociativní pole}. Jejich klíče jsou \texttt{"name"}, \texttt{"summary"}, \texttt{"group"} a tak podobně. Konstanty \texttt{RPMTAG\_SUMMARY}, \texttt{RPMTAG\_GROUP}, etc, jsou pouze tenká abstrakční vrstva vracející daný řetězec.
 
 			\subsubsection{Seznam souborů poskytovaných balíčkem}
 			Ke zjištění seznamu všech souborů, které daný balíček poskytuje, máme k dispozici příkaz
