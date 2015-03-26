@@ -9,6 +9,7 @@
 \usepackage{xcolor}
 \usepackage{textcomp}
 \usepackage{url}
+\usepackage{graphicx}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -188,12 +189,50 @@
 		]{sources/process_files_output}
 
 		\subsection{Práce s balíčky}
-			Především nás budou zajímat tři operace. Zjištění seznamu balíčků, které byly od daného času modifikovány, zjištění základních informací o balíčku jako například název, popis, etc a nakonec zjištění souborů, které balíček poskytuje.
+			Především nás budou zajímat tři operace. Zjištění seznamu balíčků, které byly od daného času modifikovány, zjištění základních informací o balíčku jako například název, popis, etc a nakonec zjištění souborů, které balíček poskytuje. Ukážeme si, že každou z nich lze implementovat několika různými způsoby. Objasníme, který z nich bude vyhovovat nejvíce a proč.
 
-			\subsubsection{Historie balíčků}
-			Balíčkovacím systémem distribuce Fedora je program zvaný DNF\@. Pro uchovávání historie prováděných operací s balíčky, využívá sqlite databázi v adresáři /var/lib/dnf/history. Z ní se můžeme dozvědět, který balíček byl nainstalován, či odinstalován a kdy.
+			\subsubsection{Databáze balíčků}
+			Úvodem uděláme drobnou odbočku a podíváme se, jakým způsobem jsou v systému reprezentovány informace o balíčcích.
+			\\
+			\\
+			Balíčkovacím systémem distribuce Fedora je program zvaný DNF\@, který pro uchovávání historie prováděných operací s balíčky, využívá sqlite databázi v adresáři \texttt{/var/lib/dnf/history}. Z ní se můžeme dozvědět informace o všech proběhlých transakcích. Scháma databáze vypadá následovně.
 
 			% Obrázek databáze
+			% @TODO Přegenerovat- chybějící tabulka pkgtups
+			%\begin{figure}
+				%\includegraphics[scale=0.7]{images/dnf-database.png}
+			%\end{figure}
+			\centerline{\includegraphics[scale=0.7]{images/dnf-database.png}}
+
+			My se budeme zajímat výhradně úspěšně proběhlými transakcemi, proto nás tabulky, zabývající se chybami, nebudou zajímat. Nám užitečné informace se nacházejí především v tabulkách \texttt{trans\_beg}, \texttt{trans\_end}, \texttt{trans\_data\_pkgs} a \texttt{pkgtups}. Z prvních dvou lze zjistit, kdy byly spuštěny a dokončeny spuštěné transakce. Kterých balíčků se týkali a jaké operace s nimi byly prováděny popisuje tabulka \texttt{trans\_data\_pkgs}. Dané balíčky ovšem rozlišuje pouze pomocí jejich unikátního identifikátoru \texttt{pkgtupid}. K zjištění více informací o daném balíčku si jej musíme vyhledat v poslední zmíněné tabulce \texttt{pkgtups}.
+
+			\subsubsection{Historie balíčků}
+			Na základě znalostí z předchozí kapitoly můžeme bez dalších odboček přejít přímo ke zkoumání historie balíčků. V programovacím jazyce Python máme pro práci se sqlite databázemi k dispozici balíček \texttt{sqlite3}. Ten umožní dotazování se vůči databázi pomocí vlastních SQL dotazů. Nejdříve se tedy zaměříme na vytvoření dotazu pro získání všech balíčků modifikovaných od určitého bodu v čase.
+			\\
+			\\
+			Informace o balíčcích, jako například jeho název, nebo verze, jsou uloženy v tabulce \texttt{pkgtups}. Není zde však datum jeho změny, proto musíme začít z druhého konce. Provedené transakce včetně času jejich spuštění se nacházejí v tabulce \texttt{trans\_beg}. Odtud dovedeme transakce spojit s relacemi v tabulce \texttt{trans\_data\_pkgs} přes atribut \texttt{tid}. Výsledkem spojení budou relace obsahující atribut \texttt{pkgtupid}, pomocí jenž můžeme provést spojení s tabulkou \texttt{pkgtups}, o kterou nám z počátku šlo.
+			\\
+			Současným mezivýsledkem jsou všechny relace vzniklé spojením zmíněných tabulek. Pomocí restrikce tuto relaci omezíme pouze na relace pro které platí, že atribut \texttt{trans\_beg.timestamp} nabývá hodnot větších, než $t$, kde $t$ je argument ve formátu zvaném jako Unix time\footnote{Známém také jako POSIX time, nebo Epoch time. Tento formát popisuje počet sekund uplynulých od 00:00:00 světového času dne 1.~1.~1970}.
+
+			V jazyce SQL lze tento problém vyjádřit následovně.
+
+			\lstinputlisting
+			[
+				language=SQL,
+				label=packages-newer-than-sql,
+				caption={Balíčky změněné od času $t$ - SQL dotaz}
+			]{sources/packages_newer_than.sql}
+
+			Pokračujme spuštěním tohoto dotazu v jazyce Python a získáním jeho výsledku. Předpokládejme předchozí dotaz uložený v proměnné \texttt{sql}, umístění databázového souboru v proměnné \texttt{db\_file} a libovolný čas v proměnné \texttt{unix\_time}. Tento zdrojový kód ukazuje, jak se lze dotázat vůči dané sqlite databázi a získat výsledek.
+
+			\lstinputlisting
+			[
+				language=Python,
+				label=packages-newer-than-py,
+				caption={Balíčky změněné od času $t$ - Python}
+			]{sources/packages_newer_than.py}
+
+			Ukázkový kód je natolik sebevysvetlující, že se obejde bez většího komentáře. Za pozornost stojí především metoda \texttt{fetchall()}, která vrací seznam všech řádků výsledku. Ve výchozím nastavení jsou jednotlivé řádky reprezentovány datovou strukturou \texttt{tuple}. Jedná se o strukturu, která by se dala popsat jako uspořádaná n-tice. Při přístupu k hodnotám atributů potom záleží na jejich pořadí v n-tici. Tento přístup má velké nevýhody, proto na třetím řádku specifikujeme, že bychom chtěli jednotlivé řádky vracet reprezentované pomocí objektů třídy \texttt{sqlite3.Row}. To umožní přístup k atributům pomocí jejich názvů.
 
 			\pagebreak
 			\subsubsection{Informace o balíčku}
