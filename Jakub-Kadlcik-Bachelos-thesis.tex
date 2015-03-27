@@ -157,12 +157,12 @@
 	\pagebreak
 	\section{Implementace}
 		\subsection{Úvod}
-		Projekt je vyvíjen pod názvem tracer. Požadovalo se, aby byl implementován v jazyce Python. V současné době se nejčastěji používá Python2.7, který lze nalézt na všech distribucích a pro který existuje velká spousta uživatelských knihoven. Z tohoto důvodu jsem zvolil právě verzi 2.7, přestože aktuální stabilní verzí je 3.x.
+		Projekt je vyvíjen pod názvem tracer. Požadovalo se, aby byl implementován v programovacím jazyce Python. V současné době je de facto standardem Python ve verzi 2.7.x, jehož překladač lze nalézt na všech distribucích a pro který existuje velká spousta uživatelských knihoven. Z tohoto důvodu jsem zvolil právě verzi 2.7.x, přestože aktuální stabilní verzí je 3.x.
 
 		\subsection{Práce s procesy}
-		Správu procesů v jazyce python zajišťuje balík psutil, který je ve Fedoře k dispozici pod názvem python-psutil. Umožňuje přístup ke všem atributům procesu, které lze v linuxových systémech zjistit. Mimo to poskytuje rozhraní pro získávání informací o paměti, procesoru, pevných discích a síťových rozhraních.
+		Správu procesů v jazyce Python zajišťuje balík \texttt{psutil}, který je ve Fedoře k dispozici pod názvem \texttt{python-psutil}. Tento balík umožňuje získání seznamu všech aktuálně běžících procesů a poskytuje přístup ke všem jejich atributům, které lze v linuxových systémech zjistit. Mimo to poskytuje rozhraní pro získávání informací o paměti, procesoru, pevných discích a síťových rozhraních.
 
-		Nás ovšem zajímá pouze práce s procesy.
+		Nás ovšem zajímá pouze práce s procesy. Ukázku, jak vypadá rozhraní objektu procesu, vidíme v následujícím příkladu.
 
 		\lstinputlisting
 		[
@@ -188,26 +188,28 @@
 			caption={Ukázka výstupu předchozího kódu}
 		]{sources/process_files_output}
 
+		Jak jsme mohli vidět, objekty procesů jsou vytvářeny na základě jejich identifikátoru PID\@. Zjištění seznamu jejich hodnot je tedy klíčkovou záležitostí, kterou pro nás zajišťuje funkce \texttt{psutil.get\_pid\_list()}.
+
 		\subsubsection{Problémy při práci s procesy}
 		% @TODO Dopsat
 
 		\subsection{Práce s balíčky}
-			Především nás budou zajímat tři operace. Zjištění seznamu balíčků, které byly od daného času modifikovány, zjištění základních informací o balíčku jako například název, popis, etc a nakonec zjištění souborů, které balíček poskytuje. Ukážeme si, že každou z nich lze implementovat několika různými způsoby. Objasníme, který z nich bude vyhovovat nejvíce a proč.
+			Především nás budou zajímat tři operace. Zjištění seznamu balíčků, které byly od daného času modifikovány, zjištění základních informací o konkrétním balíčku, jako například název, popis, etc a nakonec zjištění seznamu souborů, které balíček poskytuje. Ukážeme si, že každou z nich lze implementovat několika různými způsoby. Objasníme, který z nich vyhovuje potřebám této práce nejvíce a proč tomu tak je.
 
 			\subsubsection{Databáze balíčků}
 			Úvodem uděláme drobnou odbočku a podíváme se, jakým způsobem jsou v systému reprezentovány informace o balíčcích.
 			\\
 			\\
-			Balíčkovacím systémem distribuce Fedora je program zvaný DNF\@, který pro uchovávání historie prováděných operací s balíčky, využívá sqlite databázi v adresáři \texttt{/var/lib/dnf/history}. Z ní se můžeme dozvědět informace o všech proběhlých transakcích. Scháma databáze vypadá následovně.
+			Balíčkovacím systémem distribuce Fedora je program zvaný DNF\@, který pro uchovávání historie operací prováděných s balíčky, využívá sqlite databázi v adresáři \texttt{/var/lib/dnf/history}. Z ní se můžeme dozvědět informace o všech proběhlých transakcích. Schéma databáze vypadá následovně.
 
 			% Obrázek databáze
 			% @TODO Přegenerovat- chybějící tabulka pkgtups
 			%\begin{figure}
 				%\includegraphics[scale=0.7]{images/dnf-database.png}
 			%\end{figure}
-			\centerline{\includegraphics[scale=0.7]{images/dnf-database.png}}
+			\centerline{\includegraphics[scale=0.67]{images/dnf-database.png}}
 
-			My se budeme zajímat výhradně úspěšně proběhlými transakcemi, proto nás tabulky, zabývající se chybami, nebudou zajímat. Nám užitečné informace se nacházejí především v tabulkách \texttt{trans\_beg}, \texttt{trans\_end}, \texttt{trans\_data\_pkgs} a \texttt{pkgtups}. Z prvních dvou lze zjistit, kdy byly spuštěny a dokončeny spuštěné transakce. Kterých balíčků se týkali a jaké operace s nimi byly prováděny popisuje tabulka \texttt{trans\_data\_pkgs}. Dané balíčky ovšem rozlišuje pouze pomocí jejich unikátního identifikátoru \texttt{pkgtupid}. K zjištění více informací o daném balíčku si jej musíme vyhledat v poslední zmíněné tabulce \texttt{pkgtups}.
+			My se budeme zajímat výhradně o úspěšně proběhlé transakce, proto nás tabulky, zabývající se chybovýmy stavy, nebudou zajímat. Nám užitečné informace se nacházejí především v tabulkách \texttt{trans\_beg}, \texttt{trans\_end}, \texttt{trans\_data\_pkgs} a \texttt{pkgtups}. Z prvních dvou lze zjistit, kdy byly proběhlé transakce spuštěny a dokončeny. Kterých balíčků se týkali a jaké operace s nimi byly prováděny, popisuje tabulka \texttt{trans\_data\_pkgs}. Dané balíčky ovšem rozlišuje pouze pomocí jejich unikátního identifikátoru \texttt{pkgtupid}. Pro zjištění více informací o daném balíčku je nutné nalézt jeho záznam v poslední zmíněné tabulce \texttt{pkgtups}.
 
 			\subsubsection{Historie balíčků}
 			Na základě znalostí z předchozí kapitoly můžeme bez dalších odboček přejít přímo ke zkoumání historie balíčků. V programovacím jazyce Python máme pro práci se sqlite databázemi k dispozici balíček \texttt{sqlite3}. Ten umožní dotazování se vůči databázi pomocí vlastních SQL dotazů. Nejdříve se tedy zaměříme na vytvoření dotazu pro získání všech balíčků modifikovaných od určitého bodu v čase.
@@ -215,7 +217,7 @@
 			\\
 			Informace o balíčcích, jako například jeho název, nebo verze, jsou uloženy v tabulce \texttt{pkgtups}. Není zde však datum jeho změny, proto musíme začít z druhého konce. Provedené transakce včetně času jejich spuštění se nacházejí v tabulce \texttt{trans\_beg}. Odtud dovedeme transakce spojit s relacemi v tabulce \texttt{trans\_data\_pkgs} přes atribut \texttt{tid}. Výsledkem spojení budou relace obsahující atribut \texttt{pkgtupid}, pomocí jenž můžeme provést spojení s tabulkou \texttt{pkgtups}, o kterou nám z počátku šlo.
 			\\
-			Současným mezivýsledkem jsou všechny relace vzniklé spojením zmíněných tabulek. Pomocí restrikce tuto relaci omezíme pouze na relace pro které platí, že atribut \texttt{trans\_beg.timestamp} nabývá hodnot větších, než $t$, kde $t$ je argument ve formátu zvaném jako Unix time\footnote{Známém také jako POSIX time, nebo Epoch time. Tento formát popisuje počet sekund uplynulých od 00:00:00 světového času dne 1.~1.~1970}.
+			Současným mezivýsledkem jsou všechny relace vzniklé spojením zmíněných tabulek. Pomocí restrikce tuto relaci omezíme pouze na relace pro které platí, že atribut \texttt{trans\_beg.timestamp} nabývá hodnot větších, než $t$, kde $t$ je argument ve formátu definovaném jako Unix time\footnote{Známém také jako POSIX time, nebo Epoch time. Tento formát popisuje počet sekund uplynulých od 00:00:00 světového času dne 1.~1.~1970}.
 
 			V jazyce SQL lze tento problém vyjádřit následovně.
 
@@ -226,7 +228,7 @@
 				caption={Balíčky změněné od času $t$ - SQL dotaz}
 			]{sources/packages_newer_than.sql}
 
-			Pokračujme spuštěním tohoto dotazu v jazyce Python a získáním jeho výsledku. Předpokládejme předchozí dotaz uložený v proměnné \texttt{sql}, umístění databázového souboru v proměnné \texttt{db\_file} a libovolný čas v proměnné \texttt{unix\_time}. Tento zdrojový kód ukazuje, jak se lze dotázat vůči dané sqlite databázi a získat výsledek.
+			Pokračujme spuštěním tohoto dotazu v jazyce Python a získáním jeho výsledku. Předpokládejme předchozí dotaz uložený v proměnné \texttt{sql}, umístění databázového souboru v proměnné \texttt{db\_file} a libovolný čas uvedeného formátu v proměnné \texttt{unix\_time}. Tento zdrojový kód ukazuje, jak se lze dotázat vůči dané sqlite databázi a získat výsledek.
 
 			\lstinputlisting
 			[
@@ -235,11 +237,13 @@
 				caption={Balíčky změněné od času $t$ - Python}
 			]{sources/packages_newer_than.py}
 
-			Ukázkový kód je natolik sebevysvetlující, že se obejde bez většího komentáře. Za pozornost stojí především metoda \texttt{fetchall()}, která vrací seznam všech řádků výsledku. Ve výchozím nastavení jsou jednotlivé řádky reprezentovány datovou strukturou \texttt{tuple}. Jedná se o strukturu, která by se dala popsat jako uspořádaná n-tice. Při přístupu k hodnotám atributů potom záleží na jejich pořadí v n-tici. Tento přístup má velké nevýhody, proto na třetím řádku specifikujeme, že bychom chtěli jednotlivé řádky vracet reprezentované pomocí objektů třídy \texttt{sqlite3.Row}. To umožní přístup k atributům pomocí jejich názvů.
+			Ukázkový kód je natolik sebevysvetlující, že se obejde bez většího komentáře. Za pozornost stojí především metoda \texttt{fetchall()}, která vrací seznam všech řádků výsledku. Ve výchozím nastavení jsou jednotlivé řádky reprezentovány datovou strukturou \texttt{tuple}. Jedná se o strukturu, která by se dala nejlépe popsat jako uspořádaná n-tice. Při přístupu k hodnotám atributů potom záleží na jejich pořadí v n-tici. Tento přístup má velké nevýhody, proto na třetím řádku ukázkového kódu specifikujeme, že bychom chtěli jednotlivé řádky vracet reprezentované pomocí objektů třídy \texttt{sqlite3.Row}. To umožní přístup k atributům pomocí jejich názvů.
 
 			\pagebreak
 			\subsubsection{Informace o balíčku}
-			Pro zjištění všech informací o balíčku můžeme použít příkaz
+			V předchozí kapitole jsme pracovali s databázovým souborem, uchovávajícím informace o proběhlých operacích s balíčky. Odtud jsme dokázali zjistit například jejich název, verzi a pár dalších, nicnémeně o balíčcích lze zjišťovat informací mnohem více. Jsou však uloženy na jiném místě\footnote{Kde?} a proto musíme k problému přistupovat novým způsobem.
+			\\
+			Pro zjištění všech, o balíčku dostupných informací, můžeme použít příkaz
 
 			% Pozor, balíček musí být nainstalován
 			\begin{lstlisting}
@@ -253,7 +257,7 @@
 				caption={Informace o balíčku}
 			]{sources/fedora_package_info_output}
 
-			Tyto informace můžeme v prostředí Pythonu získat a zpracovat v zásadě dvěma způsoby. Prvním je použití modulu \texttt{subprocess} ke spuštění výše zmíněného příkazu a získání jeho výstupu.
+			Tyto informace lze v prostředí jazyka Python získat a zpracovat v zásadě dvěma způsoby. Prvním je použití modulu \texttt{subprocess} ke spuštění výše zmíněného příkazu a získání jeho výstupu.
 			\lstinputlisting
 			[
 				language=Python,
@@ -261,10 +265,11 @@
 				caption={Parsování informací o balíčku}
 			]{sources/fedora_package_info_parse.py}
 
-			Tato varianta však není ideální. Vyžaduje ruční parsování výtupu jakožto textového řetězce. Navíc dochází k drobnému zpomalení z důvodu spouštění nového procesu. Tato prodleva by byla zanedbatelná v případě jednorázového volání, ale zjišťování informací může být prováděno na větším množství balíčků, což by vedlo k výraznému zpomalení programu.
+			Tato varianta však není ideální. Vyžaduje ruční parsování výtupu, jakožto textového řetězce. Navíc dochází k drobnému zpomalení z důvodu spouštění nového procesu. Tato prodleva by byla zanedbatelná v případě jednorázového volání. Informace však mohou být zjišťovány o velkém množství balíčků, což by vedlo k výraznému zpomalení programu.
 
 			Mnohem lepší variantou je použití aplikačního rozhraní poskytovaného modulem \texttt{rpm}, které nabídne čistějsí řešení, netrpící zmíněnými neduhy.
 
+			\newpage
 			\lstinputlisting
 			[
 				language=Python,
@@ -272,20 +277,24 @@
 				caption={Získání informací o balíčku pomocí rpm API}
 			]{sources/fedora_package_info_api.py}
 
-			V tomto kódu se vyskytuje spousta neobjasněných elementů. Pojďme si je postupně projít a vysvětlit jejich význam. Každý skript pracující s balíčkem RPM musí zákonitě začínat instancováním třídy \texttt{TransactionSet}. Ta se postará o otevření databáze balíčků a poskytne rozhraní pro dotazování se vůči ní. Tím je metoda \texttt{dbMatch} použitá na následujícím řádku. Jejím výsledkem je vždy iterátor obsahující nalezené balíčky. To, jaké balíčky budou vráceny lze ovlivnit nastavením patřičných argumentů. V případě jejich vynechání, bude vrácen iterátor množiny všech nainstalovaných balíčků. Samozřejmě lze i vyhledávat pouze balíčky splňující určitá kritéria. V ukázkovém příkladu jsou vyhledány všechny balíčky, které se jmenují \texttt{vim-X11}. Jméno balíčku je však unikátní vlastnost, takže iterátor obsahuje pouze jednu položku (případně žádnou pokud nebyla nalezena shoda). Získáme ji pomocí metody \texttt{next()}.
+			V tomto kódu se vyskytuje spousta neobjasněných elementů. Pojďme si je postupně projít a vysvětlit jejich význam. Každý skript pracující s balíčkem RPM musí zákonitě začínat instancováním třídy \texttt{TransactionSet}. Ta se postará o otevření databáze balíčků a poskytne rozhraní pro dotazování se vůči ní. Tím je metoda \texttt{dbMatch} použitá na následujícím řádku. Jejím výsledkem je vždy iterátor obsahující nalezené balíčky. To, jaké balíčky budou hledány, lze ovlivnit nastavením patřičných argumentů. V případě jejich vynechání, bude vrácen iterátor množiny všech nainstalovaných balíčků. Samozřejmě lze i vyhledávat pouze balíčky splňující určitá kritéria. V ukázkovém příkladu jsou vyhledány všechny balíčky, které se jmenují \texttt{vim-X11}. Jméno balíčku je však unikátní vlastnost, takže iterátor obsahuje pouze jednu položku (případně žádnou pokud nebyla nalezena shoda). Získáme ji pomocí metody \texttt{next()}.
 			\\
-			Jednotlivé balíčky jsou reprezentovány pomocí slovníků\footnote{Jiný název pro konstrukci známější především jako asociativní pole}. Jejich klíče jsou \texttt{"name"}, \texttt{"summary"}, \texttt{"group"} a tak podobně. Konstanty \texttt{RPMTAG\_SUMMARY}, \texttt{RPMTAG\_GROUP}, etc, jsou pouze tenká abstrakční vrstva vracející daný řetězec.
+			Jednotlivé balíčky jsou reprezentovány pomocí slovníků\footnote{Jiný název pro konstrukci známější především jako asociativní pole}. To znamená, že jejich klíči jsou textové řetězce \texttt{"name"}, \texttt{"summary"}, \texttt{"group"} a tak podobně. Konstanty \texttt{RPMTAG\_SUMMARY}, \texttt{RPMTAG\_GROUP}, etc, slouží pouze jako tenká abstrakční vrstva, vracející daný řetězec.
 
 			\subsubsection{Seznam souborů poskytovaných balíčkem}
-			Ke zjištění seznamu všech souborů, které daný balíček poskytuje, máme k dispozici příkaz
+			Každý balíček v sobě nese množinu souborů, které při instalaci nakopíruje do systému. Říkejme, že balíček tyto soubory poskytuje. V případě, že dva balíčky poskytují tentýž soubor, jsou navzájem vyloučeny. To znamená, že není možné, nainstalovat je současně. O každém souboru v operačním systému lze tedy říci, že v daný moment, je poskytován nanejvýš jedním balíčkem\footnote{Nikoli však právě jedním, protože, \dots}.
+			\\
+			\\
+			Pro zjištění seznamu všech souborů poskytovaných daným balíčkem, slouží příkaz
 
 			% Pozor, balíček musí být nainstalován
 			\begin{lstlisting}
 				rpm -ql nazev_balicku
 			\end{lstlisting}
 
-			Pro získání a zpracování tohoto seznamu platí totéž co v předchozím případě. Varianta využívající modul \texttt{subprocess} by vypadala velmi podobně. Oproti předchozímu použití by se změnil pouze spouštěný příkaz. Navíc jsme tuto variantu implementace z dobrých důvodů vyloučili. Proto se budeme zabývat především použitím aplikačního rozhraní modulu \texttt{rpm}.
+			K získání a zpracování tohoto seznamu platí totéž co v předchozím případě. Varianta využívající modul \texttt{subprocess}, by vypadala velmi podobně. Oproti předchozímu použití, by se změnil pouze spouštěný příkaz. Navíc jsme tuto variantu implementace z dobrých důvodů vyloučili, proto se budeme zabývat především použitím aplikačního rozhraní modulu \texttt{rpm}.
 
+			\pagebreak
 			% @TODO Popsat TransactionSet(), dbMatch(), next(), fi(), klíče f[]
 			\lstinputlisting
 			[
@@ -310,8 +319,9 @@
 					caption={Ukázkový výstup příkazu \texttt{sudo tracer}}
 				]{sources/tracer_standard_usage_output}
 
+				\pagebreak
 				\paragraph{Zobrazení konkrétní aplikace}
-				Uživatel může ve výstupu narazit na aplikaci, kteoru například nezná, nebo netuší, proč a jak je potřeba ji restartovat. Z tohoto důvodu existuje přepínač \texttt{-s} neboli \texttt{--show}, který zobrazí všechny informace, které Tracer o aplikaci zná a se kterými pracuje.
+				Uživatel může ve výstupu narazit na aplikaci, kteoru například nezná, nebo netuší, proč je potřeba ji restartovat a jak toho docílit. Z tohoto důvodu existuje přepínač \texttt{-s} neboli \texttt{-{}-show}, který zobrazí všechny informace, které Tracer o aplikaci zná a se kterými pracuje.
 
 				\lstinputlisting
 				[
@@ -319,10 +329,10 @@
 					caption={Ukázkový výstup příkazu \texttt{sudo tracer -s apache2}}
 				]{sources/tracer_helper_output}
 
-				Stejně jako u většiny UNIXových programů, lze množství vypisovaných informací ovlivnit přepínači \texttt{-v} a \texttt{-vv}. První varianta zobrazí i seznam balíčků jenž aplikaci ovlivnil. Druhá varianta pak zobrazí i seznam konkrétních souborů, které balíčky aktualizovali a aplikace je využívá. Konečně, pro výpis těchto pomocných informací ke každé nalezené aplikaci lze zobrazit přepínačem \texttt{--helpers}.
+				Stejně jako u většiny UNIXových programů, lze množství vypisovaných informací ovlivnit přepínači \texttt{-v} a \texttt{-vv}. První varianta zobrazí i seznam balíčků jenž aplikaci ovlivnil. Druhá varianta pak zobrazí i seznam konkrétních souborů, které balíčky aktualizovali a aplikace je využívá. Konečně, pro výpis těchto pomocných informací ke každé nalezené aplikaci lze spustit přepínačem \texttt{-{}-helpers}.
 
 				\paragraph{Interaktivní mód}
-				V určitých případech může uživatel chtít zobrazit pomocné informace pouze k několika aplikacím, ale nechce vypisovat jejich názvy. Pro tento účel byl zaveden interaktivní režim. Pokud spustíme Tracer s parametrem \texttt{-i}, nebo \texttt{--interactive}, obdržíme na výstupu očíslovaný seznam aplikací zakončený promptem. Postupně zadáváme čísla aplikací, které nás zajímají a dostáváme výpis pomocných informací.
+				V určitých případech může uživatel chtít zobrazit pomocné informace pouze k několika aplikacím, ale nechce vypisovat jejich názvy. Pro tento účel byl zaveden interaktivní režim. Pokud spustíme Tracer s parametrem \texttt{-i}, nebo \texttt{-{}-interactive}, obdržíme na výstupu očíslovaný seznam aplikací zakončený promptem. Postupně zadáváme čísla aplikací, které nás zajímají a dostáváme výpis pomocných informací.
 
 			\subsubsection{Adresářová struktura}
 			\subsubsection{MVC}
