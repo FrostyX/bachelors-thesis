@@ -194,7 +194,22 @@
 		Jak jsme mohli vidět, objekty procesů jsou vytvářeny na základě jejich identifikátoru PID\@. Zjištění seznamu jejich hodnot je tedy klíčkovou záležitostí, kterou pro nás zajišťuje funkce \texttt{psutil.get\_pid\_list()}.
 
 		\subsubsection{Problémy při práci s procesy}
-		% @TODO Dopsat
+			Při práci s procesy narážíme na několik problémů, které bychom neustále měli mít na paměti.
+			\\
+			\\
+			K prvnímu výraznému jevu dochází, když je vytvořen objekt reprezentující proces, poté je daný proces ukončen a následovně dojde k pokusu o přístup k atributu jeho objektu. Obdobná situace nastává v případě získání seznamu identifikátorů všech spuštěných procesů a následného vytvoření objektů na jejich základě. Může se totiž stát, že došlo k ukončení některých procesů mezi časem získání jejich identifikátoru a časem vytváření objektů. V těchto případech dochází k výjimce, se kterou však není potřeba si příliš lámat hlavu. Proces byl již ukončen, takže pro naše účely není ničím zajímavý. Je však důležité si tuto problematiku uvědomit.
+			\\
+			\\
+			Dále si lze všimnout poměrně zvláštního jevu. Tím jsou podivné řetězce na konci názvů, některých procesem používaných, souborů. Množinu všech možných přípon, které se mohou vyskytnout, nelze přesně určit, nicméně v průběhu tohoto projektu jsem se setkal s následujícími případy:
+
+			\lstinputlisting
+			[
+				language=SQL,
+				label=strings-in-filenames,
+				caption={}
+			]{sources/strings_in_filenames}
+
+			Tyto soubory samozřejmě fyzicky neexistují. Například na konci prvního zmíněného souboru přebývá řetězec \texttt{;53c7cd86}. Po jeho vyjmutí z názvu, však získáme cestu ke skutečně existujícímu souboru poskytovanému balíčkem XY\@. Obdobně to platí i pro příponu \texttt{.\#prelink\#} a jí následovaný identifikátor, nebo příponu \texttt{\#new}. Je potřeba si také dát pozor na příznak \texttt{(deleted)}, který se může objevit i nezávisle na těchto příponách.
 
 		\subsection{Práce s balíčky}
 			Především nás budou zajímat tři operace. Zjištění seznamu balíčků, které byly od daného času modifikovány, zjištění základních informací o konkrétním balíčku, jako například název, popis, etc a nakonec zjištění seznamu souborů, které balíček poskytuje. Ukážeme si, že každou z nich lze implementovat několika různými způsoby. Objasníme, který z nich vyhovuje potřebám této práce nejvíce a proč tomu tak je.
