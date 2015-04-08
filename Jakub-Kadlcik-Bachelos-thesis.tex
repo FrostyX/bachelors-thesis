@@ -360,13 +360,40 @@
 		\subsection{DNF plugin}
 		\subsection{Testování}
 
+	\newpage
 	\section{Distribuce programu}
+		V kapitole XY byl popsán program Tracer, který vznikl v rámci této práce. Bylo řečeno jakým způsobem funguje, jak byl implementován a jaká má omezení. Nyní se podíváme na aspekty, dělající z něj dělají plnohodnotný software. To jest takový, který slouží uživatelům a je přívětivý k novým vývojářům.
+
 		\subsection{Licence}
-		\subsection{Zdrojový kód}
+		Program je vyvíjen pod svobodnou licencí GNU/GPLv2, jejíž plné znění naleznete v příloze číslo XY\@. Tato licence zajišťuje, že každý člověk má právo studovat zdrojový kód tohoto programu. To znamená číst jej, modifikovat a libovolně s ním experimentovat. Původní, nebo pozměněné dílo může dále distribuovat, avšak pod podmínkou, že tyto klony budou poskytovat stejná práva, jako původní software. Licence navíc umožňuje využívat dílo k libovolnému účelu.
+		\\
+		\\
+		Při použití této licence můžeme o Traceru hovořit jako o otevřeném, či ještě lépe, svobodném software.
+
 		\subsection{Verzování}
+		Přirozeným požadavkem na software, je \uv{rozumný} způsob jeho verzování. Na první pohled to sice nemusí být zřejmé, ale případní uživatelé musejí být schopni určit, jakou verzi používají. A to hned z několika důvodů. Software se v průběhu času vyvíjí a uživatelé by jej měli průběžně aktualizovat\footnote{To je ostatně motivací této práce}. K tomu je ovšem potřeba identifikovat používanou verzi a dokázat určit, zda je jiná verze novější, nebo ne. Programátoři navíc nejsou neomylní a jejich dílo může obsahovat chyby. V případě jejich hlášení je nutné uvést verzi programu, která danou chybou trpí, jinak bude velmi problematické, až nemožné, ji nalézt a opravit.
+
+			\subsubsection{GIT}
+			Z tohoto důvodu Tracer k verzování využívá nástroje GIT, kde je každá logická\footnote{} úprava zdrojového kódu uložena jako popis transformačních kroků, potřebných pro převedení stávajícího kódu na nový. Krokům k provedení jedné logické změny se v kontextu nástroje GIT říká commit. Každý takový commit je označen pomocí kontrolního součtu a dle historie commitů lze určit jejich pořadí. Určité milníky potom lze označit a přiřadit jim vlastní název (tag). Tím například může být číslo verze.
+			\\
+			\\
+			Člověk využívající vývojovou větev Traceru může tedy identifikovat přesnou verzi pomocí kontrolního součtu nejnovějšího commitu, případně pomocí jména tagu.
+
+			\subsubsection{Čísla verzí}
+			@TODO http://semver.org/
+
+		\subsection{Zdrojový kód}
+		Jakožto svobodný software, má Tracer zdrojové kódy a vše co k nim patří, veřejně vystavené. Kdokoli tak může uplatnit práva zaručená licencí GNU/GPLv2. Pro vytvoření vlastní kopie zdrojového kódu ve svém počítači, spusťte příkaz:
+
+		\begin{lstlisting}[gobble=12]
+			git clone https://github.com/FrostyX/tracer.git
+		\end{lstlisting}
+
 		\subsection{Balíčky pro distribuce}
 		\subsection{Dokumentace}
+		\subsection{Odkazy}
 
+	\newpage
 	\section{Porovnání s konkurencí}
 		\subsection{needs-restarting}
 		\subsection{checkrestart}
