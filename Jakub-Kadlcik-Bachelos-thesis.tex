@@ -391,7 +391,28 @@
 
 		Takto bude získána nejaktuálnější verze zdrojového kódu, která neprošla řádným testovacím procesem a v žádném případě ji nelze považovat za stabilní. Její užití je doporučeno pouze vývojářům programu Tracer a lidem majícím zájem o pohled na novou funkcionalitu tohoto programu. Avšak pouze na vlastní nebezpečí.
 
-		\subsection{Balíčky pro distribuce}
+		\subsection{Instalační balíčky pro Fedoru}
+		Cílovou platformou tohoto programu je linuxová distribuce Fedora. Zde je jeho zprovoznění velmi přímočaré. Nainstalovat lze buď pouze samotný program Tracer, jež bude potřeba manuálně spouštět, nebo i plugin pro balíčkovací systém DNF\@, který jej bude spouštět automaticky. Jsou distribuovány odděleně. Samotnou instalaci lze provést pomocí balíčkovacích systémů YUM, DNF, či jejich grafických nadstaveb. Následující ukázka vysvětlí instalaci skrze balíčkovací systém DNF.
+
+		\lstinputlisting
+		[
+			language=Sh,
+			label=dnf-install-tracer,
+			caption={Instalace programu Tracer pomocí balíčkovacího systému DNF}
+		]{sources/dnf_install_tracer.sh}
+
+		Tyto příkazy zajistí stažení a instalaci balíčků, včetně všech potřebných závislostí. Získány budou z oficiálního repozitáře distribuce Fedora, pravděpodobně tedy nebude nainstalována stejná verze programu, jako ta, která je přibalená na CD této práce.
+		\\
+		\\
+		Přibalenou verzi lze nainstalovat spuštěním následujícího příkazu:
+
+		\lstinputlisting
+		[
+			language=Sh,
+			label=rpm-install-tracer,
+			caption={Instalace přiložené verze programu Tracer}
+		]{sources/rpm_install_tracer.sh}
+
 		\subsection{Dokumentace}
 		\subsection{Odkazy}
 
