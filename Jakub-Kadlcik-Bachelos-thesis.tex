@@ -69,30 +69,35 @@
 
 	\section{Úvod}
 		\subsection{Správa software v GNU/Linux}
-		Ve většině distribucí GNU/Linuxu se software standardně spravuje prostřednictvím balíčkovacího systému. Nové distribuce většinou vznikají odvozením jiné, již existující distribuce a v tomto případě bývá zachován typ balíčků i balíčkovací systém. Můžeme tedy říct, že distribucí je mnoho, ale balíčkovaích systémů se používá jen velmi málo. Konkrétně lze hovořit o distribucích GNU/Linuxu používající balíčky RPM\footnote{RPM = Red Hat Package Manager}, DEB\footnote{DEB = Debian software package} a nebo jiný typ balíčku. V posledním případě se jedná případ od případu o velmi specifický předpis balíčku. V rámci této práce se budeme zabývat linuxovou distribucí Fedora jako reprezentantem první skupiny a distribucí Gentoo, jako reprezentantem poslední skupiny.
+		Ve většině distribucí GNU/Linuxu se software standardně spravuje prostřednictvím balíčkovacího systému. Jedná se o nástroj zajišťující evidenci nainstalovaného a dostupného softwaru, jeho instalaci a následnou aktualizaci. Nové distribuce většinou vznikají odvozením jiné, již existující distribuce a v tomto případě bývá zachován typ balíčků i balíčkovací systém. Můžeme tedy říct, že distribucí je mnoho, ale balíčkovaích systémů se používá jen velmi málo. Konkrétně lze hovořit o distribucích GNU/Linuxu používající balíčky RPM\footnote{RPM = Red Hat Package Manager}, DEB\footnote{DEB = Debian software package} a nebo jiný typ balíčku. V posledním případě se jedná případ od případu o velmi specifický předpis balíčku. V rámci této práce se budeme zabývat linuxovou distribucí Fedora jakožto reprezentantem první skupiny.
+		\\
+		\\
+		Fedora vznikla jako nekomerční odnož Red Hat Linuxu a zachovala stávající systém balíčků RPM\@. Od své první verze využívá nástavbu nad RPM zvanou YUM\@. Ten se po čase stal téměř neudržovatelný a proto se objevila alternativa pojmenovaná DNF\@. V současné době lze paralelně využívat oba tyto nástroje, avšak je snaha YUM kompletně nahradit za pomocí DNF\@. Mělo by k tomu dojít již ve Fedoře 21. Aktuální stabilní verze je 20, jde tedy o příští vydání.
 
-			\subsubsection{Balíčkovací systém distribuce Fedora}
-			Fedora vznikla jako nekomerční odnož Red Hat Linuxu a zachovala stávající systém balíčků RPM\@. Od své první verze využívá nástavbu nad RPM zvanou YUM\@. Ten se po čase stal téměř neudržovatelný a proto se objevila alternativa pojmenovaná DNF\@. V současné době lze paralelně využívat oba tyto nástroje, avšak je snaha YUM kompletně nahradit za pomocí DNF\@. Mělo by k tomu dojít již ve Fedoře 21. Aktuální stabilní verze je 20, jde tedy o příští vydání.
-
-			\subsubsection{Balíčkovací systém distribuce Gentoo}
-
-		\subsection{Problém}
-		Když spustíme aplikaci, do paměti se načtou knihovny a soubory potřebné k jejímu běhu. Pokud je některá z knihoven, nebo samotná aplikace po dobu jejího běhu aktualizována, v paměti stále zůstanou původní soubory, přestože fyzicky už nemusí existovat (mohou být smazány, nebo nahrazeny novějšími verzemi).
-		\\\\
-		Zjistit, které, v systému spuštěné, aplikace využívají takto neaktuální soubory, není pro uživatele triviální. V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné.
-
-		\subsection{Motivace}
-		Na první pohled by se mohlo zdát, že postrádá smysl, zabývat se takovým problémem a jeho vyřešení nepřinese nic zajímavého. Ve skutečnosti však mohou být důsledky velmi nebezpečné. Pokud například aktualizace opravuje bezpečnostní chybu staré verze, běžící aplikace zůstanou neopravené. K jejich opravě dojde až jejich restartováním. Uživateli se tak může stát, že nainstaluje záplatu, bude si myslet, že jeho systém je opět bezpečný a přitom stále běží několik nebezpečných procesů.
+		\subsection{Problém při aktualizaci systému}
+		Když spustíme aplikaci, do paměti se načtou knihovny a soubory potřebné k jejímu běhu. Pokud je některá z knihoven, nebo samotná aplikace po dobu jejího běhu aktualizována, v paměti stále zůstanou původní soubory, přestože fyzicky už nemusí existovat (mohou být smazány, nebo nahrazeny novějšími verzemi). Zjistit, které, v systému spuštěné, aplikace využívají takto neaktuální soubory, není pro uživatele triviální.
+		\\
+		\\
+		Na první pohled by se mohlo zdát, že postrádá smysl zabývat se takovým problémem a jeho vyřešení nepřinese nic zajímavého. Ve skutečnosti však mohou být důsledky velmi nebezpečné. Pokud například aktualizace opravuje bezpečnostní chybu staré verze, běžící aplikace zůstanou neopravené. K jejich opravě dojde až jejich restartováním. Uživateli se tak může stát, že nainstaluje záplatu, bude si myslet, že jeho systém je opět bezpečný a přitom stále běží několik nebezpečných procesů.
+		\\
 		\\
 		Další problém se týká spíše uživatelů \textit{unstable} distribucí, kterým do systému mohou přicházet zpětně nekompatibilní balíčky. Potom se může stát, že některá služba odmítne nastartovat, protože nová verze nepovoluje stávající konfiguraci, nebo vlivem nepřesně specifikovaných závislostí zůstane v systému nekompatibilní verze knihovny. Takovýchto případů bychom si rádi všimli, co nejdříve to bude možné, nikoliv až v kritické chvíli, kdy například dojde k restartování serveru.
+		\\
+		\\
+		V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné.
 
-		\subsection{Požadavky}
+		\subsection{Cíl práce}
+		Práce si klade za cíl vytvořit software, který bude řešit problém \textit{nalezení aktualizacemi ovlivněných aplikací}. Software by měl najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést.
+
+		\section{Požadavky}
+		@TODO Hutnější specifikace\\
+
 		Tato práce vznikala ve spolupráci se společností Red Hat, Inc., přičemž následující požadavky byly zhotoveny na základě již existujícího zadání.
 		\\
 		\\
-		Práce si klade za cíl vytvořit software, který bude řešit problém \textit{nalezení aktualizacemi ovlivněných aplikací}. Software by měl najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést. Software by měl disponovat textovým uživatelským rozhraním a mělo by být možné jej používat jako modul přímo v balíčkovacím systému DNF\@. Vývoj by měl probíhat pod otevřenou licencí a na libovolném veřejném úložišti. Dále by měl být k dispozici instalační balíček pro distribuci Fedora.
+		Software by měl disponovat textovým uživatelským rozhraním a mělo by být možné jej používat jako modul přímo v balíčkovacím systému DNF\@. Vývoj by měl probíhat pod otevřenou licencí a na libovolném veřejném úložišti. Dále by měl být k dispozici instalační balíček pro distribuci Fedora.
 
-	\section{Analýza}
+	\section{Analýza problému}
 	Rozložme si problém na menší části a projděme je jednu po druhé. Stěžejní funkcí má být vypsání jistého seznamu aplikací. Nejdříve se tedy zaměříme na jeho získání. Dále potřebujeme konstrukt, který zjistí informace o  dané aplikaci. Nakonec se budeme zajímat o to, jakým způsobem lze nalezené aplikace restartovat.
 
 		\subsection{Seznam ovlivněných aplikací -- Ilustrativně}
@@ -141,7 +146,9 @@
 			Při vyhledávání je pro každý balíček procházen seznam jím poskytovaných souborů. Složitost tohoto problému je analogická předchozí situaci, tedy $O(n^2)$. Co se ovšem změnilo, je problém nalezení všech procesů, využívajících daný soubor. Nyní si stačí vyzvednout jejich seznam jednorázovým přístupem do stromové struktury typu BTree. Složitost tohoto problému je $O(log(n)$. Poskládáním jednotlivých kousků problému dohromady, získáváme časovou složitost celého algoritmu vyjádřenou jako $O(n^2 * log(n))$.
 
 		\subsection{Informace o aplikaci}
-		Rozlišujme dva druhy informací. Pracujeme se spuštěnými aplikacemi, tedy lze hovořit o procesech spuštěných v systému. Každý proces má nějaký PID\footnote{PID (Process ID) je unikátní atribut pro identifikaci procesu}, spustil jej nějaký uživatel, běží určitou dobu, etc.
+		Na chvíli se zamysleme nad přenositelností nástroje mezi různými linuxovými distribucemi. Položme si následující otázku, je možné zjišťovat informace o aplikacích stejným způsobem na libovolném linuxovém systému? Prozradím, že část z nich skutečně ano, avšak ne všechny.
+
+		Rozlišujeme totiž dva druhy informací. Pracujeme se spuštěnými aplikacemi, tedy lze hovořit o procesech spuštěných v systému. Každý proces má nějaký PID\footnote{PID (Process ID) je unikátní atribut pro identifikaci procesu}, spustil jej nějaký uživatel, běží určitou dobu, etc.
 
 		Dále lze uvažovat, že každá\footnote{Každá standardně nainstalovaná} aplikace je poskytována distribučním balíčkem. Každý takový balíček poskytuje informace o tom, k čemu slouží, v jaké je verzi, jak dlouho je nainstalován, etc.
 
@@ -158,9 +165,12 @@
 
 
 	\pagebreak
+	\section{Programovací jazyk Python}
+	@TODO Proč byl použit? Historie, verze, vlastnosti,\dots?
+
 	\section{Implementace}
 		\subsection{Úvod}
-		Projekt je vyvíjen pod názvem Tracer. Bylo požadováno, aby se implementoval v programovacím jazyce Python. V současné době je de facto standardem Python ve verzi 2.7.x, jehož překladač lze nalézt na všech distribucích a pro který existuje velká spousta uživatelských knihoven. Z tohoto důvodu jsem zvolil právě verzi 2.7.x, přestože aktuální stabilní verzí je 3.x.
+		Již jsme se seznámili s prostředím linuxových systémů a problematikou hledání aktualizacemi ovlivněných aplikací. Ukázali jsme si také konkrétní vyhledávací algoritmy předpokládající jisté vstupní parametry, jako například seznam modifikovaných balíčků, nebo seznam všech procesů. Samotný algoritmus pak zjišťoval seznam souborů poskytovaných daným balíčkem, či seznam souborů využívaných daným procesem. V této kapitole si vysvětlíme, jakým způsobem lze v jazyce Python zmíněné vstupní parametry získat a také, jakým způsobem realizovat potřebné operace.
 
 		\subsection{Práce s procesy}
 		Správu procesů v jazyce Python zajišťuje balík \texttt{psutil}, který je ve Fedoře k dispozici pod názvem \texttt{python-psutil}. Tento balík umožňuje získání seznamu všech aktuálně běžících procesů a poskytuje přístup ke všem jejich atributům, které lze v linuxových systémech zjistit. Mimo to poskytuje rozhraní pro získávání informací o paměti, procesoru, pevných discích a síťových rozhraních.
@@ -325,43 +335,44 @@
 			V předchozích kapitolách jsme si vysvětlili, jak v programovacím jazyce Python získat všechny data, které algoritmus popsaný v kapitole XY na svém vstupu vyžaduje. Nyní bychom se mohli podívat na konkrétní implementaci tohoto algoritmu. Nicméně, neučiníme tak, protože samotná implementace není ničím zajímavá. Jedná se pouze o přepis pseudokódu z kapitoly XY do zdrojového kódu jazyka Python. Z tohoto důvodu bych případné zájemce rád odkázal přímo na zdrojový kód programu.
 
 		\subsection{Rozšíření pro balíčkovací systém DNF}
-		\subsection{Tracer}
-			V předchozích kapitolách jsme představili problematiku hledání aktualizacemi ovlivněných aplikací, popsali algoritmy pro jejich hledání a způsob, jak je lze implementovat v jazyce python pro linuxovou distribuci Fedora. Nyní se podíváme na produkt nesoucí název Tracer, jenž na těchto základech vznikl.
-			\subsubsection{Uživatelská příručka}
-				Následuje pouze nástin možných případů užití. Kompletní uživatelskou dokumentaci a manuálovou stránku programu naleznete v příloze XY.
+	\newpage
+	\section{Tracer}
+		V předchozích kapitolách jsme představili problematiku hledání aktualizacemi ovlivněných aplikací, popsali algoritmy pro jejich hledání a způsob, jak je lze implementovat v jazyce python pro linuxovou distribuci Fedora. Nyní se podíváme na produkt nesoucí název Tracer, jenž na těchto základech vznikl.
+		\subsection{Uživatelská příručka}
+			Následuje pouze nástin možných případů užití. Kompletní uživatelskou dokumentaci a manuálovou stránku programu naleznete v příloze XY.
 
-				\paragraph{Standardní použití}
-				Primárním a zároveň nejjednodušším způsobem, jak program spustit, je příkazem\footnote{Oprávnění superuživatele je nutné, protože program potřebuje číst databázi balíčkovacího systému.} \texttt{sudo tracer}. Na výstupu obdržíme seznam ovlivněných aplikací, tak jak byl požadován v zadání. Ukázkový výstup můžeme vidět na následujícím příkladu.
+			\subsubsection{Standardní použití}
+			Primárním a zároveň nejjednodušším způsobem, jak program spustit, je příkazem\footnote{Oprávnění superuživatele je nutné, protože program potřebuje číst databázi balíčkovacího systému.} \texttt{sudo tracer}. Na výstupu obdržíme seznam ovlivněných aplikací, tak jak byl požadován v zadání. Ukázkový výstup můžeme vidět na následujícím příkladu.
 
-				\lstinputlisting
-				[
-					label=tracer-standard-usage-output,
-					caption={Ukázkový výstup příkazu \texttt{sudo tracer}}
-				]{sources/tracer_standard_usage_output}
+			\lstinputlisting
+			[
+				label=tracer-standard-usage-output,
+				caption={Ukázkový výstup příkazu \texttt{sudo tracer}}
+			]{sources/tracer_standard_usage_output}
 
-				\pagebreak
-				\paragraph{Zobrazení konkrétní aplikace}
-				Uživatel může ve výstupu narazit na aplikaci, kterou například nezná, nebo netuší, proč je potřeba ji restartovat a jak toho docílit. Z tohoto důvodu existuje přepínač \texttt{-s} neboli \texttt{-{}-show}, jenž zobrazí všechny informace, které Tracer o aplikaci zná a se kterými pracuje.
+			\pagebreak
+			\subsubsection{Zobrazení konkrétní aplikace}
+			Uživatel může ve výstupu narazit na aplikaci, kterou například nezná, nebo netuší, proč je potřeba ji restartovat a jak toho docílit. Z tohoto důvodu existuje přepínač \texttt{-s} neboli \texttt{-{}-show}, jenž zobrazí všechny informace, které Tracer o aplikaci zná a se kterými pracuje.
 
-				\lstinputlisting
-				[
-					label=tracer-helper-output,
-					caption={Ukázkový výstup příkazu \texttt{sudo tracer -s apache2}}
-				]{sources/tracer_helper_output}
+			\lstinputlisting
+			[
+				label=tracer-helper-output,
+				caption={Ukázkový výstup příkazu \texttt{sudo tracer -s apache2}}
+			]{sources/tracer_helper_output}
 
-				Stejně jako u většiny UNIXových programů, lze množství vypisovaných informací ovlivnit přepínači \texttt{-v} a \texttt{-vv}. První varianta zobrazí i seznam balíčků, jenž aplikaci ovlivnil. Druhá varianta pak zobrazí i seznam konkrétních souborů, které balíčky aktualizovali a aplikace je využívá. Konečně, výpis těchto pomocných informací ke každé nalezené aplikaci, lze spustit přepínačem \texttt{-{}-helpers}.
+			Stejně jako u většiny UNIXových programů, lze množství vypisovaných informací ovlivnit přepínači \texttt{-v} a \texttt{-vv}. První varianta zobrazí i seznam balíčků, jenž aplikaci ovlivnil. Druhá varianta pak zobrazí i seznam konkrétních souborů, které balíčky aktualizovali a aplikace je využívá. Konečně, výpis těchto pomocných informací ke každé nalezené aplikaci, lze spustit přepínačem \texttt{-{}-helpers}.
 
-				\paragraph{Interaktivní mód}
-				V určitých případech může uživatel chtít zobrazit pomocné informace pouze k několika aplikacím, ale nechce vypisovat jejich názvy. Pro tento účel byl zaveden interaktivní režim. Pokud spustíme Tracer s parametrem \texttt{-i}, nebo \texttt{-{}-interactive}, obdržíme na výstupu očíslovaný seznam aplikací zakončený promptem. Postupně zadáváme čísla aplikací, které nás zajímají a dostáváme výpis pomocných informací.
+			\subsubsection{Interaktivní mód}
+			V určitých případech může uživatel chtít zobrazit pomocné informace pouze k několika aplikacím, ale nechce vypisovat jejich názvy. Pro tento účel byl zaveden interaktivní režim. Pokud spustíme Tracer s parametrem \texttt{-i}, nebo \texttt{-{}-interactive}, obdržíme na výstupu očíslovaný seznam aplikací zakončený promptem. Postupně zadáváme čísla aplikací, které nás zajímají a dostáváme výpis pomocných informací.
+		\subsubsection{DNF plugin}
 
+		\subsection{Programátorská příručka}
 			\subsubsection{Adresářová struktura}
 			\subsubsection{MVC}
+			\subsection{Testování}
 
-		\subsection{DNF plugin}
-		\subsection{Testování}
-
-	\newpage
 	\section{Distribuce programu}
+		@TODO Sloučit s kapitolou Tracer\\\\
 		V kapitole XY byl popsán program Tracer, který vznikl v rámci této práce. Bylo řečeno jakým způsobem funguje, jak byl implementován a jaká má omezení. Nyní se podíváme na aspekty, dělající z něj dělají plnohodnotný software. To jest takový, který slouží uživatelům a je přívětivý k novým vývojářům.
 
 		\subsection{Licence}
@@ -422,6 +433,9 @@
 		\subsection{checkrestart}
 		\subsection{needrestart}
 		% https://github.com/liske/needrestart
+
+	\section{Zhodnocení}
+	@TODO Zhodnotit výsledky práce, použité technologie, python, \dots
 
 	\section{Závěr} % Zrušit číslování
 	\section{Conclusions} % Zrušit číslování
