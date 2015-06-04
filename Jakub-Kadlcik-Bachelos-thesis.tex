@@ -74,11 +74,9 @@
 	\newpage
 
 	\section{Úvod}
-		%\subsection{Správa software v GNU/Linux}
 		Ve většině distribucí GNU/Linuxu se software standardně spravuje prostřednictvím balíčkovacího systému. Jedná se o nástroj zajišťující evidenci nainstalovaného a dostupného softwaru, jeho instalaci a následnou aktualizaci. Nové distribuce většinou vznikají odvozením jiné, již existující distribuce a v tomto případě bývá zachován typ balíčků i balíčkovací systém. Můžeme tedy říct, že distribucí je mnoho, ale balíčkovaích systémů se používá jen velmi málo. Konkrétně lze hovořit o distribucích GNU/Linuxu používající balíčky RPM\footnote{RPM = Red Hat Package Manager}, DEB\footnote{DEB = Debian software package} a nebo jiný typ balíčku. V posledním případě se jedná případ od případu o velmi specifický předpis balíčku. V rámci této práce se budeme zabývat linuxovou distribucí Fedora jakožto reprezentantem první skupiny.
 		\\
 		\\
-			%\subsubsection{Balíčkovací systém distribuce Fedora}
 		Fedora vznikla jako nekomerční odnož Red Hat Linuxu a zachovala stávající systém balíčků RPM\@. Od své první verze využívá nástavbu nad RPM zvanou YUM\@. Ten se po čase stal téměř neudržovatelný a proto se objevila alternativa pojmenovaná DNF\@. V současné době lze paralelně využívat oba tyto nástroje, avšak je snaha YUM kompletně nahradit za pomocí DNF\@.
 		\\
 		\\
@@ -87,20 +85,16 @@
 		Zjistit, které, v systému spuštěné, aplikace využívají takto neaktuální soubory, není pro uživatele triviální. V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné.
 		\\
 		\\
-		%%\subsection{Motivace}
 		Na první pohled by se mohlo zdát, že postrádá smysl, zabývat se takovým problémem a jeho vyřešení nepřinese nic zajímavého. Ve skutečnosti však mohou být důsledky velmi nebezpečné. Pokud například aktualizace opravuje bezpečnostní chybu staré verze, běžící aplikace zůstanou neopravené. K jejich opravě dojde až jejich restartováním. Uživateli se tak může stát, že nainstaluje záplatu, bude si myslet, že jeho systém je opět bezpečný a přitom stále běží několik nebezpečných procesů.
 		Další problém se týká spíše uživatelů \textit{unstable} distribucí, kterým do systému mohou přicházet zpětně nekompatibilní balíčky. Potom se může stát, že některá služba odmítne nastartovat, protože nová verze nepovoluje stávající konfiguraci, nebo vlivem nepřesně specifikovaných závislostí zůstane v systému nekompatibilní verze knihovny. Takovýchto případů bychom si rádi všimli, co nejdříve to bude možné, nikoliv až v kritické chvíli, kdy například dojde k restartování serveru.
 		\\
 		\\
-		V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné.
-
-		\subsection{Cíl práce}
-		Práce si klade za cíl vytvořit software, který bude řešit problém \textit{nalezení aktualizacemi ovlivněných aplikací}. Software by měl najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést.
+		V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné. Práce si proto klade za cíl vytvořit software, který bude řešit problém \textit{nalezení aktualizacemi ovlivněných aplikací}. Software by měl najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést.
 
 		\section{Požadavky}
 		@TODO Hutnější specifikace\\
 
-		Tato práce vznikala ve spolupráci se společností Red Hat, Inc., přičemž následující požadavky byly zhotoveny na základě již existujícího zadání.
+		Tato práce vznikala ve spolupráci se společností Red~Hat,~Inc., přičemž následující požadavky byly zhotoveny na základě již existujícího zadání.
 		\\
 		\\
 		Software by měl disponovat textovým uživatelským rozhraním a mělo by být možné jej používat jako modul přímo v balíčkovacím systému DNF\@. Vývoj by měl probíhat pod otevřenou licencí a na libovolném veřejném úložišti. Dále by měl být k dispozici instalační balíček pro distribuci Fedora.
@@ -171,8 +165,11 @@
 		\\
 		Všechny ostatní aplikace spadají do poslední skupiny. Uživatel je musí ručně ukončit a znovu spustit. Nezáleží na tom, zda jsou grafické a bude tak učiněno křížkem v záhlaví okna, nebo spuštěné v příkazové řádce a budou ukončeny jiným způsobem. Tato poslední kategorie není bezpečně automatizovatelná a proto musí zůstat v plné režii uživatele.
 
+	\newpage
+	\section{Linuxová distribuce Fedora}
+	@TODO about, historie, balíčkovací systém, možná popis dnf databáze a vysvětlit, že se bude později v textu hodit
 
-	\pagebreak
+	\newpage
 	\section{Programovací jazyk Python}
 	@TODO Proč byl použit? Historie, verze, vlastnosti,\dots?
 	Jedním z požadavků této práce je, aby výsledný produkt byl realizován v programovacím jazyce Python. Proč je tomu tak a proč zrovna Python? Na tuto otázku existuje velmi jednoduchá odpověď. Nový balíčkovací systém DNF, distribuce Fedora, je napsán právě v tomto jazyce a poskytuje v něm API pro tvorbu rozšíření od třetích stran. Nehledě na to, Python disponuje několika vlastnostmi, ve kterých konkurence zaostává.
@@ -498,7 +495,15 @@
 
 
 	\section{Zhodnocení}
-	@TODO Zhodnotit výsledky práce, použité technologie, python, \dots
+	Problém, kterým se tato práce zabývá mě trápil a přes vynaložené úsilí se mi jej nedařilo uspokojivě vyřešit za pomocí stávajících nástorjů. To bylo důvodem, proč jsem požádal o spolupráci společnost Red~Hat,~Inc., která její zadání vypsala.
+	\\
+	\\
+	Jednalo se o můj první opensource projekt takového rozsahu a byl pro mě premiérovým v mnoha směrech. Seznámil jsem se zde s programovacím jazykem Python, což mělo za následek časté refaktorování. Následkem toho byl v průběhu času několikrát přepsán nejspíš každý řádek, ve snaze přiblížit se idiomům tohoto jazyka. V Pythonu se mi programovalo velmi příjemně, většina aspektů tohoto jazyka je ve skrze vydařených. Ovšem narazil jsem i na jeho stinné stránky, jakými jsou například kompatibilita major verzí. Přestože mnoho novinek bylo ze třetí verze do druhé backportováno, je zřejmé, že zpětně nekompatibilní změny být nemohly. Jednou z takových je kódování řetězců pomocí UTF-8, jehož korektní použití je až nepřiměřeně složité.
+	\\
+	Dále jsem měl možnost vyzkoušet si nástroj Travis CI pro průběžnou integraci, Transifex pro správu lokalizací, či nástroj Sphinx pro tvorbu uživatelské dokumentace.
+	\\
+	\\
+	Několikaletá spolupráce se vydařila a výsledky byly uspokojivé pro obě strany. Tato práce mi navíc umožnila přijetí do internship programu společnosti Red~Hat,~Inc.
 
 	\section{Závěr} % Zrušit číslování
 
