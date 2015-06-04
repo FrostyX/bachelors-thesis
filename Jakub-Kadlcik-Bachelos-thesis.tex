@@ -412,10 +412,6 @@
 			\subsubsection{MVC}
 			\subsection{Testování}
 
-	\section{Distribuce programu}
-		@TODO Sloučit s kapitolou Tracer\\\\
-		V kapitole XY byl popsán program Tracer, který vznikl v rámci této práce. Bylo řečeno jakým způsobem funguje, jak byl implementován a jaká má omezení. Nyní se podíváme na aspekty, dělající z něj dělají plnohodnotný software. To jest takový, který slouží uživatelům a je přívětivý k novým vývojářům.
-
 		\subsection{Licence}
 		Program je vyvíjen pod svobodnou licencí GNU/GPLv2, jejíž plné znění naleznete v příloze číslo XY\@. Tato licence zajišťuje, že každý člověk má právo studovat zdrojový kód tohoto programu. To znamená číst jej, modifikovat a libovolně s ním experimentovat. Původní, nebo pozměněné dílo může dále distribuovat, avšak pod podmínkou, že tyto klony budou poskytovat stejná práva, jako původní software. Licence navíc umožňuje využívat dílo k libovolnému účelu.
 		\\
@@ -519,7 +515,20 @@
 	Několikaletá spolupráce se vydařila a výsledky byly uspokojivé pro obě strany. Tato práce mi navíc umožnila přijetí do internship programu společnosti Red~Hat,~Inc.
 
 	\section{Závěr} % Zrušit číslování
+	Cílem mé práce bylo rozebrat problematiku \uv{aktualizacemi ovlivněných aplikací}, konkrétně pak jejich nalezení a doporučení nejlepšího způsobu, jak docílit jejich restartování. V teoretické části jsem objasnil důležitost tohoto problému a důsledky z něho plynoucí. Pokud by si čtenář z tohoto textu odnesl pouze jedinou informaci, měla by to být právě tato. Přestože svůj systém aktualizuje, neznamená to, že se změny automaticky projeví v právě spuštěných aplikacích. Je potřeba je restartovat. Dále jsem požadovanou problematiku rozdělil na dílčí celky a navrhl algoritmy pro jejich řešení.
+	\\
+	\\
+	Součástí práce bylo v jazyce Python implementovat software pro vyhledávání ovlivněných aplikací na linuxové distribuci Fedora. Zde jsem využil vyzkoumané algoritmy zmíněné výše. V této části bylo zajímavé především získání dat potřebných pro jejich vstupy. Čtenář se dozvěděl, jakým způsobem zjišťovat informace o spuštěných procesech, nainstalovaných balíčcích, či balíčkovacím systémem provedených transakcích.
+	\\
+	\\
+	Původní cílovou platformou byla distribuce Fedora 19 obsahující interpret Pythonu verze 2.7 a balíčkovací systém YUM. V průběhu práce se všechny tyto komponenty staly neaktuálními a proto se projekt přizpůsobil současnému stavu věcí. Fedora je nyní v téměř finální verzi přechodu na systém DNF, v tuto chvíli je již YUM označen za zastaralý a v příštím vydání bude zahozen úplně. Obdobně je tomu v situaci interpreterů Pythonu. Již v příštím vydání bude výchozí jeho třetí verze namísto druhé. Můj projekt tento vývoj reflektuje a je možné jej používat, jak s komponentami, pro které byl určen původně, tak s těmi aktuálními.
+	\\
+	\\
+	Poslední částí mé práce bylo objasnit, jakým způsobem lze rozšiřovat funkcionalitu balíčkovacího systému DNF.
 	@ TODO
+	\\
+	\\
+	Stejně, jako většina existujícího softwaru, lze i ten můj dále vylepšovat a rozšiřovat. Šlo by například využít nástroje PackageKit, který by mohl přinést podporu pro většinu linuxových distribucí.
 
 	\section{Conclusions} % Zrušit číslování
 	% @TODO Přeložit ^^
