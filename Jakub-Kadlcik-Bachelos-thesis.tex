@@ -61,32 +61,37 @@
 	\newpage
 
 	% Anotace
+	\section{Anotace} % @TODO Nečíslovat
+	Práce se zabývá problematikou \uv{aktualizacemi ovlivněných aplikací}, konkrétně pak jejich nalezením a doporučením nejlepšího způsobu, jak docílit jejich restartování. V teoretické části se zabývá otázkou důležitosti tohoto problému a pojednává o možných algoritmech. Součástí práce je vytvoření nástroje pro vyhledávání ovlivněných aplikací na linuxové distribuci Fedora. Tento nástroj má být možné použít také skrze rozšíření balíčkovacího systému DNF.
+
+	\section{Anotation}
+	% @TODO Přeložit ^^
 
 	% Poděkování
 
+	\newpage
 	\tableofcontents
 	\newpage
 
 	\section{Úvod}
-		\subsection{Správa software v GNU/Linux}
-		Ve většině distribucí GNU/Linuxu se software standardně spravuje prostřednictvím balíčkovacího systému. Nové distribuce většinou vznikají odvozením jiné, již existující distribuce a v tomto případě bývá zachován typ balíčků i balíčkovací systém. Můžeme tedy říct, že distribucí je mnoho, ale balíčkovaích systémů se používá jen velmi málo. Konkrétně lze hovořit o distribucích GNU/Linuxu používající balíčky RPM\footnote{RPM = Red Hat Package Manager}, DEB\footnote{DEB = Debian software package} a nebo jiný typ balíčku. V posledním případě se jedná případ od případu o velmi specifický předpis balíčku. V rámci této práce se budeme zabývat linuxovou distribucí Fedora jako reprezentantem první skupiny a distribucí Gentoo, jako reprezentantem poslední skupiny.
-
-			\subsubsection{Balíčkovací systém distribuce Fedora}
-			Fedora vznikla jako nekomerční odnož Red Hat Linuxu a zachovala stávající systém balíčků RPM\@. Od své první verze využívá nástavbu nad RPM zvanou YUM\@. Ten se po čase stal téměř neudržovatelný a proto se objevila alternativa pojmenovaná DNF\@. V současné době lze paralelně využívat oba tyto nástroje, avšak je snaha YUM kompletně nahradit za pomocí DNF\@. Mělo by k tomu dojít již ve Fedoře 21. Aktuální stabilní verze je 20, jde tedy o příští vydání.
-
-			\subsubsection{Balíčkovací systém distribuce Gentoo}
-
-		\subsection{Problém}
-		Když spustíme aplikaci, do paměti se načtou knihovny a soubory potřebné k jejímu běhu. Pokud je některá z knihoven, nebo samotná aplikace po dobu jejího běhu aktualizována, v paměti stále zůstanou původní soubory, přestože fyzicky už nemusí existovat (mohou být smazány, nebo nahrazeny novějšími verzemi).
-		\\\\
-		Zjistit, které, v systému spuštěné, aplikace využívají takto neaktuální soubory, není pro uživatele triviální. V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné.
-
-		\subsection{Motivace}
-		Na první pohled by se mohlo zdát, že postrádá smysl, zabývat se takovým problémem a jeho vyřešení nepřinese nic zajímavého. Ve skutečnosti však mohou být důsledky velmi nebezpečné. Pokud například aktualizace opravuje bezpečnostní chybu staré verze, běžící aplikace zůstanou neopravené. K jejich opravě dojde až jejich restartováním. Uživateli se tak může stát, že nainstaluje záplatu, bude si myslet, že jeho systém je opět bezpečný a přitom stále běží několik nebezpečných procesů.
+		%\subsection{Správa software v GNU/Linux}
+		Ve většině distribucí GNU/Linuxu se software standardně spravuje prostřednictvím balíčkovacího systému. Nové distribuce většinou vznikají odvozením jiné, již existující distribuce a v tomto případě bývá zachován typ balíčků i balíčkovací systém. Můžeme tedy říct, že distribucí je mnoho, ale balíčkovaích systémů se používá jen velmi málo. Konkrétně lze hovořit o distribucích GNU/Linuxu používající balíčky RPM\footnote{RPM = Red Hat Package Manager}, DEB\footnote{DEB = Debian software package} a nebo jiný typ balíčku. V posledním případě se jedná případ od případu o velmi specifický předpis balíčku. V rámci této práce se budeme zabývat reprezentantem první skupiny, kterým bude linuxová distribuce Fedora.
 		\\
+		\\
+			%\subsubsection{Balíčkovací systém distribuce Fedora}
+		Fedora vznikla jako nekomerční odnož Red Hat Linuxu a zachovala stávající systém balíčků RPM\@. Od své první verze využívá nástavbu nad RPM zvanou YUM\@. Ten se po čase stal téměř neudržovatelný a proto se objevila alternativa pojmenovaná DNF\@. V současné době lze paralelně využívat oba tyto nástroje, avšak je snaha YUM kompletně nahradit za pomocí DNF\@.
+		\\
+		\\
+		Když spustíme aplikaci, do paměti se načtou knihovny a soubory potřebné k jejímu běhu. Pokud je některá z knihoven, nebo samotná aplikace po dobu jejího běhu aktualizována, v paměti stále zůstanou původní soubory, přestože fyzicky už nemusí existovat (mohou být smazány, nebo nahrazeny novějšími verzemi).
+		\\
+		Zjistit, které, v systému spuštěné, aplikace využívají takto neaktuální soubory, není pro uživatele triviální. V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné.
+		\\
+		\\
+		%%\subsection{Motivace}
+		Na první pohled by se mohlo zdát, že postrádá smysl, zabývat se takovým problémem a jeho vyřešení nepřinese nic zajímavého. Ve skutečnosti však mohou být důsledky velmi nebezpečné. Pokud například aktualizace opravuje bezpečnostní chybu staré verze, běžící aplikace zůstanou neopravené. K jejich opravě dojde až jejich restartováním. Uživateli se tak může stát, že nainstaluje záplatu, bude si myslet, že jeho systém je opět bezpečný a přitom stále běží několik nebezpečných procesů.
 		Další problém se týká spíše uživatelů \textit{unstable} distribucí, kterým do systému mohou přicházet zpětně nekompatibilní balíčky. Potom se může stát, že některá služba odmítne nastartovat, protože nová verze nepovoluje stávající konfiguraci, nebo vlivem nepřesně specifikovaných závislostí zůstane v systému nekompatibilní verze knihovny. Takovýchto případů bychom si rádi všimli, co nejdříve to bude možné, nikoliv až v kritické chvíli, kdy například dojde k restartování serveru.
 
-		\subsection{Požadavky}
+		\section{Požadavky}
 		Tato práce vznikala ve spolupráci se společností Red Hat, Inc., přičemž následující požadavky byly zhotoveny na základě již existujícího zadání.
 		\\
 		\\
@@ -415,16 +420,40 @@
 
 		\subsection{Dokumentace}
 		\subsection{Odkazy}
+		V tuto chvíli bych rád uvedl přehledovou tabulku s odkazy na všechny důležité služby, které projekt využívá.
+		@TODO Tabulka - homepage, dokumentace, github, fedora package, copr, transifex, travis
+
 
 	\newpage
 	\section{Porovnání s konkurencí}
+		Rád bych se pokusil objektivně srovnat svou práci s konkurenčními projekty. Během počátečního průzkumu, než jsem se vůbec začal touto problematikou zabývat, hledal jsem již existující projekt, který bych mohl podpořit, či na něj navázat. Ovšem nenašel jsem jediný a tak vznikl Tracer. V průběhu jeho vývoje jsem postupně narazil na čtyři různé existující nástroje, z nichž některé tu byly již dříve a některé vznikly teprve nedávno.
+		\\
+		\\
+		Nyní si jeden po druhém projdeme, zaměříme se na jejich cíle, vlastnosti, podporované operační systémy, uživatelské rozhraní a podobně.
 		\subsection{needs-restarting}
 		\subsection{checkrestart}
 		\subsection{needrestart}
 		% https://github.com/liske/needrestart
+		\subsection{Shrnutí}
+
+	\section{Život projektu}
+	% @TODO Přesunout před srovnání s konkurencí?
+	% @TODO Možná závěr nebo shrnutí?
+	Projekt tracer spatřil světlo světa v XY roku XY. Už v této době poskytoval většinu současné funkcionality, avšak se v průběhu let výrazně vyvinul. Doposud vyšlo XY verzí, přičemž nejnovější nese označení XY. Když vývoj započal, používala se Fedora 19 a jazyk Python byl masivně rozšířený ve verzi 2.7. Nyní jsme se posunuli k Fedoře 22, která je poslední, jež používá tuto verzi Pythonu jako výchozí. Tracer se musel přizpůsobit a nyní je připraven běžet ve Fedoře 23 na Pythonu 3.x. Přiští Fedoru také čeká další významná změna, kterou je nahrazení původního balíčkovacího systému YUM novým nástrojem DNF. Tracer původně fungoval výhradně s YUMem, avšak jak DNF začal získávat na důležitosti, projekt začal podporovat oba systémy současně, aniž by se o to musel uživatel zajímat. Nové verze však od podpory YUMu ze zjevných důvodů upustí.
+	\\
+	\\
+	Zajímavé je také ohlédnutí na způsob distribuce tohoto programu. Od svého počátku byl projekt umístěn na veřejném repozitáři na GitHubu a uživatelé si mohli zdrojové kódy několika způsoby stáhnout. Tento způsob byl vhodný pouze zpočátku, protože uživatelé samořejmě nechtějí instalovat a spravovat závislosti manuálně. V brzké době se proto přešlo na distribuci pomocí vlastního repozitáře v systému COPR. Tato varianta přetrvala dodnes, avšak slouží pouze k vytváření testovacích balíčků. Stabilní verze jsou distribuovány skrze oficiální softwarové repozitáře distribuce Fedora. Autor této práce se stal \uv{balíčkářem} distribuce a o balíček nástroje tracer se stará osobně. Plugin pro systém DNF se podařilo připojit k oficiálně podporovaným komunitním pluginům a jeho distribuci zajišťuje správce této sbírky.
+	\\
+	\\
+	Od samotného počátku nebyla očekávána velká uživatelská základna. Mnoho lidí vůbec netuší, že nástroj tohoto typu vůbec potřebuje a nezajímá je to, navíc projekt cílí především na uživatele RPM distribucí, protože ostatní již podobný nástroj mají. Počet instalací se tímto dnem blíží k číslu XY, což považuji za úspěch. V rámci zpětné vazby od uživatelů bylo nahlášeno XY chyb, z nichž XY bylo již opraveno. Dále bylo vyhověno jedné žádosti o portaci na jinou distribuci a XY žádostem o rozšíření funkcionality.
+
 
 	\section{Závěr} % Zrušit číslování
+
+
 	\section{Conclusions} % Zrušit číslování
+	% @TODO Přeložit ^^
+
 	\section{Reference} % Zrušit číslování
 
 	% Obsah přiloženého CD
