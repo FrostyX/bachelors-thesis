@@ -1,4 +1,4 @@
-kidiplom: %: %.tex
+Jakub-Kadlcik-Bachelors-thesis: %: %.tex
 	@pdflatex $@
 	@pdflatex $@
 	@biber $@
