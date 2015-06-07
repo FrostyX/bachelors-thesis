@@ -33,3 +33,11 @@
 *.pdf
 *.fls
 .directory
+
+# kidiplom
+kidiplom.bcf
+kidiplom.glsdefs
+kidiplom.loe
+kidiplom.lol
+kidiplom.run.xml
+
