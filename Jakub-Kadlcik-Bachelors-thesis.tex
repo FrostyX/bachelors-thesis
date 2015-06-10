@@ -204,12 +204,15 @@
 	V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné. Práce si proto klade za cíl vytvořit software, který bude řešit problém \textit{nalezení aktualizacemi ovlivněných aplikací}. Software by měl najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést.
 
 	\section{Požadavky}
-	@TODO Hutnější specifikace\\
-
 	Tato práce vznikala ve spolupráci se společností Red~Hat,~Inc., přičemž následující požadavky byly zhotoveny na základě již existujícího zadání.
 	\\
 	\\
-	Software by měl disponovat textovým uživatelským rozhraním a mělo by být možné jej používat jako modul přímo v balíčkovacím systému DNF\@. Vývoj by měl probíhat pod otevřenou licencí a na libovolném veřejném úložišti. Dále by měl být k dispozici instalační balíček pro distribuci Fedora.
+	Teoretická část práce by se měla zabývat problematikou aktualizacemi ovlivněných aplikací a otázkou jejich vyhledání. Budou uvedeny a vysvětleny algoritmy pro řešení tohoto problému. Výsledkem práce bude software implementující některý z teoreticky popsaných algoritmů.
+	\\
+	\\
+	Software bude implementován v programovacím jazyce Python a jeho cílovou platformou bude linuxová distribuce Fedora, pro kterou bude k dispozici instalační balíček. Vývoj software bude probíhat pod svobodnou licencí splňující kritéria pro přidání balíčku do oficiálních repozitářů této distribuce. Zdrojový kód programu bude umístěný na libovolném veřejném úložišti a bude komukoliv k dispozici.
+	\\
+	Software by měl disponovat textovým uživatelským rozhraním a mělo by být možné jej používat přímo skrze balíčkovací systém. Z tohoto důvodu bude taktéž popsána problematika tvorby rozšíření pro balíčkovací systém DNF\@.
 
 \section{Analýza problému}
 Rozložme si problém na menší části a projděme je jednu po druhé. Stěžejní funkcí má být vypsání jistého seznamu aplikací. Nejdříve se tedy zaměříme na jeho získání. Dále potřebujeme konstrukt, který zjistí informace o  dané aplikaci. Nakonec se budeme zajímat o to, jakým způsobem lze nalezené aplikace restartovat.
