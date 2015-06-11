@@ -288,7 +288,6 @@ Rozložme si problém na menší části a projděme je jednu po druhé. Stěže
 
 \newpage
 \section{Programovací jazyk Python}
-@TODO Proč byl použit? Historie, verze, vlastnosti,\dots?
 Jedním z požadavků této práce je, aby výsledný produkt byl realizován v programovacím jazyce Python. Proč je tomu tak a proč zrovna Python? Na tuto otázku existuje velmi jednoduchá odpověď. Nový balíčkovací systém DNF, distribuce Fedora, je napsán právě v tomto jazyce a poskytuje v něm API pro tvorbu rozšíření od třetích stran. Nehledě na to, Python disponuje několika vlastnostmi, ve kterých konkurence zaostává.
 
 	\subsection{Historie}
@@ -299,7 +298,7 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 	Python je platformově nezávislý, multi-paradigmatický programovací jazyk, jehož výchozím stylem je strukturované, případně objektově orientované programování. Poskytuje však mnohé prvky funkcionálního paradigmatu, jako například lambda výrazy, iterátory, ne-destruktivní varianty většiny standardních funkcí, či funkce \texttt{map}, \texttt{filter}, \texttt{apply} a další, dobře známé z ostatních funkcionálních jazyků.
 	\\
 	\\
-	Typování je v tomto jazyce dynamické, avšak silné. Kupříkladu operaci sčítání tedy nelze provést na jednom argumentu typu číslo a druhém argumentu typu řetězec, přesto že v něm je uložena číselná hodnota. K žádným koercím a implicitnímu přetypování v tomto případě nedojde a jeho výsledkem bude chyba. Velmi výrazným rysem je takzvaný duck typing, který preferuje provedení dané operace s objektem, aniž by se předem ověřoval jeho typ. Při selhání zjevně objekt nebyl požadovaného typu a situace se vyřeší výjimkou. V opačném případě objekt poskytoval požadované rozraní a byl tedy správného typu.
+	Typování je v tomto jazyce dynamické, avšak silné. Kupříkladu operaci sčítání tedy nelze provést na jednom argumentu typu číslo a druhém argumentu typu řetězec, i kdyby v něm byla uložena číselná hodnota. K žádným koercím a implicitnímu přetypování v tomto případě nedojde a výsledkem operace bude chyba. Velmi výrazným rysem je takzvaný duck typing, který preferuje provedení dané operace s objektem, aniž by se předem ověřoval jeho typ. Při selhání zjevně objekt nebyl požadovaného typu a situace se vyřeší výjimkou. V opačném případě objekt poskytoval požadované rozraní a byl tedy správného typu.
 	\\
 	\\
 	Standardní knihovna se snaží být \uv{rozumně} velká a všechna dodatečná funkcionalita je řešena formou rozšíření. Hlavní implementace Pythonu zvaná CPython je napsaná v jazyce C standardu C89. Tento překladač proramy kompiluje do přechodného bytekódu (soubor s příponou \texttt{.pyc}), který je následně prováděn virtuálním strojem. O správu paměti se stará garbage collector.
@@ -320,8 +319,10 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 	Zbývajících dvanáct veršů naleznete ve zmíněném dokumentu, případně v interpretru jazyka, pomocí příkazu \texttt{import this}.
 
 	\subsection{Syntax a sémantika}
-	Základním syntaktickým rysem, kterým se syntax liší od jazyků rodiny C je použití odsazení k vyhrazení bloku kódu, namísto složených závorek.
-	@TODO PEP8
+	Základním syntaktickým rysem, kterým se syntax liší od jazyků rodiny C je použití odsazení k vyhrazení bloku kódu, namísto složených závorek. Přídává klíčové slovo \texttt{with}, které umožní otevřít zdroj, implementující metody \texttt{\_\_enter\_\_} a \texttt{\_\_exit\_\_}, pro daný blok kódu. Konstrukt se sám postará o ukončení práce se zdrojem a to i v případě, kdy ve vykonávaném kódu dojde k chybě. V jazyce nenajdeme konstrukci \texttt{switch}. Návrh o její přídání byl oficiálně zamítnut, viz PEP 3103. K dispozici máme několik základních datových struktur jako jsou seznamy (obdoba pole), slovníky (obdoba asociativního pole), tuply, či množiny. Všechny se používají velmi snadno, například seznam lze vytvořit zapsáním jeho prvků mezi hranaté závoky.
+	\\
+	\\
+	Doporučené konvence pro formátování zrojového kódu popisuje dokument PEP 8. Pojednává například o způsobu odsazování, doporučené šírce řádku, komentářích, způsobech pojmenování různých elementů a podobně.
 
 
 	\subsection{Kompatibilita verzí}
