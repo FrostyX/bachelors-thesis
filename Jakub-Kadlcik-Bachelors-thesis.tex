@@ -295,13 +295,14 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 	Koncept jazyka Python vznikl na konci osmdesátých let dvacátého století v Amsterdamském CWI\footnote{Centrum Wiskunde \& Informatica (English: National Research Institute for Mathematics and Computer Science)}. Jeho autorem je Guido van Rossum, který dosud stále stojí v čele jeho vývoje. Při návrhu Pythonu se inspiroval jazykem ABC, na kterém v té době pracoval. Implementace započala v prosinci 1989 a první stabilní verze 1.0 vyšla o několik let později, v roce 1994. Od té doby se vývoj posunul o dvě major verze dopředu. Řada 2.x.x odstartovala v roce 2000 a je stále velmi populární, obzvláště pak v komerční sféře.  V roce 2008 vyšla verze 3.0, která měla být nástupcem dvojkové řady, avšak kvůli neúplné zpětné kompatibilitě probíhá vývoj obou řad paralelně. Aktuálně lze tedy Python získat ve dvou stabilních verzích. V době psaní této práce se jedná konkrétně o verze 2.7.9 a 3.4.3.
 
 	\subsection{Vlastnosti}
-	Python je multi-paradigmatický programovací jazyk, využívající dynamické, avšak silné typování. O správu paměti se stará garbage collector.
-	\\@TODO Duck typing
-
-	% The main Python implementation, named CPython, is written in C meeting the C89 standard.[70] It compiles Python programs into intermediate bytecode,[71] which is executed by the virtual machine.[72] CPython is distributed with a large standard library written in a mixture of C and Python. It is available in versions for many platforms, including Microsoft Windows and most modern Unix-like systems. CPython was intended from almost its very conception to be cross-platform.
-
-	\subsection{Rozšíření}
-	@TODO Mergnout s \textasciicircum\textasciicircum
+	% @TODO Najít slovo koerce ve slovníku
+	Python je platformově nezávislý, multi-paradigmatický programovací jazyk, jehož výchozím stylem je strukturované, případně objektově orientované programování. Poskytuje však mnohé prvky funkcionálního paradigmatu, jako například lambda výrazy, iterátory, ne-destruktivní varianty většiny standardních funkcí, či funkce \texttt{map}, \texttt{filter}, \texttt{apply} a další, dobře známé z ostatních funkcionálních jazyků.
+	\\
+	\\
+	Typování je v tomto jazyce dynamické, avšak silné. Kupříkladu operaci sčítání tedy nelze provést na jednom argumentu typu číslo a druhém argumentu typu řetězec, přesto že v něm je uložena číselná hodnota. K žádným koercím a implicitnímu přetypování v tomto případě nedojde a jeho výsledkem bude chyba. Velmi výrazným rysem je takzvaný duck typing, který preferuje provedení dané operace s objektem, aniž by se předem ověřoval jeho typ. Při selhání zjevně objekt nebyl požadovaného typu a situace se vyřeší výjimkou. V opačném případě objekt poskytoval požadované rozraní a byl tedy správného typu.
+	\\
+	\\
+	Standardní knihovna se snaží být \uv{rozumně} velká a všechna dodatečná funkcionalita je řešena formou rozšíření. Hlavní implementace Pythonu zvaná CPython je napsaná v jazyce C standardu C89. Tento překladač proramy kompiluje do přechodného bytekódu (soubor s příponou \texttt{.pyc}), který je následně prováděn virtuálním strojem. O správu paměti se stará garbage collector.
 
 	\subsection{Filozofie}
 	Rady a doporučení, jak by měl vypadat zdrojový kód v jazyce Python, sepsal Tim Peters v dokumentu PEP 20 -- The Zen of Python. Jak sám píše na začátku dokumentu, principy shrnul do dvaceti aforismů, z nichž však pouze devatenáct bylo zapsáno. Následuje ukázka samotného Zenu:
