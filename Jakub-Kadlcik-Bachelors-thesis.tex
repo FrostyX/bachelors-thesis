@@ -524,12 +524,9 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 
 		\subsubsection{Interaktivní mód}
 		V určitých případech může uživatel chtít zobrazit pomocné informace pouze k několika aplikacím, ale nechce vypisovat jejich názvy. Pro tento účel byl zaveden interaktivní režim. Pokud spustíme Tracer s parametrem \texttt{-i}, nebo \texttt{-{}-interactive}, obdržíme na výstupu očíslovaný seznam aplikací zakončený promptem. Postupně zadáváme čísla aplikací, které nás zajímají a dostáváme výpis pomocných informací.
-	\subsubsection{DNF plugin}
 
-	\subsection{Programátorská příručka}
-		\subsubsection{Adresářová struktura}
-		\subsubsection{MVC}
-		\subsection{Testování}
+		\subsubsection{DNF plugin}
+		@TODO
 
 	\subsection{Licence}
 	Program je vyvíjen pod svobodnou licencí GNU/GPLv2, jejíž plné znění naleznete v příloze číslo XY\@. Tato licence zajišťuje, že každý člověk má právo studovat zdrojový kód tohoto programu. To znamená číst jej, modifikovat a libovolně s ním experimentovat. Původní, nebo pozměněné dílo může dále distribuovat, avšak pod podmínkou, že tyto klony budou poskytovat stejná práva, jako původní software. Licence navíc umožňuje využívat dílo k libovolnému účelu.
@@ -585,6 +582,18 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 
 	\subsection{Lokalizace}
 	@TODO
+
+	\subsection{Programátorská příručka}
+	Tato kapitola je určená především novým vývojářům a všem zájemcům, kteří chtějí nějakým způsobem pracovat se zdrojovýmy kódy projektu. Objasní jejich organizaci, použitá paradigmata a poradí, jak ověřit, že jimi provedené změny neměly nezamýšlený, nežádoucí efekt.
+
+		\subsubsection{Architektura zdrojového kódu}
+		V domovském adresáři projektu najdeme pouze soubory potřebné k balíčkování a konfigurační soubory pro služby jež projekt využívá. Dále vidíme několik adresářů, z nichž zajímavé jsou především tyto následující. Spouštěcí soubor programu nalezneme v adresáři \texttt{bin}. Tento soubor obsahuje pouze nejnutnější minimum zdrojového kódu, nutného k zavedení programu. Naopak naprostá většina kódu se nachází v adresáři \texttt{tracer}, který je při instalaci nakopírován mezi ... @TODO site-packages.
+		\\
+		\\
+		Tento kód je povětšinou objěktově orientovaný a koncepčně je rozdělen do jednotlivých celků architektury Model-View-Controller (MVC). Šablony (View), nejsou tvořeny pomocí speciálního šablonovacího systému, jako tomu často bývá například u webových aplikací, nýbrž jde o obyčejné soubory obsahující zdrojový kód jazyka Python. Slouží však pouze k vypsání výstupu na požadované zařízení. Kontrolery se starají o naplnění těchto šablon \uv{vypočítanými} daty. Největším celkem jsou modely tvořící zbytek adresáře. Ty slouží ke zjišťování informací o systému, procesech, balíčcích, zajišťují se o jazykovou lokalizaci a jiné.
+
+		\subsubsection{Testování}
+		Zdrojový kód projektu je prověřován pomocí jednotkových testů, i testů uživatelského rozhraní. Oboje jsou realizovány pomocí modulu FOO. Testy však nepokrývají každou jednotlivou řádku kódu a negarantují stoprocentní spolehlivost, nicméně za určitých okolností, například při refaktorování, jsou velmi nápomocné. Navíc jsou pomocí CI spouštěny automaticky při uložení libovolné změny do verzovacího systému. Ručně, v příkazové řádce, lze testy spustit například pomocí nástrojů FOO, nebo BAR.
 
 	\subsection{Odkazy}
 	V tuto chvíli bych rád uvedl přehledovou tabulku s odkazy na všechny důležité služby, které projekt využívá.
