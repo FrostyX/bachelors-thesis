@@ -583,7 +583,10 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 	]{sources/generate_docs.sh}
 
 	\subsection{Lokalizace}
-	@TODO
+	Přestože projekt obsahuje velmi jednoduché uživatelské rozhraní a nejspíš jej lze používat i s elementárními znalostmi angličtiny, poskytuje možnost jazykových lokalizací. Součástí zdrojových kódů je soubor \texttt{tracer.pot} obsahující všechny lokalizovatelné řetězce a dalé pak soubory s příponou \texttt{.po}, obsahující překlady těchto řetězců do konkrétních jazyků. Tyto soubory jsou vyvěšeny na překladatelském serveru \url{http://transifex.com}.
+	\\
+	\\
+	Při vytváření instalačního balíčku se ze všech \texttt{.po} souborů vygenerují jejich binární verze s příponou \texttt{.mo}. Ty jsou při instalaci balíčku kopírovány do systémového adresáře s překlady. V závislosti na uživatelem preferovaném jazyku systému, je při spuštění vybrána kýžená lokalizace. V současné době existuje kompletní překlad pouze do českého jazyka, přičemž ostatním uživatelům bude zobrazena výchozí anglická verze.
 
 	\subsection{Programátorská příručka}
 	Tato kapitola je určená především novým vývojářům a všem zájemcům, kteří chtějí nějakým způsobem pracovat se zdrojovýmy kódy projektu. Objasní jejich organizaci, použitá paradigmata a poradí, jak ověřit, že jimi provedené změny neměly nezamýšlený, nežádoucí efekt.
