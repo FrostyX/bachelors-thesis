@@ -1,0 +1,78 @@
+[jkadlcik@localhost tracer]$ sudo needs-restarting
+623 : /usr/libexec/accounts-daemon
+1129 : /sbin/dhclient -d -q -sf /usr/libexec/nm-dhcp-helper -pf /var/run/dhclient-enp0s3.pid -lf /var/lib/NetworkManager/dhclient-584c7891-47cc-485b-8ad5-d05a8044344c-enp0s3.lease -cf /var/lib/NetworkManager/dhclient-enp0s3.conf enp0s3
+607 : /usr/sbin/alsactl -s -n 19 -c -E ALSA_CONFIG_PATH=/etc/alsa/alsactl.conf --initfile=/lib/alsa/init/00main rdaemon
+1581 : kdeinit4: kded4 [kdei e
+1327 : /usr/bin/kglobalaccel5
+597 : /sbin/auditd -n
+741 : /usr/sbin/VBoxService
+705 : /usr/lib/polkit-1/polkitd --no-debug
+1339 : /usr/libexec/kf5/kscreen_backend_launcher
+1140 : (sd-pam)
+1229 : /usr/bin/VBoxClient --clipboard
+1346 : /usr/lib/udisks2/udisksd --no-debug
+1230 : /usr/bin/VBoxClient --clipboard
+1488 : /usr/bin/pulseaudio --start --log-target=syslog
+1309 : /usr/libexec/kf5/start_kdeinit --kded +kcminit_startup
+1313 : kded5 [kdeinit5]
+1502 : /usr/libexec/bluetooth/bluetoothd
+1423 : /bin/kaccess
+1422 : ksmserver [kdeinit5]
+1311 : klauncher [kdeinit5] --fd=9
+1427 : kwin_x11 -session 1028c1d320b210000143642918900000013200000_1436429532_666852
+1193 : /bin/sh /usr/bin/startkde
+1215 : /usr/bin/dbus-daemon --fork --print-pid 5 --print-address 7 --session
+798 : /usr/sbin/NetworkManager --no-daemon
+1 : /usr/lib/systemd/systemd --system --deserialize 24
+1658 : /bin/bash
+1305 : /usr/libexec/gam_server
+1442 : /usr/libexec/kf5/polkit-kde-authentication-agent-1
+1250 : /usr/bin/VBoxClient --seamless
+1251 : /usr/bin/ssh-agent /bin/sh -c exec -l /bin/bash -c "/usr/bin/startkde"
+1653 : /bin/konsole
+1291 : /usr/bin/gpg-agent -s --daemon --write-env-file /run/user/1000/.gpg-agent-info
+1448 : /bin/kwrited
+630 : /usr/sbin/gssproxy -D
+1421 : kwrapper5 ksmserver
+1175 : /usr/bin/dbus-launch --autolaunch 2b76eb6fb3df4e68b3f350f7b4d93b32 --binary-syntax --close-stderr
+2650 : /usr/lib/systemd/systemd-udevd
+678 : /usr/sbin/mcelog --ignorenodev --daemon --foreground
+1504 : /bin/kmix -session 1028c1d320b210000143642919100000013200008_1436429532_683205
+1214 : dbus-launch --sh-syntax --exit-with-session
+637 : /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation
+674 : /usr/lib/systemd/systemd-logind
+1334 : /usr/libexec/upowerd
+1573 : /usr/libexec/at-spi2-registryd --use-gnome-session
+1136 : /usr/lib/systemd/systemd --user
+672 : /usr/libexec/rtkit-daemon
+460 : /usr/lib/systemd/systemd-journald
+1552 : /bin/dbus-daemon --config-file=/etc/at-spi2/accessibility.conf --nofork --print-address 3
+1330 : /usr/libexec/mission-control-5
+1239 : /usr/bin/VBoxClient --display
+1545 : kdeinit4: klauncher [ e
+1620 : /usr/bin/kuiserver5
+1179 : /usr/bin/dbus-daemon --fork --print-pid 5 --print-address 7 --session
+485 : /usr/sbin/lvmetad -f
+1354 : /usr/bin/kactivitymanagerd start-daemon
+1543 : kdeinit4: kdeinit4 Ru e
+1436 : /bin/plasmashell --shut-up
+846 : /usr/bin/sddm
+1621 : /usr/libexec/packagekitd
+1466 : /bin/xsettings-kde
+1433 : /bin/krunner
+1189 : (sd-pam)
+1303 : /usr/bin/kwalletd --pam-login 17 20
+1187 : /usr/lib/systemd/systemd --user
+1431 : /bin/baloo_file
+4115 : /usr/libexec/colord
+1183 : /usr/libexec/sddm-helper --socket /tmp/Auth846.1438100320 --id 1 --start /usr/bin/startkde --user jkadlcik
+1240 : /usr/bin/VBoxClient --display
+1534 : /bin/abrt-applet
+1247 : /usr/bin/VBoxClient --seamless
+1747 : /bin/bash
+1249 : /usr/bin/VBoxClient --draganddrop
+1248 : /usr/bin/VBoxClient --draganddrop
+1310 : kdeinit5: Running...
+1547 : /usr/libexec/at-spi-bus-launcher
+823 : /usr/sbin/atd -f
+868 : /usr/libexec/Xorg :0 -auth /var/run/sddm/:0 -nolisten tcp -background none -noreset vt1

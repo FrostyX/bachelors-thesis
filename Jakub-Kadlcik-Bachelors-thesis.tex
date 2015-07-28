@@ -618,12 +618,46 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 	\\
 	Nyní si jeden po druhém projdeme, zaměříme se na jejich cíle, vlastnosti, podporované operační systémy, uživatelské rozhraní a podobně.
 	\subsection{needs-restarting}
-	@TODO
+	% - potřebuje roota
+	% - vypisuje duplicitní aplikace (různé pid)
+	% - pouze pro yum
+	% - deprecated
+	% - o hodně pomalejší než tracer?
+	% - zabalíčkováno v yum-utils v Date:   Wed Nov 4 12:44:20 2009 -0500 viz:
+	% git://yum.baseurl.org/yum-utils.git commit 43e630fb134e78fc44651c203e3fad364acf1b64
+
 	\subsection{checkrestart}
+	% - debian only
+	% - nejmíń user friendly
+	% - v balíčku debian-goodies
+	% - vyžaduje roota
+
 	\subsection{needrestart}
-	% https://github.com/liske/needrestart
+	% Homepage: https://fiasko-nw.net/~thomas/tag/needrestart.html
+	% Date:   Fri Mar 29 00:12:15 2013 +0100 viz
+	% https://github.com/liske/needrestart.git commit 68891433e1e525087cbe57b7e0854cbc9c83afc5
+	% - kontroluje jenom daemony
+	% + hooky pro dpkg, rpm, pacman
+	% - perl
+	% - není ve fedoře
+	% + kontejnery
+	% + interpretery
+	% + lze vyhledat starý kernel
+	% + nepotřebuje roota
+	% + rychlý
+
 	\subsection{Shrnutí}
 	% @TODO Implementovat funkcionalitu --daemons-only pro pokrití 100% funkcionality jednoho z ^^
+	% - nejhorší UI má checkrestart
+	% - checkrestart vypadává kvůli debian-only
+	% - doposud se ve fedoře primárně používal needs-restarting
+	% - needsrestarting je obsolete kvuli yumu
+	% - moje snaha o jeho nahrazení pomocí traceru
+	% - needrestart se zdá být hodně dobrý
+	% - needsrestart vznikl současně s tracerem a funkcionalitou si konkurují
+	% - needsrestart ale není zabalíčkovaný
+	% - nelze určit nejlepší nástroj, hodně bude záležet na osobních preferencích každého uživatele
+
 
 \section{Život projektu}
 % @TODO Přesunout před srovnání s konkurencí?
