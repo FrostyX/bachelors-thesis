@@ -486,7 +486,42 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 	\subsection{Vyhledání ovlivněných aplikací}
 		V předchozích kapitolách jsme si vysvětlili, jak v programovacím jazyce Python získat všechny data, které algoritmus popsaný v kapitole XY na svém vstupu vyžaduje. Nyní bychom se mohli podívat na konkrétní implementaci tohoto algoritmu. Nicméně, neučiníme tak, protože samotná implementace není ničím zajímavá. Jedná se pouze o přepis pseudokódu z kapitoly XY do zdrojového kódu jazyka Python. Z tohoto důvodu bych případné zájemce rád odkázal přímo na zdrojový kód programu.
 
+	\newpage
 	\subsection{Rozšíření pro balíčkovací systém DNF}
+	DNF poskytuje aplikační rozhraní pro tvorbu dvou druhů rozšíření. Prvním z nich je takzvaný plugin, jenž může implementovat metody, které budou provedeny v daných momentech instalačního procesu. Spustit vlastní kód tedy lze například během čtení konfiguračních souborů, před provedením plánované transakce, či ihned po ní. Vykonat lze libovolný kód, nicméně zajímavá je především možnost zkoumat prováděnou transakci a operace s balíčky, jež se chystá provést. Nemusí se však jednat pouze o čtení. Transakci lze podle vlastních potřeb libovolně upravovat. Druhý typ rozšíření umožňuje tvorbu vlastních příkazů, které lze spustit v příkazové řádce skrze program \texttt{dnf}.
+	\\
+	\\
+	Implementace vlastního příkazu potom může vypadat následovně.
+
+	\lstinputlisting
+	[
+		language=Python,
+		label=dnf-command,
+		caption={Ukázka vlastního příkazu pro program \texttt{dnf}}
+	]{sources/dnf_command.py}
+
+	Při spuštění, ukázkový příkaz pouze vypíše, jakým způsobem byl zavolán. Pro zprovoznění je nutné soubor uložit do adresáře definovaného v konfiguračním souboru jako \texttt{pluginpath}. Ve výchozím nastavení se jedná o adresář \texttt{/usr/lib/python2.7/site-packages/dnf-plugins/}. A dále zaregistrováním příkazu do uživatelského rozhraní, které můžeme zajistit pomocí následujícího pluginu.
+
+	\lstinputlisting
+	[
+		language=Python,
+		label=dnf-command-register,
+		caption={Plugin registrující vlastní příkaz}
+	]{sources/dnf_command_register.py}
+
+	Nyní, podíváme-li se pomocí \texttt{dnf help} do nápovědy, vidíme příkaz \texttt{foo}, který jsme vytvořili naším rozšířením. Zavoláme jej jednoduše pomocí \texttt{dnf foo arg1 arg2 arg3}.
+
+	Na závěr této vsuvkové kapitoly si ještě ukážeme plugin, který za každou úspěšně provedenou transakcí vypíše seznam balíčků, jež nainstalovala.
+
+	\lstinputlisting
+	[
+		language=Python,
+		label=dnf-plugin,
+		caption={Plugin vypisující seznam transakcí nainstalovaných balíčků}
+	]{sources/dnf_plugin.py}
+
+
+
 \newpage
 \section{Tracer}
 	V předchozích kapitolách jsme představili problematiku hledání aktualizacemi ovlivněných aplikací, popsali algoritmy pro jejich hledání a způsob, jak je lze implementovat v jazyce python pro linuxovou distribuci Fedora. Nyní se podíváme na projekt nesoucí název Tracer, jenž na těchto základech vznikl.
@@ -688,11 +723,10 @@ Od samotného počátku nebyla očekávána velká uživatelská základna. Mnoh
 	Původní cílovou platformou byla distribuce Fedora 19 obsahující interpret Pythonu verze 2.7 a balíčkovací systém YUM. V průběhu práce se všechny tyto komponenty staly neaktuálními a proto se projekt přizpůsobil současnému stavu věcí. Fedora je nyní v téměř finální verzi přechodu na systém DNF, v tuto chvíli je již YUM označen za zastaralý a v příštím vydání bude zahozen úplně. Obdobně je tomu v situaci interpreterů Pythonu. Již v příštím vydání bude výchozí jeho třetí verze namísto druhé. Můj projekt tento vývoj reflektuje a je možné jej používat, jak s komponentami, pro které byl určen původně, tak s těmi aktuálními.
 	\\
 	\\
-	Poslední částí mé práce bylo objasnit, jakým způsobem lze rozšiřovat funkcionalitu balíčkovacího systému DNF.
-	@ TODO
+	Poslední částí mé práce bylo objasnit, jakým způsobem lze rozšiřovat funkcionalitu balíčkovacího systému DNF. Tu považuji za nejméně důležitou, protože pouze rekapituluje již známé a popsané informace. Z tohoto důvodu jí byla věnována pouze jedna kapitola shrnující množinu elementárních znalostí nutných k porozumění zbytku práce.
 	\\
 	\\
-	Stejně, jako většina existujícího softwaru, lze i ten můj dále vylepšovat a rozšiřovat. Šlo by například využít nástroje PackageKit, který by mohl přinést podporu pro většinu linuxových distribucí. Má snaha bude nadále směřovat také na zahrnutí programu Tracer do výchozí instalace distribuce Fedora, aby si tuto problematiku začalo uvědomovat více uživatelů.
+	Software se v průběhu času neustále vyvíjí a vždy jej lze vylepšovat a rozšiřovat o novou funkcionalitu. V případě programu Tracer by například šlo využít nástroje PackageKit, který by mohl přinést podporu pro většinu linuxových distribucí. Má snaha bude nadále směřovat také k zahrnutí programu do výchozí instalace distribuce Fedora, aby si problematiku probíranou v této práci, začalo uvědomovat více uživatelů.
 \end{kiconclusions}
 
 \begin{kiconclusions}[english]
