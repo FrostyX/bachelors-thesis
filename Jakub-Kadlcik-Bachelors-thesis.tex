@@ -528,12 +528,12 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 
 	\subsection{Verzování}
 	Přirozeným požadavkem na software, je \uv{rozumný} způsob jeho verzování. Na první pohled to sice nemusí být zřejmé, ale případní uživatelé musejí být schopni určit, jakou verzi používají. A to hned z několika důvodů. Software se v průběhu času vyvíjí a uživatelé by jej měli průběžně aktualizovat\footnote{To je ostatně motivací této práce}. K tomu je ovšem potřeba identifikovat používanou verzi a dokázat určit, zda je jiná verze novější, nebo ne. Programátoři navíc nejsou neomylní a jejich dílo může obsahovat chyby. V případě jejich hlášení je nutné uvést verzi programu, která danou chybou trpí, jinak bude velmi problematické, až nemožné, ji nalézt a opravit.
-
-		\subsubsection{GIT}
-		Z tohoto důvodu Tracer k verzování využívá nástroje GIT, kde je každá logická\footnote{} úprava zdrojového kódu uložena jako popis transformačních kroků, potřebných pro převedení stávajícího kódu na nový. Krokům k provedení jedné logické změny se v kontextu nástroje GIT říká commit. Každý takový commit je označen pomocí kontrolního součtu a dle historie commitů lze určit jejich pořadí. Určité milníky potom lze označit a přiřadit jim vlastní název (tag). Tím například může být číslo verze.
-		\\
-		\\
-		Člověk využívající vývojovou větev Traceru může tedy identifikovat přesnou verzi pomocí kontrolního součtu nejnovějšího commitu, případně pomocí jména tagu.
+	\\
+	\\
+	Z tohoto důvodu Tracer k verzování využívá nástroje GIT, kde je každá logická\footnote{} úprava zdrojového kódu uložena jako popis transformačních kroků, potřebných pro převedení stávajícího kódu na nový. Krokům k provedení jedné logické změny se v kontextu nástroje GIT říká commit. Každý takový commit je označen pomocí kontrolního součtu a dle historie commitů lze určit jejich pořadí. Určité milníky potom lze označit a přiřadit jim vlastní název (tag). Tím například může být číslo verze.
+	\\
+	\\
+	Člověk využívající vývojovou větev Traceru může tedy identifikovat přesnou verzi pomocí kontrolního součtu nejnovějšího commitu, případně pomocí jména tagu.
 
 
 	\subsection{Zdrojový kód}
