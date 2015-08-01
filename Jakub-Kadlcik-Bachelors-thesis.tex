@@ -214,10 +214,8 @@
 	\\
 	Software by měl disponovat textovým uživatelským rozhraním a mělo by být možné jej používat přímo skrze balíčkovací systém. Z tohoto důvodu bude taktéž popsána problematika tvorby rozšíření pro balíčkovací systém DNF\@.
 
-% @TODO Teoretická rovina problému
-% Před/místo analýzy musí ještě neco být
 \section{Analýza problému}
-Rozložme si problém na menší části a projděme je jednu po druhé. Stěžejní funkcí má být vypsání jistého seznamu aplikací. Nejdříve se tedy zaměříme na jeho získání. Dále potřebujeme konstrukt, který zjistí informace o  dané aplikaci. Nakonec se budeme zajímat o to, jakým způsobem lze nalezené aplikace restartovat.
+V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritmy pro jejich vyřešení a provedeme úvahu nad vhodností jejich použití. Nejdříve se zaměříme na samotné získání aktualizacemi ovlivněných aplikací, poté zvážíme univerzálnost navrhovaného řešení napříč operačními systémy a nakonec se zaměříme na to, jakým způsobem lze nalezené aplikace restartovat.
 
 	\subsection{Seznam ovlivněných aplikací -- Ilustrativně}
 	Hlavním účelem programu bude nalezení aktualizacemi ovlivněných, běžících aplikací. Řešení se zdá být velmi přímočaré. Nejdříve zjistit seznam balíčků, které byly od spuštění systému modifikovány. Následně pro každý balíček zjistit seznam souborů, které poskytuje. Poté zjistit, které procesy využívají některý z množiny modifikovaných souborů. Tedy pro každý spuštěný proces zjistit seznam souborů jež využívá a najít shodu se soubory poskytovanými modifikovanými balíčky.
