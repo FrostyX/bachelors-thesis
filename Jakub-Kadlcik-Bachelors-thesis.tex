@@ -712,13 +712,13 @@ Od samotného počátku nebyla očekávána velká uživatelská základna. Mnoh
 %% \documentclass, výchozí český) se zadává použitím makra s uvedením
 %% jazyka jako nepovinného parametru.
 \begin{kiconclusions}
-	Cílem mé práce bylo rozebrat problematiku \uv{aktualizacemi ovlivněných aplikací}, konkrétně pak jejich nalezení a doporučení nejlepšího způsobu, jak docílit jejich restartování. V teoretické části jsem objasnil důležitost tohoto problému a důsledky z něho plynoucí. Pokud by si čtenář z tohoto textu odnesl pouze jedinou informaci, měla by to být právě tato. Přestože svůj systém aktualizuje, neznamená to, že se změny automaticky projeví v právě spuštěných aplikacích. Je potřeba je restartovat. Dále jsem požadovanou problematiku rozdělil na dílčí celky a navrhl algoritmy pro jejich řešení.
+	Cílem mé práce bylo rozebrat problematiku \uv{aktualizacemi ovlivněných aplikací}, konkrétně pak jejich nalezení a doporučení nejlepšího způsobu, jak docílit jejich restartování. V teoretické části jsem objasnil důležitost tohoto problému a důsledky z něho plynoucí. Pokud by si čtenář z tohoto textu odnesl pouze jedinou informaci, měla by to být právě tato. Přestože svůj systém aktualizuje, neznamená to, že se změny automaticky projeví v právě spuštěných aplikacích. Je potřeba je restartovat. Dále jsem zkoumanou problematiku rozdělil na dílčí celky a navrhl algoritmy pro jejich řešení.
 	\\
 	\\
 	Součástí práce bylo v jazyce Python implementovat software pro vyhledávání ovlivněných aplikací na linuxové distribuci Fedora. Zde jsem využil vyzkoumané algoritmy zmíněné výše. V této části bylo zajímavé především získání dat potřebných pro jejich vstupy. Čtenář se dozvěděl, jakým způsobem zjišťovat informace o spuštěných procesech, nainstalovaných balíčcích, či balíčkovacím systémem provedených transakcích.
 	\\
 	\\
-	Původní cílovou platformou byla distribuce Fedora 19 obsahující interpret Pythonu verze 2.7 a balíčkovací systém YUM. V průběhu práce se všechny tyto komponenty staly neaktuálními a proto se projekt přizpůsobil současnému stavu věcí. Fedora je nyní v téměř finální verzi přechodu na systém DNF, v tuto chvíli je již YUM označen za zastaralý a v příštím vydání bude zahozen úplně. Obdobně je tomu v situaci interpreterů Pythonu. Již v příštím vydání bude výchozí jeho třetí verze namísto druhé. Můj projekt tento vývoj reflektuje a je možné jej používat, jak s komponentami, pro které byl určen původně, tak s těmi aktuálními.
+	Původní cílovou platformou byla distribuce Fedora 19 obsahující interpret Pythonu verze 2.7 a balíčkovací systém YUM. V průběhu práce se všechny tyto komponenty staly neaktuálními a proto se projekt přizpůsobil současnému stavu věcí. Fedora je nyní v téměř finální fázi přechodu na systém DNF, v tuto chvíli je již YUM označen za zastaralý a v příštím vydání bude zahozen úplně. Obdobně je tomu v situaci interpreterů Pythonu. Již v příštím vydání bude výchozí jeho třetí verze namísto druhé. Můj projekt tento vývoj reflektuje a je možné jej používat, jak s komponentami, pro které byl určen původně, tak s těmi aktuálními.
 	\\
 	\\
 	Poslední částí mé práce bylo objasnit, jakým způsobem lze rozšiřovat funkcionalitu balíčkovacího systému DNF. Tu považuji za nejméně důležitou, protože pouze rekapituluje již známé a popsané informace. Z tohoto důvodu jí byla věnována pouze jedna kapitola shrnující množinu elementárních znalostí nutných k porozumění zbytku práce.
@@ -728,7 +728,19 @@ Od samotného počátku nebyla očekávána velká uživatelská základna. Mnoh
 \end{kiconclusions}
 
 \begin{kiconclusions}[english]
-	@TODO
+	The goal of my thesis was to analyze the topic of „applications affected by upgrade“, particularly of their determination and suggesting the best way of achieving thier restart. In the theoretical part I explained the relevance of this topic and it‘s consequences. If the reader is supposed to learn at least one information from this thesis, it should be this one. Even though he updates his system the changes will not take effect in running applications. It is needed to restart them. Hereafter I divided given topic to sub-units and suggested algorithms for solving them.
+	\\
+	\\
+Part of my work was to implement the software for determining affected applications on linux distribution Fedora, in Python language. Here I utilized algorithms mentioned above. In this part it was mainly interesting to get the data needed on their inputs. The reader learned how to gain information about running processes, installed packages or transactions made by package manager.
+	\\
+	\\
+The initial targeted platform was distribution Fedora 19 with interpreter Python in version 2.7 and package manager YUM installed. During the thesis all of these components became outdated and therefore the project adapted for recent state of things. Fedora is now at final phase of conversion to the DNF manager. At this moment, YUM has been marked as outdated and in the following release it will be removed completely. The Python interpreter is in similar situation. In the following release it‘s third version will be set as default instead of the second version. My project reflects this development and it is possible to use it with the components which it was originally designed for and even with the current components.
+	\\
+	\\
+The last part of my work was to clarify how it is possible to extend the functionality of the DNF package manager. That I consider to be the least important thing because it just sums up already known and described information. Therefore only one chapter was dedicated to wrap up the set of elementary knowledge needed for understanding the rest of the thesis.
+	\\
+	\\
+Software changes constantly and it is always possible to improve it and extend it with new functionality. In case of Tracer program it should be possible to use the PackageKit tool which could bring the support for the most of linux distributions. I will make my effort to have the program included in the default installation of Fedora distribution in order to make more people aware of the topic described in this thesis.
 \end{kiconclusions}
 
 
