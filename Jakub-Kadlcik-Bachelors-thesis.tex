@@ -527,6 +527,11 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 			caption={Ukázkový výstup příkazu \texttt{sudo tracer}}
 		]{sources/tracer_standard_usage_output}
 
+		Formát výstupu je koncipován především z pohledu uživatelské přívětivosti, proto jsou nalezené aplikace jsou rozděleny dle kategorií popsaných v kapitole XY. První skupinu aplikací lze restartovat pouhým zkopírováním bloku navrhovaných příkazů do terminálu.
+		\\
+		\\
+		Ve výchozím stavu se vypíše pouze poznámka o nerestartovatelných aplikacích, namísto celého jejich seznamu, protože s nimi uživatel stejně nemůže nic udělat. Z obnobného důvodu jsou vypsány pouze aplikace současného uživatele. Pro vypsání všech aplikací všech uživatelů, lze použít přepínače \texttt{-{}-all} a \texttt{-{}-everyone}.
+
 		\pagebreak
 		\subsubsection{Zobrazení konkrétní aplikace}
 		Uživatel může ve výstupu narazit na aplikaci, kterou například nezná, nebo netuší, proč je potřeba ji restartovat a jak toho docílit. Z tohoto důvodu existuje přepínač \texttt{-s} neboli \texttt{-{}-show}, jenž zobrazí všechny informace, které Tracer o aplikaci zná a se kterými pracuje.
@@ -689,13 +694,13 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 \section{Život projektu}
 % @TODO Přesunout před srovnání s konkurencí?
 % @TODO Možná závěr nebo shrnutí?
-Projekt tracer spatřil světlo světa v XY roku XY. Už v této době poskytoval většinu současné funkcionality, avšak se v průběhu let výrazně vyvinul. Doposud vyšlo XY verzí, přičemž nejnovější nese označení XY. Když vývoj započal, používala se Fedora 19 a jazyk Python byl masivně rozšířený ve verzi 2.7. Nyní jsme se posunuli k Fedoře 22, která je poslední, jež používá tuto verzi Pythonu jako výchozí. Tracer se musel přizpůsobit a nyní je připraven běžet ve Fedoře 23 na Pythonu 3.x. Přiští Fedoru také čeká další významná změna, kterou je nahrazení původního balíčkovacího systému YUM novým nástrojem DNF. Tracer původně fungoval výhradně s YUMem, avšak jak DNF začal získávat na důležitosti, projekt začal podporovat oba systémy současně, aniž by se o to musel uživatel zajímat. Nové verze však od podpory YUMu ze zjevných důvodů upustí.
+Projekt tracer spatřil světlo světa v říjnu roku 2013. Už v této době poskytoval většinu současné funkcionality, avšak se v průběhu let výrazně vyvinul. Doposud vyšlo 21 verzí, přičemž nejnovější nese označení 0.6.1. Když vývoj započal, používala se Fedora 19 a jazyk Python byl masivně rozšířený ve verzi 2.7. Nyní jsme se posunuli k Fedoře 22, která je poslední, jež používá tuto verzi Pythonu jako výchozí. Tracer se musel přizpůsobit a nyní je připraven běžet ve Fedoře 23 na Pythonu 3.x. Přiští Fedoru také čeká další významná změna, kterou je nahrazení původního balíčkovacího systému YUM novým nástrojem DNF. Tracer původně fungoval výhradně s YUMem, avšak jak DNF začal získávat na důležitosti, projekt začal podporovat oba systémy současně, aniž by se o to musel uživatel zajímat. Nové verze však od podpory YUMu ze zjevných důvodů upustí.
 \\
 \\
 Zajímavé je také ohlédnutí na způsob distribuce tohoto programu. Od svého počátku byl projekt umístěn na veřejném repozitáři na GitHubu a uživatelé si mohli zdrojové kódy několika způsoby stáhnout. Tento způsob byl vhodný pouze zpočátku, protože uživatelé samořejmě nechtějí instalovat a spravovat závislosti manuálně. V brzké době se proto přešlo na distribuci pomocí vlastního repozitáře v systému COPR. Tato varianta přetrvala dodnes, avšak slouží pouze k vytváření testovacích balíčků. Stabilní verze jsou distribuovány skrze oficiální softwarové repozitáře distribuce Fedora. Autor této práce se stal \uv{balíčkářem} distribuce a o balíček nástroje tracer se stará osobně. Plugin pro systém DNF se podařilo připojit k oficiálně podporovaným komunitním pluginům a jeho distribuci zajišťuje správce této sbírky.
 \\
 \\
-Od samotného počátku nebyla očekávána velká uživatelská základna. Mnoho lidí vůbec netuší, že nástroj tohoto typu vůbec potřebuje a nezajímá je to. Navíc projekt cílí především na uživatele RPM distribucí, protože ostatní již podobný nástroj mají. Počet instalací, potažmo současný počet uživatelů nelze přesně určit. Na základě jistého problému\footnote{} postihujícího všechny uživatele Traceru na Fedoře 21, však lze alespoň určit spodní hranici, již tvoří 240 uživatelů, kteří problém ohlásili. Takovou uživatelskou základnu považuji za úspěch. V rámci zpětné vazby od uživatelů bylo nahlášeno celkem XY chyb, z nichž XY bylo již opraveno. Dále bylo vyhověno jedné žádosti o portaci na jinou distribuci a XY žádostem o rozšíření funkcionality.
+Od samotného počátku nebyla očekávána velká uživatelská základna. Mnoho lidí vůbec netuší, že nástroj tohoto typu vůbec potřebuje a nezajímá je to. Navíc projekt cílí především na uživatele RPM distribucí, protože ostatní již podobný nástroj mají. Počet instalací, potažmo současný počet uživatelů nelze přesně určit. Na základě jistého problému\footnote{\url{https://bugzilla.redhat.com/show\_bug.cgi?id=1187763}} postihujícího všechny uživatele Traceru na Fedoře 21, však lze alespoň určit spodní hranici, již tvoří 240 uživatelů, kteří problém ohlásili. Takovou uživatelskou základnu považuji za úspěch. V rámci zpětné vazby od uživatelů bylo nahlášeno celkem 46 chyb a žádostí o rozšíření funkcionality, z nichž 36 bylo již vyřešeno. Dále bylo vyhověno jedné žádosti o portaci na jinou distribuci.
 
 
 
