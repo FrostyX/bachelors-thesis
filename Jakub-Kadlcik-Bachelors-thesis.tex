@@ -323,8 +323,7 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 
 \newpage
 \section{Implementace}
-	\subsection{Úvod}
-	Již jsme se seznámili s prostředím linuxových systémů a problematikou hledání aktualizacemi ovlivněných aplikací. Ukázali jsme si také konkrétní vyhledávací algoritmy předpokládající jisté vstupní parametry, jako například seznam modifikovaných balíčků, nebo seznam všech procesů. Samotný algoritmus pak zjišťoval seznam souborů poskytovaných daným balíčkem, či seznam souborů využívaných daným procesem. V této kapitole si vysvětlíme, jakým způsobem lze v jazyce Python zmíněné vstupní parametry získat a také, jakým způsobem realizovat potřebné operace.
+Již jsme se seznámili s prostředím linuxových systémů a problematikou hledání aktualizacemi ovlivněných aplikací. Ukázali jsme si také konkrétní vyhledávací algoritmy předpokládající jisté vstupní parametry, jako například seznam modifikovaných balíčků, nebo seznam všech procesů. Samotný algoritmus pak zjišťoval seznam souborů poskytovaných daným balíčkem, či seznam souborů využívaných daným procesem. V této kapitole si vysvětlíme, jakým způsobem lze v jazyce Python zmíněné vstupní parametry získat a také, jakým způsobem realizovat potřebné operace.
 
 	\subsection{Práce s procesy}
 	Správu procesů v jazyce Python zajišťuje modul \texttt{psutil}, který je ve Fedoře k dispozici pod názvem \texttt{python-psutil}. Tento modul umožňuje získání seznamu všech aktuálně běžících procesů a poskytuje přístup ke všem jejich atributům, které lze v linuxových systémech zjistit. Mimo to poskytuje rozhraní pro získávání informací o paměti, procesoru, pevných discích a síťových rozhraních.
