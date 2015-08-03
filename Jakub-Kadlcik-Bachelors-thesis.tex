@@ -241,7 +241,7 @@ V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritm
 	\subsection{Seznam ovlivněných aplikací -- Vylepšení}
 	Klíčem k rychlejšímu získání chtěných procesů je zvolení vhodné vyhledávací struktury pro data. Vezměme si fakt, že mnoho procesů využívá stejné soubory (např. knihovny). Naivní algoritmus tedy jeden konkrétní soubor musí ověřit hned několikrát -- pro každý proces, který jej využívá.
 
-	Tento nedostatek můžeme řešit tak, že nebudeme zkoumat proces po procesu, ale místo toho vezmeme množinu všech\footnote{} souborů v paměti, přičemž ke každému souboru si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, zvolíme strom typu BTree jako strukturu pro uložení dat. Zaplatíme sice zvýšenou spotřebou paměti, ale jak si ukážeme v kapitole XY, rychlostní zlepšení bude na první pohled zjevné.
+	Tento nedostatek můžeme řešit tak, že nebudeme zkoumat proces po procesu, ale místo toho vezmeme množinu všech souborů v paměti, přičemž ke každému souboru si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, zvolíme strom typu BTree jako strukturu pro uložení dat. Zaplatíme sice zvýšenou spotřebou paměti, ale jak si ukážeme v kapitole XY, rychlostní zlepšení bude na první pohled zjevné.
 
 	\lstinputlisting
 	[
@@ -417,7 +417,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		Ukázkový kód je natolik sebevysvětlující, že se obejde bez většího komentáře. Za pozornost stojí především metoda \texttt{fetchall()}, která vrací seznam všech záznamů výsledku. Ve výchozím nastavení jsou jednotlivé záznamy reprezentovány datovou strukturou \texttt{tuple}. Jedná se o strukturu, která by se dala nejlépe popsat jako uspořádaná n-tice. Při přístupu k hodnotám atributů potom záleží na jejich pořadí v n-tici. Tento přístup má velké nevýhody, proto na třetím řádku ukázkového kódu specifikujeme, že chceme jednotlivé záznamy vracet reprezentované pomocí objektů třídy \texttt{sqlite3.Row}. To umožní přístup k atributům pomocí jejich názvů.
 
 		\subsubsection{Informace o balíčku}
-		V předchozí kapitole jsme pracovali s databázovým souborem, uchovávajícím informace o proběhlých operacích s balíčky. Odtud jsme dokázali zjistit například jejich název, verzi a pár dalších. Nicnémeně o balíčcích lze zjišťovat informací mnohem více. Jsou však uloženy na jiném místě\footnote{Kde?} a proto musíme k problému přistupovat novým způsobem.
+		V předchozí kapitole jsme pracovali s databázovým souborem, uchovávajícím informace o proběhlých operacích s balíčky. Odtud jsme dokázali zjistit například jejich název, verzi a pár dalších. Nicméně o balíčcích lze zjišťovat informací mnohem více. Jsou však uloženy na jiném místě\footnote{@TODO Kde?} a proto musíme k problému přistupovat novým způsobem.
 		\\
 		Pro zjištění všech, o balíčku dostupných informací, můžeme použít příkaz:
 
@@ -457,7 +457,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		Jednotlivé balíčky jsou reprezentovány pomocí slovníků\footnote{Jiný název pro konstrukci známější především jako asociativní pole}. To znamená, že jejich klíči jsou textové řetězce \texttt{"name"}, \texttt{"summary"}, \texttt{"group"} a tak podobně. Konstanty \texttt{RPMTAG\_SUMMARY}, \texttt{RPMTAG\_GROUP}, apod. slouží pouze jako tenká abstrakční vrstva, vracející daný řetězec.
 
 		\subsubsection{Seznam souborů poskytovaných balíčkem}
-		Každý balíček v sobě nese množinu souborů, které při instalaci nakopíruje do systému. Říkejme, že balíček tyto soubory poskytuje. V případě, že dva balíčky poskytují tentýž soubor, jsou navzájem vyloučeny. To znamená, že není možné, nainstalovat je současně. O každém souboru v operačním systému lze tedy říci, že v daný moment, je poskytován nanejvýš jedním balíčkem\footnote{Nikoli však právě jedním, protože, \dots}.
+		Každý balíček v sobě nese množinu souborů, které při instalaci nakopíruje do systému. Říkejme, že balíček tyto soubory poskytuje. V případě, že dva balíčky poskytují tentýž soubor, jsou navzájem vyloučeny. To znamená, že není možné, nainstalovat je současně. O každém souboru v operačním systému lze tedy říci, že v daný moment, je poskytován nanejvýš jedním balíčkem\footnote{Nikoli však právě jedním, protože, ne každý soubor v systému musí být vlastněn nějakým balíčkem. Protipříkladem budiž uživatelská data}.
 		\\
 		\\
 		Pro zjištění seznamu všech souborů poskytovaných daným balíčkem, slouží příkaz:
@@ -565,7 +565,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 	Přirozeným požadavkem na software, je \uv{rozumný} způsob jeho verzování. Na první pohled to sice nemusí být zřejmé, ale případní uživatelé musejí být schopni určit, jakou verzi používají. A to hned z několika důvodů. Software se v průběhu času vyvíjí a uživatelé by jej měli průběžně aktualizovat\footnote{To je ostatně motivací této práce}. K tomu je ovšem potřeba identifikovat používanou verzi a dokázat určit, zda je jiná verze novější, nebo ne. Programátoři navíc nejsou neomylní a jejich dílo může obsahovat chyby. V případě jejich hlášení je nutné uvést verzi programu, která danou chybou trpí, jinak bude velmi problematické, až nemožné, ji nalézt a opravit.
 	\\
 	\\
-	Z tohoto důvodu Tracer k verzování využívá nástroje GIT, kde je každá logická\footnote{} úprava zdrojového kódu uložena jako popis transformačních kroků, potřebných pro převedení stávajícího kódu na nový. Krokům k provedení jedné logické změny se v kontextu nástroje GIT říká commit. Každý takový commit je označen pomocí kontrolního součtu a dle historie commitů lze určit jejich pořadí. Určité milníky potom lze označit a přiřadit jim vlastní název (tag). Tím například může být číslo verze.
+	Z tohoto důvodu Tracer k verzování využívá nástroje GIT, kde je každá logická\footnote{Určitá posloupnost změn tvořící pojmenovatelný celek, týkající se právě jednoho tématu} úprava zdrojového kódu uložena jako popis transformačních kroků, potřebných pro převedení stávajícího kódu na nový. Krokům k provedení jedné logické změny se v kontextu nástroje GIT říká commit. Každý takový commit je označen pomocí kontrolního součtu a dle historie commitů lze určit jejich pořadí. Určité milníky potom lze označit a přiřadit jim vlastní název (tag). Tím například může být číslo verze.
 	\\
 	\\
 	Člověk využívající vývojovou větev Traceru může tedy identifikovat přesnou verzi pomocí kontrolního součtu nejnovějšího commitu, případně pomocí jména tagu.
