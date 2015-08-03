@@ -380,12 +380,7 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 		\\
 		Balíčkovacím systémem distribuce Fedora je program zvaný DNF\@, který pro uchovávání historie operací, prováděných s balíčky, využívá sqlite databázi v adresáři \texttt{/var/lib/dnf/history}. Z ní se můžeme dozvědět informace o všech proběhlých transakcích. Schéma databáze vypadá následovně.
 
-		% Obrázek databáze
-		% @TODO Přegenerovat- chybějící tabulka pkgtups
-		%\begin{figure}
-			%\includegraphics[scale=0.7]{images/dnf-database.png}
-		%\end{figure}
-		\centerline{\includegraphics[scale=0.67]{images/dnf-database.png}}
+		\centerline{\includegraphics[scale=0.45]{images/dnf-database.png}}
 
 		My se budeme zajímat výhradně o úspěšně proběhlé transakce, proto nás tabulky, zabývající se chybovýmy stavy, nebudou zajímat. Nám užitečné informace se nacházejí především v tabulkách \texttt{trans\_beg}, \texttt{trans\_end}, \texttt{trans\_data\_pkgs} a \texttt{pkgtups}. Z prvních dvou lze zjistit, kdy byly proběhlé transakce spuštěny a dokončeny. Kterých balíčků se týkali a jaké operace s nimi byly prováděny, popisuje tabulka \texttt{trans\_data\_pkgs}. Dané balíčky ovšem rozlišuje pouze pomocí jejich unikátního identifikátoru \texttt{pkgtupid}. Pro zjištění více informací o daném balíčku je nutné nalézt jeho záznam v poslední zmíněné tabulce \texttt{pkgtups}.
 
