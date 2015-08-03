@@ -1,12 +1,10 @@
 [frostyx@localhost ~]$ rpm -qi vim-X11
 Name        : vim-X11
-Epoch       : 2
 Version     : 7.4.179
 Release     : 1.fc20
 Architecture: i686
 Install Date: Ne 17. srpen 2014, 17:16:24 CEST
 Group       : Applications/Editors
-Size        : 2472759
 License     : Vim
 Packager    : Fedora Project
 URL         : http://www.vim.org/

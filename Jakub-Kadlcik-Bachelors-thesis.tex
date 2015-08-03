@@ -271,7 +271,6 @@ V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritm
 	\\
 	Všechny ostatní aplikace spadají do poslední skupiny. Uživatel je musí ručně ukončit a znovu spustit. Nezáleží na tom, zda jsou grafické a bude tak učiněno křížkem v záhlaví okna, nebo spuštěné v příkazové řádce a budou ukončeny jiným způsobem. Tato poslední kategorie není bezpečně automatizovatelná a proto musí zůstat v plné režii uživatele.
 
-\newpage
 \section{Linuxová distribuce Fedora}
 @TODO about, historie, balíčkovací systém, možná popis dnf databáze a vysvětlit, že se bude později v textu hodit
 
@@ -412,7 +411,6 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 
 		Ukázkový kód je natolik sebevysvětlující, že se obejde bez většího komentáře. Za pozornost stojí především metoda \texttt{fetchall()}, která vrací seznam všech záznamů výsledku. Ve výchozím nastavení jsou jednotlivé záznamy reprezentovány datovou strukturou \texttt{tuple}. Jedná se o strukturu, která by se dala nejlépe popsat jako uspořádaná n-tice. Při přístupu k hodnotám atributů potom záleží na jejich pořadí v n-tici. Tento přístup má velké nevýhody, proto na třetím řádku ukázkového kódu specifikujeme, že chceme jednotlivé záznamy vracet reprezentované pomocí objektů třídy \texttt{sqlite3.Row}. To umožní přístup k atributům pomocí jejich názvů.
 
-		\pagebreak
 		\subsubsection{Informace o balíčku}
 		V předchozí kapitole jsme pracovali s databázovým souborem, uchovávajícím informace o proběhlých operacích s balíčky. Odtud jsme dokázali zjistit například jejich název, verzi a pár dalších. Nicnémeně o balíčcích lze zjišťovat informací mnohem více. Jsou však uloženy na jiném místě\footnote{Kde?} a proto musíme k problému přistupovat novým způsobem.
 		\\
@@ -442,7 +440,6 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 
 		Mnohem lepší variantou je použití aplikačního rozhraní, poskytovaného modulem \texttt{rpm}, které nabídne čistější řešení, netrpící zmíněnými neduhy.
 
-		\newpage
 		\lstinputlisting
 		[
 			language=Python,
