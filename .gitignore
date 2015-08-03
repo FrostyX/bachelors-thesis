@@ -33,6 +33,8 @@
 *.pdf
 *.fls
 .directory
+*.mwb.bak
+*.mwb.beforefix
 
 # kidiplom
 kidiplom.bcf
