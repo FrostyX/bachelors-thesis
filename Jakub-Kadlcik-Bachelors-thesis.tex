@@ -189,7 +189,7 @@
 	Ve většině distribucí GNU/Linuxu se software standardně spravuje prostřednictvím balíčkovacího systému. Jedná se o nástroj zajišťující evidenci nainstalovaného a dostupného softwaru, jeho instalaci a následnou aktualizaci. Nové distribuce většinou vznikají odvozením jiné, již existující distribuce a v tomto případě bývá zachován typ balíčků i balíčkovací systém. Můžeme tedy říct, že distribucí je mnoho, ale balíčkovaích systémů se používá jen velmi málo. Konkrétně lze hovořit o distribucích GNU/Linuxu používající balíčky RPM\footnote{RPM = Red Hat Package Manager}, DEB\footnote{DEB = Debian software package} a nebo jiný typ balíčku. V posledním případě se jedná případ od případu o velmi specifický předpis balíčku. V rámci této práce se budeme zabývat linuxovou distribucí Fedora jakožto reprezentantem první skupiny.
 	\\
 	\\
-	Fedora vznikla jako nekomerční odnož Red Hat Enterprise Linuxu a zachovala stávající systém balíčků RPM\@. Od své první verze využívá nástavbu nad RPM zvanou YUM\@. Ten se po čase stal z mnoha technickůch důvodů nedostatečný a proto se objevila alternativa pojmenovaná DNF\@. V současné době lze paralelně využívat oba tyto nástroje, avšak je snaha YUM kompletně nahradit za pomocí DNF\@.
+	Fedora vznikla jako nekomerční odnož Red Hat Linuxu a zachovala stávající systém balíčků RPM\@. Od své první verze využívá nástavbu nad RPM zvanou YUM\@. Ten se po čase stal z mnoha technickůch důvodů nedostatečný a proto se objevila alternativa pojmenovaná DNF\@. V současné době lze paralelně využívat oba tyto nástroje, avšak je snaha YUM kompletně nahradit za pomocí DNF\@.
 	\\
 	\\
 	Když spustíme aplikaci, do paměti se načtou knihovny a soubory potřebné k jejímu běhu. Pokud je některá z knihoven, nebo samotná aplikace po dobu jejího běhu aktualizována, v paměti stále zůstanou původní soubory, přestože fyzicky už nemusí existovat (mohou být smazány, nebo nahrazeny novějšími verzemi).
@@ -272,7 +272,13 @@ V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritm
 	Všechny ostatní aplikace spadají do poslední skupiny. Uživatel je musí ručně ukončit a znovu spustit. Nezáleží na tom, zda jsou grafické a bude tak učiněno křížkem v záhlaví okna, nebo spuštěné v příkazové řádce a budou ukončeny jiným způsobem. Tato poslední kategorie není bezpečně automatizovatelná a proto musí zůstat v plné režii uživatele.
 
 \section{Linuxová distribuce Fedora}
-@TODO about, historie, balíčkovací systém, možná popis dnf databáze a vysvětlit, že se bude později v textu hodit
+Fedora je linuxová distribuce GNU/Linuxu vzniklá jako nekomerční odnož Red~Hat Linuxu. Odtud převzala stávající systém balíčků RPM, nad kterým poskytuje nástavby v podobě správců balíčků YUM a novějším DNF. Fedoru vyvíjí komunita vývojářů okolo Fedora Project, sponzorovaného firmou Red Hat. Projekt vznikl v roce 2003, kdy se firma rozhodla rozdělit Red Hat Linux na komerční Red Hat Enterprise Linux a komunitní Fedoru.
+\\
+\\
+Správce balíčků YUM byl nedílnou součástí Fedory již od jejího prvního vydání Fedora Core 1, avšak v aktuálně stabilní verzi Fedora 22 došlo k jeho nahrazení nástrojem DNF. Nyní lze používat oba nástroje paralelně, avšak YUM je označen za zastaralý a v příštím vydání bude ze systému kompletně odstraněn. Důvody nahrazení jdou mimo rámec této práce, nicméně jedním z nich, pro tuto práci významným, je modularita systému DNF.
+\\
+\\
+Projekt se skládá z knihovny hawkey, poskytující aplikační rozhraní pro jazyky C a Python ke knihovně libsolv, samotného nástroje DNF a dále pak sbírkami rozšíření \texttt{dnf-plugins-core} a \texttt{dnf-plugins-extras}, pomocí kterých lze vylepšovat jeho funkcionalitu. Do těchto sbírek lze za určitých podmínek nechat zahrnout i vlastní rozšíření.
 
 \newpage
 \section{Programovací jazyk Python}
