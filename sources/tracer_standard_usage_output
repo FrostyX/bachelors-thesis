@@ -10,5 +10,5 @@ You should restart:
       gvim
 
 Additionally to those process above, there are:
-  - 6 processes requiring restarting your session (i.e. Logging out & Logging in again)
+  - 6 processes requiring restarting your session
   - 2 processes requiring reboot
