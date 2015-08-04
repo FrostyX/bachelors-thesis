@@ -55,6 +55,8 @@
 %  language=english,
 %  font=sans,
   glossaries,
+  theorems=false,
+  tables=false,
   index
 ]{kidiplom}
 
@@ -88,7 +90,7 @@
 
 %% Anotace práce, včetně anglické (obvykle překlad z jazyka
 %% práce). Jeden odstavec!
-\annotation{Práce se zabývá problematikou \uv{aktualizacemi ovlivněných aplikací}, konkrétně pak jejich nalezením a doporučením nejlepšího způsobu, jak docílit jejich restartování. V teoretické části se zabývá otázkou důležitosti tohoto problému a pojednává o možných algoritmech. Součástí práce je vytvoření nástroje pro vyhledávání ovlivněných aplikací na linuxové distribuci Fedora. Tento nástroj by mělo být možné použít také skrze rozšíření balíčkovacího systému DNF.}
+\annotation{Práce se zabývá problematikou \uv{aktualizacemi ovlivněných aplikací}, konkrétně pak jejich nalezením a doporučením nejlepšího způsobu, jak docílit jejich restartování. V teoretické části řeší otázkou důležitosti tohoto problému a pojednává o možných algoritmech. Součástí práce je vytvoření nástroje pro vyhledávání ovlivněných aplikací na linuxové distribuci Fedora. Tento nástroj by mělo být možné použít také skrze rozšíření balíčkovacího systému DNF.}
 
 \annotation[english]{This thesis deals with the topic of „applications affected by upgrade“, particularly of their determination and recommending the best way of achieving their restart. In the theoretical part it shows the relevance of the problem and describes possible algorithms. This thesis also includes the tool for determining affected applications on Fedora linux distribution which should be possible to use via an extension of the DNF package manager.}
 
@@ -187,22 +189,23 @@
 %%%
 
 \section{Úvod}
-	Ve většině distribucí GNU/Linuxu se software standardně spravuje prostřednictvím balíčkovacího systému. Jedná se o nástroj zajišťující evidenci nainstalovaného a dostupného softwaru, jeho instalaci a následnou aktualizaci. Nové distribuce většinou vznikají odvozením jiné, již existující distribuce a v tomto případě bývá zachován typ balíčků i balíčkovací systém. Můžeme tedy říct, že distribucí je mnoho, ale balíčkovaích systémů se používá jen velmi málo. Konkrétně lze hovořit o distribucích GNU/Linuxu používající balíčky RPM\footnote{RPM = Red Hat Package Manager}, DEB\footnote{DEB = Debian software package} a nebo jiný typ balíčku. V posledním případě se jedná případ od případu o velmi specifický předpis balíčku. V rámci této práce se budeme zabývat linuxovou distribucí Fedora jakožto reprezentantem první skupiny.
+	Ve většině distribucí GNU/Linuxu se software standardně spravuje prostřednictvím balíčkovacího systému. Jedná se o nástroj zajišťující evidenci nainstalovaného a dostupného softwaru, jeho instalaci a následnou aktualizaci. Nové distribuce většinou vznikají odvozením jiné, již existující distribuce a v tomto případě bývá zachován typ balíčků i balíčkovací systém. Můžeme tedy říct, že distribucí je mnoho, ale balíčkovaích systémů se používá jen velmi málo. Konkrétně lze hovořit o distribucích GNU/Linuxu používající balíčky RPM\footnote{RPM = Red Hat Package Manager}, DEB\footnote{DEB = Debian software package} a nebo jiný typ balíčku. V posledním případě jsou balíčky popsány případ od případu velmi specifickým předpisem. V rámci této práce se budeme zabývat linuxovou distribucí Fedora jakožto reprezentantem první skupiny.
 	\\
 	\\
-	Fedora vznikla jako nekomerční odnož Red Hat Linuxu a zachovala stávající systém balíčků RPM\@. Od své první verze využívá nástavbu nad RPM zvanou YUM\@. Ten se po čase stal z mnoha technickůch důvodů nedostatečný a proto se objevila alternativa pojmenovaná DNF\@. V současné době lze paralelně využívat oba tyto nástroje, avšak je snaha YUM kompletně nahradit za pomocí DNF\@.
+	Fedora vznikla jako nekomerční odnož Red Hat Enterprise Linuxu a zachovala stávající systém balíčků RPM\@. Od své první verze využívá nástavbu nad RPM zvanou YUM\@. Ten se po čase stal z mnoha technickůch důvodů nedostatečný a proto se objevila alternativa pojmenovaná DNF\@. V současné době lze paralelně využívat oba tyto nástroje, avšak je snaha YUM kompletně nahradit za pomocí DNF\@.
 	\\
 	\\
 	Když spustíme aplikaci, do paměti se načtou knihovny a soubory potřebné k jejímu běhu. Pokud je některá z knihoven, nebo samotná aplikace po dobu jejího běhu aktualizována, v paměti stále zůstanou původní soubory, přestože fyzicky už nemusí existovat (mohou být smazány, nebo nahrazeny novějšími verzemi).
 	\\
-	Zjistit, které, v systému spuštěné, aplikace využívají takto neaktuální soubory, není pro uživatele triviální. V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné.
+	Zjistit, které, v systému spuštěné, aplikace využívají takto neaktuální soubory, není pro uživatele triviální. V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné, viz kapitola \ref{porovnani-s-konkurenci}.
 	\\
 	\\
-	Na první pohled by se mohlo zdát, že postrádá smysl, zabývat se takovým problémem a jeho vyřešení nepřinese nic zajímavého. Ve skutečnosti však mohou být důsledky velmi nebezpečné. Pokud například aktualizace opravuje bezpečnostní chybu staré verze, běžící aplikace zůstanou neopravené. K jejich opravě dojde až jejich restartováním. Uživateli se tak může stát, že nainstaluje záplatu, bude si myslet, že jeho systém je opět bezpečný a přitom stále běží několik nebezpečných procesů.
+	Na první pohled by se mohlo zdát, že postrádá smysl, zabývat se takovým problémem, protože jeho vyřešení nepřinese nic zajímavého. Ve skutečnosti však mohou být důsledky velmi nebezpečné. Pokud například aktualizace opravuje bezpečnostní chybu staré verze, běžící aplikace zůstanou neopravené. K jejich opravě dojde až jejich restartováním. Uživateli se tak může stát, že nainstaluje záplatu, bude si myslet, že jeho systém je opět bezpečný a přitom stále běží několik nebezpečných procesů.
 	Další problém se týká spíše uživatelů \textit{unstable} distribucí, kterým do systému mohou přicházet zpětně nekompatibilní balíčky. Potom se může stát, že některá služba odmítne nastartovat, protože nová verze nepovoluje stávající konfiguraci, nebo vlivem nepřesně specifikovaných závislostí zůstane v systému nekompatibilní verze knihovny. Takovýchto případů bychom si rádi všimli, co nejdříve to bude možné, nikoliv až v kritické chvíli, kdy například dojde k restartování serveru.
 	\\
 	\\
-	V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné, viz kapitola \ref{porovnani-s-konkurenci}. Práce si proto klade za cíl vytvořit software, který bude řešit problém \textit{nalezení aktualizacemi ovlivněných aplikací}. Software by měl najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést.
+	\\
+	Práce si klade za cíl vytvořit software, který bude řešit problém \textit{nalezení aktualizacemi ovlivněných aplikací}. Software by měl najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést.
 
 	\section{Požadavky}
 	Tato práce vznikala ve spolupráci se společností Red~Hat,~Inc., přičemž následující požadavky byly zhotoveny na základě již existujícího zadání.
@@ -216,7 +219,7 @@
 	Software by měl disponovat textovým uživatelským rozhraním a mělo by být možné jej používat přímo skrze balíčkovací systém. Z tohoto důvodu bude taktéž popsána problematika tvorby rozšíření pro balíčkovací systém DNF\@.
 
 \section{Analýza problému}
-V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritmy pro jejich vyřešení a provedeme úvahu nad vhodností jejich použití. Nejdříve se zaměříme na samotné získání aktualizacemi ovlivněných aplikací, poté zvážíme univerzálnost navrhovaného řešení napříč operačními systémy a nakonec se zaměříme na to, jakým způsobem lze nalezené aplikace restartovat.
+V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritmy pro jejich vyřešení a provedeme úvahu nad vhodností jejich použití. Nejdříve se zaměříme na samotné získání aktualizacemi ovlivněných aplikací, poté zvážíme univerzálnost navrhovaného řešení napříč operačními systémy a nakonec se podíváme na to, jakým způsobem lze nalezené aplikace restartovat.
 
 	\subsection{Seznam ovlivněných aplikací -- Ilustrativně}
 	Hlavním účelem programu bude nalezení aktualizacemi ovlivněných, běžících aplikací. Řešení se zdá být velmi přímočaré. Nejdříve zjistit seznam balíčků, které byly od spuštění systému modifikovány. Následně pro každý balíček zjistit seznam souborů, které poskytuje. Poté zjistit, které procesy využívají některý z množiny modifikovaných souborů. Tedy pro každý spuštěný proces zjistit seznam souborů jež využívá a najít shodu se soubory poskytovanými modifikovanými balíčky.
@@ -232,7 +235,7 @@ V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritm
 	Algoritmus na první pohled vypadá velmi jednoduše a zřejmě vypíše korektní množinu procesů. Mohlo by se tedy zdát, že máme hotovo, nicméně jsme nevzali v úvahu časovou složitost takového algoritmu. Ta, jak si ukážeme níže, je bohužel velmi nepříznivá, což by vedlo k útrpně pomalému vyhledávání.
 
 		\subsubsection*{Časová složitost}
-		Časovou složitost lze vyjádřit následovně. První průchod přes všechny balíky je lineární, tedy $O(n)$. Pro každý balík se prochází všemi procesy, takže násobíme $* O(m)$. Protože jsou obě $m$ i $n$ spočetně velké a nejsou to konstanty, místo $O(n*m)$ vyjádříme $O(n^2)$.
+		Časovou složitost lze vyjádřit následovně. Průchod přes všechny balíky je lineární, tedy $O(n)$. Pro každý balík se prochází všemi procesy, takže násobíme $* O(m)$. Protože jsou obě $m$ i $n$ spočetně velké a nejsou to konstanty, místo $O(n*m)$ vyjádříme $O(n^2)$.
 		\\
 		\\
 		Dále počítáme složitost množinového průniku. V případě jeho naivní implementace, která porovnává každý prvek jedné množiny s každým prvkem druhé, dostaneme kvadratickou složitost $O(n^2)$. V případě optimalizovanějšího návrhu si polepšíme na $O(n)$.
@@ -244,7 +247,7 @@ V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritm
 	\label{seznam-ovlivnenych-aplikaci-vylepseni}
 	Klíčem k rychlejšímu získání chtěných procesů je zvolení vhodné vyhledávací struktury pro data. Vezměme si fakt, že mnoho procesů využívá stejné soubory (např. knihovny). Naivní algoritmus tedy jeden konkrétní soubor musí ověřit hned několikrát -- pro každý proces, který jej využívá.
 
-	Tento nedostatek můžeme řešit tak, že nebudeme zkoumat proces po procesu, ale místo toho vezmeme množinu všech souborů v paměti, přičemž ke každému souboru si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, zvolíme strom typu BTree jako strukturu pro uložení dat. Zaplatíme sice zvýšenou spotřebou paměti, ale jak si ukážeme v kapitole XY, rychlostní zlepšení bude na první pohled zjevné.
+	Tento nedostatek můžeme řešit tak, že nebudeme zkoumat proces po procesu, ale místo toho vezmeme množinu všech souborů v paměti, přičemž ke každému souboru si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, zvolíme strom typu BTree jako strukturu pro uložení dat. Zaplatíme sice zvýšenou spotřebou paměti, nicméně rychlostní zlepšení bude na první pohled zjevné.
 
 	\newpage
 	\lstinputlisting
@@ -255,7 +258,7 @@ V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritm
 	]{sources/tracer_algorithm.py}
 
 		\subsubsection*{Časová složitost}
-		Při vyhledávání je pro každý balíček procházen seznam jím poskytovaných souborů. Složitost tohoto problému je analogická předchozí situaci, tedy $O(n^2)$. Co se ovšem změnilo, je problém nalezení všech procesů, využívajících daný soubor. Nyní si stačí vyzvednout jejich seznam jednorázovým přístupem do stromové struktury typu BTree. Složitost tohoto problému je $O(log(n)$. Poskládáním jednotlivých kousků problému dohromady, získáváme časovou složitost celého algoritmu vyjádřenou jako $O(n^2 * log(n))$.
+		Při vyhledávání je pro každý balíček procházen seznam jím poskytovaných souborů. Složitost tohoto problému je analogická předchozí situaci, tedy $O(n^2)$. Co se ovšem změnilo, je problém nalezení všech procesů, využívajících daný soubor. Nyní si stačí vyzvednout jejich seznam jednorázovým přístupem do stromové struktury typu BTree. Složitost tohoto problému je $O(log(n))$. Poskládáním jednotlivých kousků problému dohromady, získáváme časovou složitost celého algoritmu vyjádřenou jako $O(n^2 * log(n))$.
 
 	\subsection{Informace o aplikaci}
 	Na chvíli se zamysleme nad přenositelností nástroje mezi různými linuxovými distribucemi. Položme si následující otázku, je možné zjišťovat informace o aplikacích stejným způsobem na libovolném linuxovém systému? Prozradím, že část z nich skutečně ano, avšak ne všechny.
@@ -277,33 +280,33 @@ V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritm
 	Všechny ostatní aplikace spadají do poslední skupiny. Uživatel je musí ručně ukončit a znovu spustit. Nezáleží na tom, zda jsou grafické a bude tak učiněno křížkem v záhlaví okna, nebo spuštěné v příkazové řádce a budou ukončeny jiným způsobem. Tato poslední kategorie není bezpečně automatizovatelná a proto musí zůstat v plné režii uživatele.
 
 \section{Linuxová distribuce Fedora}
-Fedora je linuxová distribuce GNU/Linuxu vzniklá jako nekomerční odnož Red~Hat Linuxu. Odtud převzala stávající systém balíčků RPM, nad kterým poskytuje nástavby v podobě správců balíčků YUM a novějším DNF. Fedoru vyvíjí komunita vývojářů okolo Fedora Project, sponzorovaného firmou Red Hat. Projekt vznikl v roce 2003, kdy se firma rozhodla rozdělit Red Hat Linux na komerční Red Hat Enterprise Linux a komunitní Fedoru.
+Fedora je linuxová distribuce GNU/Linuxu vzniklá jako nekomerční odnož Red~Hat Enterprise Linuxu. Odtud převzala stávající systém balíčků RPM, nad kterým poskytuje nástavby v podobě správců balíčků YUM a novějším DNF. Fedoru vyvíjí komunita vývojářů okolo Fedora Project, sponzorovaného firmou Red Hat. Projekt vznikl v roce 2003, kdy se firma rozhodla rozdělit Red Hat Linux na komerční Red Hat Enterprise Linux a komunitní Fedoru.
 \\
 \\
-Správce balíčků YUM byl nedílnou součástí Fedory již od jejího prvního vydání Fedora Core 1, avšak v aktuálně stabilní verzi Fedora 22 došlo k jeho nahrazení nástrojem DNF. Nyní lze používat oba nástroje paralelně, avšak YUM je označen za zastaralý a v příštím vydání bude ze systému kompletně odstraněn. Důvody nahrazení jdou mimo rámec této práce, nicméně jedním z nich, pro tuto práci významným, je modularita systému DNF.
+Správce balíčků YUM byl nedílnou součástí Fedory již od jejího prvního vydání Fedora Core 1, avšak v aktuálně stabilní verzi Fedora 22 došlo k jeho nahrazení nástrojem DNF~\cite{t12}. Nyní lze používat oba nástroje paralelně, avšak YUM je označen za zastaralý a v příštím vydání bude ze systému kompletně odstraněn. Důvody nahrazení jdou mimo rámec této práce, nicméně jedním z nich, pro tuto práci významným, je modularita systému DNF.
 \\
 \\
 Projekt se skládá z knihovny hawkey, poskytující aplikační rozhraní pro jazyky C a Python ke knihovně libsolv, samotného nástroje DNF a dále pak sbírkami rozšíření \texttt{dnf-plugins-core} a \texttt{dnf-plugins-extras}, pomocí kterých lze vylepšovat jeho funkcionalitu. Do těchto sbírek lze za určitých podmínek nechat zahrnout i vlastní rozšíření.
 
 \newpage
 \section{Programovací jazyk Python}
-Jedním z požadavků této práce je, aby výsledný produkt byl realizován v programovacím jazyce Python. Proč je tomu tak a proč zrovna Python? Na tuto otázku existuje velmi jednoduchá odpověď. Nový balíčkovací systém DNF, distribuce Fedora, je napsán právě v tomto jazyce a poskytuje v něm API pro tvorbu rozšíření od třetích stran. Nehledě na to, Python disponuje několika vlastnostmi, ve kterých konkurence zaostává.
+Jedním z požadavků této práce je, aby výsledný produkt byl realizován v programovacím jazyce Python. Proč je tomu tak a proč zrovna Python? Na tuto otázku existuje velmi jednoduchá odpověď. Nový balíčkovací systém distribuce Fedora, DNF, je napsán právě v tomto jazyce a poskytuje v něm API pro tvorbu rozšíření třetích stran~\cite{t06}. Nehledě na to, Python disponuje několika vlastnostmi, ve kterých konkurence zaostává.
 
 	\subsection{Historie}
-	Koncept jazyka Python vznikl na konci osmdesátých let dvacátého století v Amsterdamském CWI\footnote{Centrum Wiskunde \& Informatica (English: National Research Institute for Mathematics and Computer Science)}. Jeho autorem je Guido van Rossum, který dosud stále stojí v čele jeho vývoje. Při návrhu Pythonu se inspiroval jazykem ABC, na kterém v té době pracoval. Implementace započala v prosinci 1989 a první stabilní verze 1.0 vyšla o několik let později, v roce 1994. Od té doby se vývoj posunul o dvě major verze dopředu. Řada 2.x.x odstartovala v roce 2000 a je stále velmi populární, obzvláště pak v komerční sféře.  V roce 2008 vyšla verze 3.0, která měla být nástupcem dvojkové řady, avšak kvůli neúplné zpětné kompatibilitě probíhá vývoj obou řad paralelně. Aktuálně lze tedy Python získat ve dvou stabilních verzích. V době psaní této práce se jedná konkrétně o verze 2.7.9 a 3.4.3.
+	Koncept jazyka Python vznikl na konci osmdesátých let dvacátého století v Amsterdamském CWI\footnote{Centrum Wiskunde \& Informatica (English: National Research Institute for Mathematics and Computer Science)}. Jeho autorem je Guido van Rossum, který dosud stále stojí v čele jeho vývoje. Při návrhu Pythonu se inspiroval jazykem ABC, na kterém v té době pracoval. Implementace započala v prosinci 1989 a první stabilní verze 1.0 vyšla o několik let později, v roce 1994. Od té doby se vývoj posunul o dvě major verze dopředu. Řada 2.x.x odstartovala v roce 2000 a je stále velmi populární obzvláště v komerční sféře.  V roce 2008 vyšla verze 3.0, která měla být nástupcem dvojkové řady, avšak kvůli neúplné zpětné kompatibilitě~\cite{t13} probíhá vývoj obou řad paralelně. Aktuálně lze tedy Python získat ve dvou stabilních verzích. V době psaní této práce se jedná konkrétně o verze 2.7.10~\cite{t02} a 3.4.3~\cite{t03}.
 
 	\subsection{Vlastnosti}
 	% @TODO Najít slovo koerce ve slovníku
-	Python je platformově nezávislý, multi-paradigmatický programovací jazyk, jehož výchozím stylem je strukturované, případně objektově orientované programování. Poskytuje však mnohé prvky funkcionálního paradigmatu, jako například lambda výrazy, iterátory, ne-destruktivní varianty většiny standardních funkcí, či funkce \texttt{map}, \texttt{filter}, \texttt{apply} a další, dobře známé z ostatních funkcionálních jazyků.
+	Python je platformově nezávislý, multi-paradigmatický programovací jazyk, jehož výchozím stylem je strukturované, případně objektově orientované programování. Poskytuje však mnohé prvky funkcionálního paradigmatu, jako například lambda výrazy, iterátory, ne-destruktivní varianty většiny standardních funkcí, či například funkce \texttt{map}, \texttt{filter}, nebo \texttt{apply} dobře známé z ostatních funkcionálních jazyků.
 	\\
 	\\
-	Typování je v tomto jazyce dynamické, avšak silné. Kupříkladu operaci sčítání tedy nelze provést na jednom argumentu typu číslo a druhém argumentu typu řetězec, i kdyby v něm byla uložena číselná hodnota. K žádným koercím a implicitnímu přetypování v tomto případě nedojde a výsledkem operace bude chyba. Velmi výrazným rysem je takzvaný duck typing, který preferuje provedení dané operace s objektem, aniž by se předem ověřoval jeho typ. Při selhání zjevně objekt nebyl požadovaného typu a situace se vyřeší výjimkou. V opačném případě objekt poskytoval požadované rozraní a byl tedy správného typu.
+	Typování je v tomto jazyce dynamické, avšak silné. Kupříkladu operaci sčítání tedy nelze provést na jednom argumentu typu číslo a druhém argumentu typu řetězec, i kdyby v něm byla zapsána číselná hodnota. K žádným koercím a implicitnímu přetypování v tomto případě nedojde a výsledkem operace bude chyba. Velmi výrazným rysem je takzvaný duck typing, který preferuje provedení dané operace s objektem, aniž by se předem ověřoval jeho typ. Při selhání zjevně objekt nebyl požadovaného typu a situace se vyřeší výjimkou. V opačném případě objekt poskytoval požadované rozraní a byl tedy správného typu.
 	\\
 	\\
 	Standardní knihovna se snaží být \uv{rozumně} velká a všechna dodatečná funkcionalita je řešena formou rozšíření. Hlavní implementace Pythonu zvaná CPython je napsaná v jazyce C standardu C89. Tento překladač proramy kompiluje do přechodného bytekódu (soubor s příponou \texttt{.pyc}), který je následně prováděn virtuálním strojem. O správu paměti se stará garbage collector.
 
 	\subsection{Filozofie}
-	Rady a doporučení, jak by měl vypadat zdrojový kód v jazyce Python, sepsal Tim Peters v dokumentu PEP 20 -- The Zen of Python. Jak sám píše na začátku dokumentu, principy shrnul do dvaceti aforismů, z nichž však pouze devatenáct bylo zapsáno. Následuje ukázka samotného Zenu:
+	Rady a doporučení, jak by měl vypadat zdrojový kód v jazyce Python, sepsal Tim Peters v dokumentu PEP 20 -- The Zen of Python~\cite{t07}. Jak sám píše na začátku dokumentu, principy shrnul do dvaceti aforismů, z nichž však pouze devatenáct bylo zapsáno. Následuje ukázka samotného Zenu:
 
 	\begin{verse}
 	Beautiful is better than ugly.\\
@@ -318,20 +321,18 @@ Jedním z požadavků této práce je, aby výsledný produkt byl realizován v 
 	Zbývajících dvanáct veršů naleznete ve zmíněném dokumentu, případně v interpretru jazyka, pomocí příkazu \texttt{import this}.
 
 	\subsection{Syntax a sémantika}
-	Základním syntaktickým rysem, kterým se syntax liší od jazyků rodiny C je použití odsazení k vyhrazení bloku kódu, namísto složených závorek. Přídává klíčové slovo \texttt{with}, které umožní otevřít zdroj, implementující metody \texttt{\_\_enter\_\_} a \texttt{\_\_exit\_\_}, pro daný blok kódu. Konstrukt se sám postará o ukončení práce se zdrojem a to i v případě, kdy ve vykonávaném kódu dojde k chybě. V jazyce nenajdeme konstrukci \texttt{switch}. Návrh o její přídání byl oficiálně zamítnut, viz PEP 3103. K dispozici máme několik základních datových struktur jako jsou seznamy (obdoba pole), slovníky (obdoba asociativního pole), tuply, či množiny. Všechny se používají velmi snadno, například seznam lze vytvořit zapsáním jeho prvků mezi hranaté závoky.
+	Základním syntaktickým rysem, kterým se syntax liší od jazyků rodiny C je použití odsazení k vyhrazení bloku kódu namísto složených závorek. Přídává klíčové slovo \texttt{with}, které umožní otevřít zdroj, implementující metody \texttt{\_\_enter\_\_} a \texttt{\_\_exit\_\_}, pro daný blok kódu. Konstrukt se sám postará o ukončení práce se zdrojem a to i v případě, kdy ve vykonávaném kódu dojde k chybě. V jazyce nenajdeme konstrukci \texttt{switch}. Návrh o její přídání byl oficiálně zamítnut, viz PEP 3103~\cite{t08}. K dispozici máme několik základních datových struktur jako jsou seznamy (obdoba pole), slovníky (obdoba asociativního pole), tuply, či množiny. Všechny se používají velmi snadno, například seznam lze vytvořit zapsáním jeho prvků mezi hranaté závoky.
 	\\
 	\\
-	Doporučené konvence pro formátování zrojového kódu popisuje dokument PEP 8. Pojednává například o způsobu odsazování, doporučené šírce řádku, komentářích, způsobech pojmenování různých elementů a podobně.
+	Doporučené konvence pro formátování zrojového kódu popisuje dokument PEP~8~\cite{t09}. Pojednává například o způsobu odsazování, doporučené šírce řádku, komentářích, způsobech pojmenování různých elementů a podobně.
 
-
-	\subsection{Kompatibilita verzí}
 
 \newpage
 \section{Implementace}
 Již jsme se seznámili s prostředím linuxových systémů a problematikou hledání aktualizacemi ovlivněných aplikací. Ukázali jsme si také konkrétní vyhledávací algoritmy předpokládající jisté vstupní parametry, jako například seznam modifikovaných balíčků, nebo seznam všech procesů. Samotný algoritmus pak zjišťoval seznam souborů poskytovaných daným balíčkem, či seznam souborů využívaných daným procesem. V této kapitole si vysvětlíme, jakým způsobem lze v jazyce Python zmíněné vstupní parametry získat a také, jakým způsobem realizovat potřebné operace.
 
 	\subsection{Práce s procesy}
-	Správu procesů v jazyce Python zajišťuje modul \texttt{psutil}, který je ve Fedoře k dispozici pod názvem \texttt{python-psutil}. Tento modul umožňuje získání seznamu všech aktuálně běžících procesů a poskytuje přístup ke všem jejich atributům, které lze v linuxových systémech zjistit. Mimo to poskytuje rozhraní pro získávání informací o paměti, procesoru, pevných discích a síťových rozhraních.
+	Správu procesů v jazyce Python zajišťuje modul \texttt{psutil}, který je ve Fedoře k dispozici pod názvem \texttt{python-psutil}. Tento modul umožňuje získání seznamu všech aktuálně běžících procesů a poskytuje přístup ke všem jejich atributům, které lze v linuxových systémech zjistit. Mimo to poskytuje rozhraní pro získávání informací o paměti, procesoru, pevných discích a síťových rozhraních~\cite{t04}.
 
 	Nás ovšem zajímá pouze práce s procesy. Ukázku, jak vypadá rozhraní objektu procesu, vidíme v následujícím příkladu.
 
@@ -342,7 +343,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		caption={Základní práce s procesy v psutil}
 	]{sources/psutil.py}
 
-	Můžeme požadovat i pokročilejší funkce, jako například zjištění souborů, které daný proces využívá. Pro následující ukázku předpokládejme identifikátor některého z procesů uložený v proměnné \texttt{pid}.
+	Můžeme požadovat i pokročilejší funkce, jako například zjištění souborů, které daný proces využívá. Pro následující ukázku, stejně tak jako pro tu předchozí, předpokládejme identifikátor některého z procesů uložený v proměnné \texttt{pid}.
 
 	\lstinputlisting
 	[
@@ -359,13 +360,13 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		caption={Ukázka výstupu předchozího kódu}
 	]{sources/process_files_output}
 
-	Jak jsme mohli vidět, objekty procesů jsou vytvářeny na základě jejich identifikátoru PID\@. Zjištění seznamu jejich hodnot je tedy klíčkovou záležitostí, kterou pro nás zajišťuje funkce \texttt{psutil.get\_pid\_list()}.
+	Jak jsme mohli vidět, objekty procesů jsou vytvářeny na základě jejich identifikátoru PID\@. Zjištění seznamu unikátních identifikátorů je tedy klíčkovou záležitostí, kterou pro nás zajišťuje funkce \texttt{psutil.get\_pid\_list()}.
 
 	\subsubsection{Problémy při práci s procesy}
 		Při práci s procesy narážíme na několik problémů, které bychom neustále měli mít na paměti.
 		\\
 		\\
-		K prvnímu výraznému jevu dochází, když je vytvořen objekt reprezentující proces, poté je daný proces ukončen a následovně dojde k pokusu o přístup k atributu jeho objektu. Obdobná situace nastává v případě získání seznamu identifikátorů všech spuštěných procesů a následného vytvoření objektů na jejich základě. Může se totiž stát, že došlo k ukončení některých procesů mezi časem získání jejich identifikátoru a časem vytváření objektů. V těchto případech dochází k výjimce, se kterou však není potřeba si příliš lámat hlavu. Proces byl již ukončen, takže pro naše účely není ničím zajímavý\footnote{Ukončený proces zjevně aktualizací ovlivněn nebude}. Je však důležité si tuto problematiku uvědomit.
+		K prvnímu významnému jevu dochází, když je vytvořen objekt reprezentující proces, poté je daný proces ukončen a následovně dojde k pokusu o přístup k atributu jeho objektu. Obdobná situace nastává v případě získání seznamu identifikátorů všech spuštěných procesů a následného vytvoření objektů na jejich základě. Může se totiž stát, že došlo k ukončení některých procesů mezi časem získání jejich identifikátoru a časem vytváření objektů. V těchto případech dochází k výjimce, se kterou si však v naší situaci není potřeba příliš lámat hlavu. Proces byl již ukončen, takže pro naše účely není ničím zajímavý\footnote{Ukončený proces zjevně aktualizací ovlivněn nebude}. Je však důležité si tuto problematiku uvědomit.
 		\\
 		\\
 		Dále si lze všimnout poměrně zvláštního jevu. Tím jsou podivné řetězce na konci názvů, některých procesem používaných, souborů. Množinu všech možných přípon, které se mohou vyskytnout, nedovedu přesně určit, nicméně v průběhu tohoto projektu jsem se setkal s následujícími případy:
@@ -388,7 +389,10 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		\\
 		Balíčkovacím systémem distribuce Fedora je program zvaný DNF\@, který pro uchovávání historie operací, prováděných s balíčky, využívá sqlite databázi v adresáři \texttt{/var/lib/dnf/history}. Z ní se můžeme dozvědět informace o všech proběhlých transakcích. Schéma databáze vypadá následovně.
 
-		\centerline{\includegraphics[scale=0.45]{images/dnf-database.png}}
+		\begin{figure}[h]
+			\centerline{\includegraphics[scale=0.45]{images/dnf-database.png}}
+			\caption{Schéma databáze balíčkovacího systému DNF}
+		\end{figure}
 
 		My se budeme zajímat výhradně o úspěšně proběhlé transakce, proto nás tabulky, zabývající se chybovýmy stavy, nebudou zajímat. Nám užitečné informace se nacházejí především v tabulkách \texttt{trans\_beg}, \texttt{trans\_end}, \texttt{trans\_data\_pkgs} a \texttt{pkgtups}. Z prvních dvou lze zjistit, kdy byly proběhlé transakce spuštěny a dokončeny. Kterých balíčků se týkali a jaké operace s nimi byly prováděny, popisuje tabulka \texttt{trans\_data\_pkgs}. Dané balíčky ovšem rozlišuje pouze pomocí jejich unikátního identifikátoru \texttt{pkgtupid}. Pro zjištění více informací o daném balíčku je nutné nalézt jeho záznam v poslední zmíněné tabulce \texttt{pkgtups}.
 
@@ -423,7 +427,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		\subsubsection{Informace o balíčku}
 		V předchozí kapitole jsme pracovali s databázovým souborem, uchovávajícím informace o proběhlých operacích s balíčky. Odtud jsme dokázali zjistit například jejich název, verzi a pár dalších. Nicméně o balíčcích lze zjišťovat informací mnohem více. Jsou však uloženy na jiném místě\footnote{V databázi RPMDB umístěné v adresáři \texttt{/var/lib/rpm/}} a proto musíme k problému přistupovat novým způsobem.
 		\\
-		Pro zjištění všech, o balíčku dostupných informací, můžeme použít příkaz:
+		Pro zjištění všech, o balíčku dostupných, informací, můžeme použít příkaz:
 
 		% Pozor, balíček musí být nainstalován
 		\begin{lstlisting}
@@ -445,7 +449,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 			caption={Parsování informací o balíčku}
 		]{sources/fedora_package_info_parse.py}
 
-		Tato varianta však není ideální. Vyžaduje ruční parsování výstupu, jakožto textového řetězce. Navíc dochází k drobnému zpomalení z důvodu spouštění nového procesu. Tato prodleva by byla zanedbatelná v případě jednorázového volání. Informace však mohou být zjišťovány o velkém množství balíčků, což by vedlo k výraznému zpomalení programu.
+		Tato varianta však není ideální. Vyžaduje ruční parsování výstupu, jakožto textového řetězce a navíc dochází k drobnému zpomalení z důvodu spouštění nového procesu. Tato prodleva by byla zanedbatelná v případě jednorázového volání, informace však mohou být zjišťovány o velkém množství balíčků, což by vedlo k výraznému zpomalení programu.
 
 		Mnohem lepší variantou je použití aplikačního rozhraní, poskytovaného modulem \texttt{rpm}, které nabídne čistější řešení, netrpící zmíněnými neduhy.
 
@@ -456,22 +460,22 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 			caption={Získání informací o balíčku pomocí rpm API}
 		]{sources/fedora_package_info_api.py}
 
-		V tomto kódu se vyskytuje spousta neobjasněných elementů. Pojďme si je postupně projít a vysvětlit jejich význam. Každý skript pracující s balíčkem RPM musí zákonitě začínat instancováním třídy \texttt{TransactionSet}. Ta se postará o otevření databáze balíčků a poskytne rozhraní pro dotazování se vůči ní. Tím je metoda \texttt{dbMatch} použitá na následujícím řádku. Jejím výsledkem je vždy iterátor obsahující nalezené balíčky. To, jaké balíčky budou hledány, lze ovlivnit nastavením patřičných argumentů. V případě jejich vynechání, bude vrácen iterátor množiny všech nainstalovaných balíčků. Samozřejmě lze i vyhledávat pouze balíčky splňující určitá kritéria. V ukázkovém příkladu jsou vyhledány všechny balíčky, které se jmenují \texttt{vim-X11}. Jméno balíčku je však unikátní vlastnost, takže iterátor obsahuje pouze jednu položku (případně žádnou pokud nebyla nalezena shoda). Získáme ji pomocí metody \texttt{next()}.
+		V tomto kódu se vyskytuje spousta neobjasněných elementů. Pojďme si je postupně projít a vysvětlit jejich význam. Každý skript pracující s balíčkem RPM musí zákonitě začínat instancováním třídy \texttt{TransactionSet}~\cite{t10}. Ta se postará o otevření databáze balíčků a poskytne rozhraní pro dotazování se vůči ní. Tím je metoda \texttt{dbMatch} použitá na následujícím řádku. Jejím výsledkem je vždy iterátor obsahující nalezené balíčky. To, jaké balíčky budou hledány, lze ovlivnit nastavením patřičných argumentů. V případě jejich vynechání, bude vrácen iterátor množiny všech nainstalovaných balíčků. Samozřejmě lze i vyhledávat pouze balíčky splňující určitá kritéria. V ukázkovém příkladu jsou vyhledány všechny balíčky, které se jmenují \texttt{vim-X11}. Jméno balíčku je však unikátní vlastnost, takže iterátor obsahuje pouze jednu položku (případně žádnou pokud nebyla nalezena shoda). Získáme ji pomocí metody \texttt{next()}.
 		\\
-		Jednotlivé balíčky jsou reprezentovány pomocí slovníků\footnote{Jiný název pro konstrukci známější především jako asociativní pole}. To znamená, že jejich klíči jsou textové řetězce \texttt{"name"}, \texttt{"summary"}, \texttt{"group"} a tak podobně. Konstanty \texttt{RPMTAG\_SUMMARY}, \texttt{RPMTAG\_GROUP}, apod. slouží pouze jako tenká abstrakční vrstva, vracející daný řetězec.
+		Jednotlivé balíčky jsou reprezentovány pomocí slovníků\footnote{Jiný název pro konstrukci známější především jako asociativní pole}. To znamená, že jejich klíči jsou textové řetězce \texttt{"name"}, \texttt{"summary"}, \texttt{"group"} a tak podobně. Konstanty \texttt{RPMTAG\_NAME}, \texttt{RPMTAG\_SUMMARY}, \texttt{RPMTAG\_GROUP}, apod. slouží pouze jako tenká abstrakční vrstva, vracející daný klíč.
 
 		\subsubsection{Seznam souborů poskytovaných balíčkem}
-		Každý balíček v sobě nese množinu souborů, které při instalaci nakopíruje do systému. Říkejme, že balíček tyto soubory poskytuje. V případě, že dva balíčky poskytují tentýž soubor, jsou navzájem vyloučeny. To znamená, že není možné, nainstalovat je současně. O každém souboru v operačním systému lze tedy říci, že v daný moment, je poskytován nanejvýš jedním balíčkem\footnote{Nikoli však právě jedním, protože, ne každý soubor v systému musí být vlastněn nějakým balíčkem. Protipříkladem budiž uživatelská data}.
+		Každý balíček v sobě nese množinu souborů, které při instalaci nakopíruje do systému\footnote{Ne tak docela každý. Existují totiž tzv. metabalíčky, které nenesou žádné soubory, ale pouze zprostředkují nainstalování jiných balíčků.}. Říkejme, že balíček tyto soubory poskytuje. V případě, že dva balíčky poskytují tentýž soubor, jsou navzájem vyloučeny. To znamená, že není možné, nainstalovat je současně. O každém souboru v operačním systému lze tedy říci, že v daný moment, je poskytován nanejvýš jedním balíčkem\footnote{Nikoli však právě jedním, protože, ne každý soubor v systému musí být vlastněn nějakým balíčkem. Protipříkladem budiž uživatelská data.}.
 		\\
 		\\
-		Pro zjištění seznamu všech souborů poskytovaných daným balíčkem, slouží příkaz:
+		K zjištění seznamu všech souborů poskytovaných daným balíčkem, slouží příkaz:
 
 		% Pozor, balíček musí být nainstalován
 		\begin{lstlisting}
 			rpm -ql nazev_balicku
 		\end{lstlisting}
 
-		K získání a zpracování tohoto seznamu platí totéž, co v předchozím případě. Varianta využívající modul \texttt{subprocess}, by vypadala velmi podobně. Oproti předchozímu použití, by se změnil pouze spouštěný příkaz. Navíc jsme tuto variantu implementace z dobrých důvodů vyloučili, proto se budeme zabývat především použitím aplikačního rozhraní modulu \texttt{rpm}.
+		Pro získání a zpracování tohoto seznamu platí totéž, co v předchozím případě. Varianta využívající modul \texttt{subprocess}, by vypadala velmi podobně. Oproti předchozímu použití, by se změnil pouze spouštěný příkaz. Navíc jsme tuto variantu implementace z dobrých důvodů vyloučili, proto se budeme zabývat především použitím aplikačního rozhraní modulu \texttt{rpm}.
 
 		\lstinputlisting
 		[
@@ -483,7 +487,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		V tomto ukázkovém příkladu nově narážíme na funkci \texttt{fi} její výsledky. Tato funkce pro daný balíček vrací objekt reprezentující seznam, jím poskytovaných souborů včetně jejich atributů. Položkami tohoto seznamu jsou uspořádané n-tice, jejichž první složku tvoří název souboru.
 
 	\subsection{Vyhledání ovlivněných aplikací}
-	V předchozích kapitolách jsme si vysvětlili, jak v programovacím jazyce Python získat všechny data, které algoritmus popsaný v kapitole \ref{seznam-ovlivnenych-aplikaci-vylepseni} na svém vstupu vyžaduje. Nyní bychom se mohli podívat na konkrétní implementaci tohoto algoritmu. Nicméně, neučiníme tak, protože samotná implementace není ničím zajímavá. Jedná se pouze o přepis pseudokódu z téže kapitoly do zdrojového kódu jazyka Python. Z tohoto důvodu bych případné zájemce rád odkázal přímo na zdrojový kód programu.
+	V předchozích kapitolách jsme si vysvětlili, jak v programovacím jazyce Python získat všechny data, které algoritmus popsaný v kapitole \ref{seznam-ovlivnenych-aplikaci-vylepseni} na svém vstupu vyžaduje. Nyní bychom se mohli podívat na konkrétní implementaci tohoto algoritmu. Nicméně, neučiníme tak, protože samotná implementace není ničím zajímavá. Jedná se pouze o přepis pseudokódu z téže kapitoly, do zdrojového kódu jazyka Python. Z tohoto důvodu bych případné zájemce rád odkázal přímo na zdrojový kód programu.
 
 	\newpage
 	\subsection{Rozšíření pro balíčkovací systém DNF}
@@ -499,7 +503,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		caption={Ukázka vlastního příkazu pro program \texttt{dnf}}
 	]{sources/dnf_command.py}
 
-	Při spuštění, ukázkový příkaz pouze vypíše, jakým způsobem byl zavolán. Pro zprovoznění je nutné soubor uložit do adresáře definovaného v konfiguračním souboru jako \texttt{pluginpath}. Ve výchozím nastavení se jedná o adresář \texttt{/usr/lib/python2.7/site-packages/dnf-plugins/}. A dále zaregistrováním příkazu do uživatelského rozhraní, které můžeme zajistit pomocí následujícího pluginu.
+	Při spuštění, ukázkový příkaz pouze vypíše, jakým způsobem byl zavolán. Pro zprovoznění je nutné soubor uložit do adresáře definovaného v konfiguračním souboru jako \texttt{pluginpath}. Ve výchozím nastavení se jedná o adresář \texttt{/usr/lib/python2.7/site-packages/dnf-plugins/}. A dále zaregistrovat příkaz do uživatelského rozhraní, což můžeme zajistit následujícím pluginem.
 
 	\lstinputlisting
 	[
@@ -508,8 +512,9 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		caption={Plugin registrující vlastní příkaz}
 	]{sources/dnf_command_register.py}
 
-	Nyní, podíváme-li se pomocí \texttt{dnf help} do nápovědy, vidíme příkaz \texttt{foo}, který jsme vytvořili naším rozšířením. Zavoláme jej jednoduše pomocí \texttt{dnf foo arg1 arg2 arg3}.
-
+	Nyní, podíváme-li se pomocí \texttt{dnf help} do nápovědy, vidíme příkaz \texttt{foo}, který jsme vytvořili naším rozšířením. Zavoláme jej jednoduše pomocí\\ \texttt{dnf foo arg1 arg2 arg3}.
+	\\
+	\\
 	Na závěr této vsuvkové kapitoly si ještě ukážeme plugin, který za každou úspěšně provedenou transakcí vypíše seznam balíčků, jež nainstalovala.
 
 	\lstinputlisting
@@ -558,10 +563,10 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		V určitých případech může uživatel chtít zobrazit pomocné informace pouze k několika aplikacím, ale nechce vypisovat jejich názvy. Pro tento účel byl zaveden interaktivní režim. Pokud spustíme Tracer s parametrem \texttt{-i}, nebo \texttt{-{}-interactive}, obdržíme na výstupu očíslovaný seznam aplikací zakončený promptem. Postupně zadáváme čísla aplikací, které nás zajímají a dostáváme výpis pomocných informací.
 
 		\subsubsection{DNF plugin}
-		Specialitou program pro uživatele linuxové distribuce Fedora je rozšíření pro balíčkovací systém DNF, spouštějící program Tracer po každé úspěšně provedené transakci. Tedy je spuštěno automaticky po nainstalování, aktualizaci, či odstranění libovolného balíčku. Toto rozšíření nevyžaduje žádnou interakci s uživatelem a není potřeba jej nijak manuálně nastavovat. Výstup vypadá totožně s ukázkou v kapitole \ref{standardni-pouziti}.
+		Specialitou programu pro uživatele linuxové distribuce Fedora je rozšíření pro balíčkovací systém DNF, spouštějící program Tracer po každé úspěšně provedené transakci. Tedy je spuštěno automaticky po nainstalování, aktualizaci, či odstranění libovolného balíčku. Toto rozšíření nevyžaduje žádnou interakci s uživatelem a není potřeba jej nijak manuálně nastavovat. Výstup vypadá totožně s ukázkou v kapitole \ref{standardni-pouziti}.
 
 	\subsection{Licence}
-	Program je vyvíjen pod svobodnou licencí GNU/GPLv2, jejíž plné znění naleznete v příloze \ref{gnu-gpl-v2}. Tato licence zajišťuje, že každý člověk má právo studovat zdrojový kód tohoto programu. To znamená číst jej, modifikovat a libovolně s ním experimentovat. Původní, nebo pozměněné dílo může dále distribuovat, avšak pod podmínkou, že tyto klony budou poskytovat stejná práva, jako původní software. Licence navíc umožňuje využívat dílo k libovolnému účelu.
+	Program je vyvíjen pod svobodnou licencí GNU/GPLv2, jejíž plné znění naleznete v příloze \ref{gnu-gpl-v2}. Tato licence zajišťuje, že každý člověk má právo studovat zdrojový kód daného programu. To znamená číst jej, modifikovat a libovolně s ním experimentovat. Původní, nebo pozměněné dílo může dále distribuovat, avšak pod podmínkou, že tyto klony budou poskytovat stejná práva, jako původní software. Licence navíc umožňuje využívat dílo k libovolnému účelu.
 	\\
 	\\
 	Při použití této licence můžeme o Traceru hovořit jako o otevřeném, či ještě lépe, svobodném software.
@@ -570,7 +575,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 	Přirozeným požadavkem na software, je \uv{rozumný} způsob jeho verzování. Na první pohled to sice nemusí být zřejmé, ale případní uživatelé musejí být schopni určit, jakou verzi používají. A to hned z několika důvodů. Software se v průběhu času vyvíjí a uživatelé by jej měli průběžně aktualizovat\footnote{To je ostatně motivací této práce}. K tomu je ovšem potřeba identifikovat používanou verzi a dokázat určit, zda je jiná verze novější, nebo ne. Programátoři navíc nejsou neomylní a jejich dílo může obsahovat chyby. V případě jejich hlášení je nutné uvést verzi programu, která danou chybou trpí, jinak bude velmi problematické, až nemožné, ji nalézt a opravit.
 	\\
 	\\
-	Z tohoto důvodu Tracer k verzování využívá nástroje GIT, kde je každá logická\footnote{Určitá posloupnost změn tvořící pojmenovatelný celek, týkající se právě jednoho tématu} úprava zdrojového kódu uložena jako popis transformačních kroků, potřebných pro převedení stávajícího kódu na nový. Krokům k provedení jedné logické změny se v kontextu nástroje GIT říká commit. Každý takový commit je označen pomocí kontrolního součtu a dle historie commitů lze určit jejich pořadí. Určité milníky potom lze označit a přiřadit jim vlastní název (tag). Tím například může být číslo verze.
+	Z tohoto důvodu Tracer k verzování využívá nástroje GIT, kde je každá logická\footnote{Určitá posloupnost změn tvořící pojmenovatelný celek, týkající se právě jednoho tématu} úprava zdrojového kódu uložena jako popis transformačních kroků, potřebných pro převedení stávajícího kódu na nový. Krokům k provedení jedné logické změny se v kontextu nástroje GIT říká commit. Každý takový commit je označen pomocí kontrolního součtu a dle historie commitů lze určit jejich pořadí~\cite{t01}. Určité milníky potom lze označit a přiřadit jim vlastní název (tag). Tím například může být číslo verze.
 	\\
 	\\
 	Člověk využívající vývojovou větev Traceru může tedy identifikovat přesnou verzi pomocí kontrolního součtu nejnovějšího commitu, případně pomocí jména tagu.
@@ -579,14 +584,14 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 	\subsection{Zdrojový kód}
 	Jakožto svobodný software, má Tracer zdrojové kódy a vše co k nim patří, veřejně vystavené. Kdokoli tak může uplatnit práva zaručená licencí GNU/GPLv2. Pro vytvoření vlastní kopie zdrojového kódu ve svém počítači, spusťte příkaz:
 
-	\begin{lstlisting}[gobble=12]
+	\begin{lstlisting}[gobble=8]
 		git clone https://github.com/FrostyX/tracer.git
 	\end{lstlisting}
 
-	Takto bude získána nejaktuálnější verze zdrojového kódu, která neprošla řádným testovacím procesem a v žádném případě ji nelze považovat za stabilní. Její užití je doporučeno pouze vývojářům programu Tracer a lidem majícím zájem o pohled na novou funkcionalitu tohoto programu. Avšak pouze na vlastní nebezpečí.
+	Takto bude získána nejaktuálnější verze zdrojového kódu, která neprošla řádným testovacím procesem a v žádném případě ji nelze považovat za stabilní. Její užití je doporučeno pouze vývojářům programu Tracer a lidem majícím zájem o pohled na nejnovější funkcionalitu tohoto programu. Avšak použití pouze na vlastní nebezpečí.
 
 	\subsection{Instalační balíčky pro Fedoru}
-	Cílovou platformou tohoto programu je linuxová distribuce Fedora. Zde je jeho zprovoznění velmi přímočaré. Nainstalovat lze buď pouze samotný program Tracer, jež bude potřeba manuálně spouštět, nebo i plugin pro balíčkovací systém DNF\@, který jej bude spouštět automaticky. Jsou distribuovány odděleně. Samotnou instalaci lze provést pomocí balíčkovacích systémů YUM, DNF, či jejich grafických nadstaveb. Následující ukázka vysvětlí instalaci skrze balíčkovací systém DNF.
+	Cílovou platformou tohoto programu je linuxová distribuce Fedora. Zde je jeho zprovoznění velmi přímočaré. Nainstalovat lze buď pouze samotný program Tracer, jež bude potřeba manuálně spouštět, nebo i plugin pro balíčkovací systém DNF\@, který jej bude spouštět automaticky. Jsou distribuovány odděleně. Samotnou instalaci lze provést pomocí balíčkovacích systémů YUM, DNF, či jejich grafických nástaveb. Následující ukázka vysvětlí instalaci skrze balíčkovací systém DNF.
 
 	\lstinputlisting
 	[
@@ -595,7 +600,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		caption={Instalace programu Tracer pomocí balíčkovacího systému DNF}
 	]{sources/dnf_install_tracer.sh}
 
-	Tyto příkazy zajistí stažení a instalaci balíčků, včetně všech potřebných závislostí. Získány budou z oficiálního repozitáře distribuce Fedora, pravděpodobně tedy nebude nainstalována stejná verze programu, jako ta, která je přibalená na CD této práce.
+	Tyto příkazy zajistí stažení a instalaci balíčků, včetně všech potřebných závislostí. Získány budou z oficiálního repozitáře distribuce Fedora. Pravděpodobně tedy nebude nainstalována stejná verze programu, jako ta, která se nachází na přílohovém CD k této práci.
 	\\
 	\\
 	Přibalenou verzi lze nainstalovat spuštěním následujícího příkazu:
@@ -611,7 +616,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 	Původní dokumentace projektu byla kolekce souborů oddělená od zdrojového kódu programu a uživatelům byla poskytována prostřednictvím wiki systému. Nevýhodu tohoto řešení jsem si uvědomil záhy po jeho nasazení. Ve chvíli, kdy je dokumentace oddělena od zdrojového kódu, nastává problém s rozlišováním, pro kterou verzi kódu je určena. Jde-li o vydanou stabilní verzi, lze ji samozřejmě specifikovat někde v textu. Nicméně v případě vývojové větvě lze těžko určit, od kterého commitu popisovaná funkcionalita funguje.
 	\\
 	\\
-	Mnohem lepším řešením je vedení dokumentace přímo v adresáři zdrojového kódu programu. O oboje se pak stará stejný verzovací systém a tím pádem je k dispozici dokumentace věrně odpovídající zdrojovému kódu v libovolném okamžiku. Projekt nyní využívá nástroj sphinx, který na základě souborů ve formátu rst\footnote{reStructuredText -- plaintextový formát umožňující intiutivní strukturování dokumentu} dokáže vygenerovat dokumentaci v několika výstupních formátech, jako například HTML, či PDF. Do jednotlivých stránek navíc umožňuje vkládat konkrétní entity zdrojového kódu. Odkaz na webovou dokumentaci projektu naleznete v kapitole \ref{odkazy}. Vlastní verzi si můžete vygenerovat pomocí příkazů:
+	Mnohem lepším řešením je vedení dokumentace přímo v adresáři zdrojového kódu programu. O oboje se pak stará stejný verzovací systém a tím pádem je k dispozici dokumentace věrně odpovídající zdrojovému kódu v libovolném okamžiku. Projekt nyní využívá nástroj Sphinx, který na základě souborů ve formátu rst\footnote{reStructuredText -- plaintextový formát umožňující intiutivní strukturování dokumentu} dokáže vygenerovat dokumentaci v několika výstupních formátech, jako například HTML, či PDF. Do jednotlivých stránek navíc umožňuje vkládat konkrétní entity zdrojového kódu. Odkaz na webovou dokumentaci projektu naleznete v kapitole \ref{odkazy}. Vlastní verzi si můžete vygenerovat pomocí příkazů\footnote{Vyžaduje instalaci balíčku \texttt{python-sphinx}}:
 
 	\lstinputlisting
 	[
@@ -621,7 +626,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 	]{sources/generate_docs.sh}
 
 	\subsection{Lokalizace}
-	Přestože projekt obsahuje velmi jednoduché uživatelské rozhraní a nejspíš jej lze používat i s elementárními znalostmi angličtiny, poskytuje možnost jazykových lokalizací. Součástí zdrojových kódů je soubor \texttt{tracer.pot} obsahující všechny lokalizovatelné řetězce a dalé pak soubory s příponou \texttt{.po}, obsahující překlady těchto řetězců do konkrétních jazyků. Tyto soubory jsou vyvěšeny na překladatelském serveru \url{http://transifex.com}.
+	Přestože projekt obsahuje velmi jednoduché uživatelské rozhraní a nejspíš jej lze používat i s elementárními znalostmi angličtiny, poskytuje možnost jazykových lokalizací. Součástí zdrojových kódů je soubor \texttt{tracer.pot} obsahující všechny lokalizovatelné řetězce programu a dalé pak soubory s příponou \texttt{.po}, obsahující překlady těchto řetězců do konkrétních jazyků. Tyto soubory jsou vyvěšeny na překladatelském serveru \url{http://transifex.com}.
 	\\
 	\\
 	Při vytváření instalačního balíčku se ze všech \texttt{.po} souborů vygenerují jejich binární verze s příponou \texttt{.mo}. Ty jsou při instalaci balíčku kopírovány do systémového adresáře s překlady. V závislosti na uživatelem preferovaném jazyku systému, je při spuštění vybrána kýžená lokalizace. V současné době existuje kompletní překlad pouze do českého jazyka, přičemž ostatním uživatelům bude zobrazena výchozí anglická verze.
@@ -630,13 +635,15 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 	Tato kapitola je určená především novým vývojářům a všem zájemcům, kteří chtějí nějakým způsobem pracovat se zdrojovými kódy projektu. Objasní jejich organizaci, použitá paradigmata a poradí, jak ověřit, že jimi provedené změny neměly nezamýšlený, nežádoucí efekt.
 
 		\subsubsection{Architektura zdrojového kódu}
-		V domovském adresáři projektu najdeme pouze soubory potřebné k balíčkování a konfigurační soubory pro služby jež projekt využívá. Dále vidíme několik adresářů, z nichž zajímavé jsou především tyto následující. Spouštěcí soubor programu nalezneme v adresáři \texttt{bin}. Tento soubor obsahuje pouze nejnutnější minimum zdrojového kódu, nutného k zavedení programu. Naopak naprostá většina kódu se nachází v adresáři \texttt{tracer}, který je při instalaci nakopírován k systémovým modulům jazyka Python.
+		V domovském adresáři projektu najdeme pouze soubory potřebné k balíčkování a konfigurační soubory pro služby, jež projekt využívá. Dále vidíme několik adresářů, z nichž zajímavé jsou především tyto následující.
+		\\
+		\\Spouštěcí soubor programu nalezneme v adresáři \texttt{bin}. Tento soubor obsahuje pouze nejnutnější minimum zdrojového kódu, nutného k zavedení programu. Naopak naprostá většina kódu se nachází v adresáři \texttt{tracer}, který je při instalaci nakopírován k systémovým modulům jazyka Python.
 		\\
 		\\
-		Tento kód je povětšinou objektově orientovaný a koncepčně je rozdělen do jednotlivých celků architektury Model-View-Controller (MVC). Šablony (View), nejsou tvořeny pomocí speciálního šablonovacího systému, jako tomu často bývá například u webových aplikací, nýbrž jde o obyčejné soubory obsahující zdrojový kód jazyka Python. Slouží však pouze k vypsání výstupu na požadované zařízení. Kontrolery se starají o naplnění těchto šablon \uv{vypočítanými} daty. Největším celkem jsou modely tvořící zbytek adresáře. Ty slouží ke zjišťování informací o systému, procesech, balíčcích, zajišťují se o jazykovou lokalizaci a jiné.
+		Tento kód je povětšinou objektově orientovaný a koncepčně je rozdělen do jednotlivých celků architektury Model-View-Controller (MVC)~\cite{t11}. Šablony (View), nejsou tvořeny pomocí speciálního šablonovacího systému, jako tomu často bývá například u webových aplikací, nýbrž jde o obyčejné soubory obsahující zdrojový kód jazyka Python. Slouží však pouze k vypsání výstupu na požadované zařízení. Kontrolery se starají o naplnění těchto šablon \uv{vypočítanými} daty. Největším celkem jsou modely tvořící zbytek adresáře. Ty slouží ke zjišťování informací o systému, procesech, balíčcích, zajišťují jazykovou lokalizaci a jiné.
 
 		\subsubsection{Testování}
-		Zdrojový kód projektu je prověřován pomocí jednotkových testů, i testů uživatelského rozhraní. Oboje jsou realizovány pomocí modulu \texttt{unittest}. Testy však nepokrývají každou jednotlivou řádku kódu a negarantují stoprocentní spolehlivost, nicméně za určitých okolností, například při refaktorování, jsou velmi nápomocné. Navíc jsou pomocí CI spouštěny automaticky při uložení libovolné změny do verzovacího systému. Ručně, v příkazové řádce, lze testy spustit například pomocí nástrojů \texttt{nosetests}, nebo \texttt{unit2}.
+		Zdrojový kód projektu je prověřován pomocí jednotkových testů, i testů uživatelského rozhraní. Oboje jsou realizovány pomocí modulu \texttt{unittest}. Testy však nepokrývají každou jednotlivou řádku kódu a negarantují stoprocentní spolehlivost, nicméně za určitých okolností, například při refaktorování, jsou velmi nápomocné. Všechny testy jsou pomocí CI spouštěny automaticky při uložení libovolné změny do verzovacího systému. Ručně, v příkazové řádce, lze testy spustit například pomocí nástrojů \texttt{nosetests}, nebo \texttt{unit2}.
 
 	\subsection{Odkazy}
 	\label{odkazy}
@@ -644,8 +651,8 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 
 	\begin{table}[h]
 		\begin{tabular}{ll}
-			Homepage:               & \url{http://tracer-package.com/} \\
-			Dokumentace:            & \url{http://docs.tracer-package.com/en/latest/} \\
+			Homepage:               & \url{http://tracer-package.com} \\
+			Dokumentace:            & \url{http://docs.tracer-package.com} \\
 			Zdrojový kód:           & \url{https://github.com/FrostyX/tracer} \\
 			Travis CI:              & \url{https://travis-ci.org/FrostyX/tracer} \\
 			Transifex (lokalizace): & \url{https://www.transifex.com/organization/frostyx/dashboard/tracer}
@@ -655,7 +662,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 
 \section{Srovnání s konkurencí}
 	\label{porovnani-s-konkurenci}
-	Rád bych se pokusil objektivně porovnat svou práci s konkurenčními projekty. Během počátečního průzkumu, než jsem se vůbec začal touto problematikou zabývat, hledal jsem již existující projekt, který bych mohl podpořit, či na něj navázat. Ovšem nenašel jsem jediný a tak vznikl Tracer. V průběhu jeho vývoje jsem postupně narazil na čtyři různé existující nástroje, z nichž některé tu byly již dříve a některé vznikly teprve nedávno.
+	Rád bych se pokusil objektivně porovnat svou práci s konkurenčními projekty. Během počátečního průzkumu, než jsem se vůbec začal touto problematikou zabývat do hloubky, hledal jsem již existující projekt, který bych mohl podpořit, či na něj navázat. Několik jsem jich našel, avšak žádný z nich nebyl dostatečně vyhovující a tak vznikl Tracer. V průběhu jeho vývoje jsem postupně narazil na několik dalších, existujících nástrojů, které vznikly teprve nedávno.
 	\\
 	\\
 	Nyní si jeden po druhém projdeme, zaměříme se na jejich cíle, vlastnosti, podporované operační systémy, uživatelské rozhraní a podobně.
@@ -704,13 +711,13 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 \newpage
 \section{Život projektu}
 % @TODO Přesunout před srovnání s konkurencí?
-Projekt tracer spatřil světlo světa v říjnu roku 2013. Už v této době poskytoval většinu současné funkcionality, avšak se v průběhu let výrazně vyvinul. Doposud vyšlo 21 verzí, přičemž nejnovější nese označení 0.6.1. Když vývoj započal, používala se Fedora 19 a jazyk Python byl masivně rozšířený ve verzi 2.7. Nyní jsme se posunuli k Fedoře 22, která je poslední, jež používá tuto verzi Pythonu jako výchozí. Tracer se musel přizpůsobit a nyní je připraven běžet ve Fedoře 23 na Pythonu 3.x. Přiští Fedoru také čeká další významná změna, kterou je nahrazení původního balíčkovacího systému YUM novým nástrojem DNF. Tracer původně fungoval výhradně s YUMem, avšak jak DNF začal získávat na důležitosti, projekt začal podporovat oba systémy současně, aniž by se o to musel uživatel zajímat. Nové verze však od podpory YUMu ze zjevných důvodů upustí.
+Projekt Tracer spatřil světlo světa v říjnu roku 2013. Už v této době poskytoval většinu současné funkcionality, avšak se v průběhu let výrazně vyvinul. Doposud vyšlo 21 verzí, přičemž nejnovější nese označení 0.6.1. Když vývoj započal, používala se Fedora 19 a jazyk Python byl masivně rozšířený ve verzi 2.7. Nyní jsme se posunuli k Fedoře 22, která je poslední, jež používá tuto verzi Pythonu jako výchozí. Tracer se musel přizpůsobit a nyní je připraven běžet ve Fedoře 23 na Pythonu 3.x. Přiští Fedoru také čeká další významná změna, kterou je nahrazení původního balíčkovacího systému YUM novým nástrojem DNF. Tracer původně fungoval výhradně s YUMem, avšak jak DNF začal získávat na důležitosti, projekt začal podporovat oba systémy současně, aniž by se o to musel uživatel zajímat. Nové verze však od podpory YUMu ze zjevných důvodů upustí.
 \\
 \\
-Zajímavé je také ohlédnutí na způsob distribuce tohoto programu. Od svého počátku byl projekt umístěn na veřejném repozitáři na GitHubu a uživatelé si mohli zdrojové kódy několika způsoby stáhnout. Tento způsob byl vhodný pouze zpočátku, protože uživatelé samořejmě nechtějí instalovat a spravovat závislosti manuálně. V brzké době se proto přešlo na distribuci pomocí vlastního repozitáře v systému COPR. Tato varianta přetrvala dodnes, avšak slouží pouze k vytváření testovacích balíčků. Stabilní verze jsou distribuovány skrze oficiální softwarové repozitáře distribuce Fedora. Autor této práce se stal \uv{balíčkářem} distribuce a o balíček nástroje tracer se stará osobně. Plugin pro systém DNF se podařilo připojit k oficiálně podporovaným komunitním pluginům a jeho distribuci zajišťuje správce této sbírky.
+Zajímavé je také ohlédnutí na způsob distribuce tohoto programu. Od svého počátku byl projekt umístěn ve veřejném repozitáři na GitHubu a uživatelé si mohli zdrojové kódy několika způsoby stáhnout. Tento způsob byl vhodný pouze zpočátku, protože uživatelé samořejmě nechtějí instalovat a spravovat závislosti manuálně. V brzké době se proto přešlo na distribuci pomocí vlastního repozitáře v systému Copr\footnote{Copr (Cool Other Package Repo) slouží k vytváření repozitářů pro balíčky třetích stran}. Tato varianta přetrvala dodnes, avšak slouží pouze k vytváření testovacích balíčků. Stabilní verze jsou distribuovány skrze oficiální softwarové repozitáře distribuce Fedora. Autor této práce se stal \uv{balíčkářem} distribuce a o balíček nástroje Tracer se stará osobně. Plugin pro systém DNF se podařilo připojit k oficiálně podporovaným komunitním pluginům a jeho distribuci zajišťuje správce této sbírky.
 \\
 \\
-Od samotného počátku nebyla očekávána velká uživatelská základna. Mnoho lidí vůbec netuší, že nástroj tohoto typu vůbec potřebuje a nezajímá je to. Navíc projekt cílí především na uživatele RPM distribucí, protože ostatní již podobný nástroj mají. Počet instalací, potažmo současný počet uživatelů nelze přesně určit. Na základě jistého problému\footnote{\url{https://bugzilla.redhat.com/show\_bug.cgi?id=1187763}} postihujícího všechny uživatele Traceru na Fedoře 21, však lze alespoň určit spodní hranici, již tvoří 240 uživatelů, kteří problém ohlásili. Takovou uživatelskou základnu považuji za úspěch. V rámci zpětné vazby od uživatelů bylo nahlášeno celkem 46 chyb a žádostí o rozšíření funkcionality, z nichž 36 bylo již vyřešeno. Dále bylo vyhověno jedné žádosti o portaci na jinou distribuci.
+Od samotného počátku nebyla očekávána velká uživatelská základna. Mnoho lidí vůbec netuší, že nástroj tohoto typu vůbec potřebuje a nezajímá je to. Navíc projekt cílí především na uživatele RPM distribucí. Počet instalací, potažmo současný počet uživatelů, nelze přesně určit, protože Fedora neudržuje statistiku stažení jednotlivých balíčků. Na základě jistého problému\footnote{\url{https://bugzilla.redhat.com/show\_bug.cgi?id=1187763}} postihujícího všechny uživatele Traceru na Fedoře 21, však lze alespoň určit spodní hranici, již tvoří 240 uživatelů, kteří problém ohlásili. Takovou uživatelskou základnu považuji za úspěch. V rámci zpětné vazby od uživatelů bylo nahlášeno celkem 46 chyb a žádostí o rozšíření funkcionality, z nichž 36 bylo již vyřešeno. Dále bylo vyhověno třem žádostem o portaci na jiné distribuce.
 
 
 

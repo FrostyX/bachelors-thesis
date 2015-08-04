@@ -1,4 +1,4 @@
-[frostyx@localhost ~]$ rpm -qi vim-X11
+$[jkadlcik  ~]-> rpm -qi vim-X11
 Name        : vim-X11
 Version     : 7.4.179
 Release     : 1.fc20

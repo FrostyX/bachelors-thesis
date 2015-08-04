@@ -1,6 +1,6 @@
 >>> import rpm
 >>> ts = rpm.TransactionSet()
->>> mi = ts.dbMatch("name", "vim-X11")
+>>> mi = ts.dbMatch(rpm.RPMTAG_NAME, "vim-X11")
 >>> package_hdr = mi.next()
 
 >>> package_hdr[rpm.RPMTAG_SUMMARY]

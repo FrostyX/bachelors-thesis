@@ -1,4 +1,4 @@
-$[FrostyX  ~]-> sudo tracer
+$[jkadlcik  ~]-> sudo tracer
 You should restart:
   * Some applications using:
       sudo service apache2 restart
