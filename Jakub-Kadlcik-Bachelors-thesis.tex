@@ -201,7 +201,7 @@
 	Další problém se týká spíše uživatelů \textit{unstable} distribucí, kterým do systému mohou přicházet zpětně nekompatibilní balíčky. Potom se může stát, že některá služba odmítne nastartovat, protože nová verze nepovoluje stávající konfiguraci, nebo vlivem nepřesně specifikovaných závislostí zůstane v systému nekompatibilní verze knihovny. Takovýchto případů bychom si rádi všimli, co nejdříve to bude možné, nikoliv až v kritické chvíli, kdy například dojde k restartování serveru.
 	\\
 	\\
-	V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné, viz kapitola XY. Práce si proto klade za cíl vytvořit software, který bude řešit problém \textit{nalezení aktualizacemi ovlivněných aplikací}. Software by měl najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést.
+	V současné době sice existují nástroje, které tento problém řeší, avšak jsou z mnoha důvodů nedostatečné, viz kapitola \ref{porovnani-s-konkurenci}. Práce si proto klade za cíl vytvořit software, který bude řešit problém \textit{nalezení aktualizacemi ovlivněných aplikací}. Software by měl najít všechny programy využívající neaktuální soubory a doporučit jejich restartování. Pro různé typy programů by měla být vypsána jiná doporučení a nápověda, jakým způsobem to lze provést.
 
 	\section{Požadavky}
 	Tato práce vznikala ve spolupráci se společností Red~Hat,~Inc., přičemž následující požadavky byly zhotoveny na základě již existujícího zadání.
@@ -239,6 +239,7 @@ V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritm
 		Množinový průnik je zjišťován pro každou kombinaci balíčku a procesu, proto původní $O(n^2)$ násobíme $O(n)$ (případně $O(n^2)$ při naivní implementaci). Výslednou časovou složitost ukázaného algoritmu tedy vyčíslíme jako $O(n^3)$, případně $O(n^4)$.
 
 	\subsection{Seznam ovlivněných aplikací -- Vylepšení}
+	\label{seznam-ovlivnenych-aplikaci-vylepseni}
 	Klíčem k rychlejšímu získání chtěných procesů je zvolení vhodné vyhledávací struktury pro data. Vezměme si fakt, že mnoho procesů využívá stejné soubory (např. knihovny). Naivní algoritmus tedy jeden konkrétní soubor musí ověřit hned několikrát -- pro každý proces, který jej využívá.
 
 	Tento nedostatek můžeme řešit tak, že nebudeme zkoumat proces po procesu, ale místo toho vezmeme množinu všech souborů v paměti, přičemž ke každému souboru si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, zvolíme strom typu BTree jako strukturu pro uložení dat. Zaplatíme sice zvýšenou spotřebou paměti, ale jak si ukážeme v kapitole XY, rychlostní zlepšení bude na první pohled zjevné.
@@ -263,6 +264,7 @@ V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritm
 	Lze předpokládat, že informace o procesech budou získatelné jednotným způsobem napříč celým spektrem linuxových distribucí, avšak informace o balíčku budou závislé na jeho typu. Jejich struktura se totiž výrazně liší, používají jiné názvy atributů a tak podobně.
 
 	\subsection{Jak aplikaci restartovat?}
+	\label{jak-aplikaci-restartovat}
 	Aplikace můžeme rozdělit do několika kategorií. Zřejmě budou existovat takové, jež nemůžeme restartovat jinak, než rebootováním celého operačního systému. Příkladem budiž init, či jaderné procesy. Dále jistě budou v systémech s grafickým uživatelským rozhraním aplikace, k jejichž restartování bude potřeba řestartovat celé grafické prostředí. Příkladem mohou být správci oken a aplikace související s uživatelským sezením\footnote{Známější spíše v anglickém originále jako session}. V těchto případech nezbývá jiná možnost, než provést požadovanou operaci jako reboot počítače, či odhlášení a opětovné přihlášení uživatele do grafického režimu.
 	\\
 	\\
@@ -373,7 +375,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 			caption={Artefakty v názvech souborů}
 		]{sources/strings_in_filenames}
 
-		Tyto soubory samozřejmě fyzicky neexistují. Například na konci prvního zmíněného souboru přebývá řetězec \texttt{;53c7cd86}. Po jeho vyjmutí z názvu, však získáme cestu ke skutečně existujícímu souboru poskytovanému balíčkem XY\@. Obdobně to platí i pro příponu \texttt{.\#prelink\#} a jí následovaný identifikátor, nebo příponu \texttt{\#new}. Je potřeba si také dát pozor na příznak \texttt{(deleted)}, který se může objevit i nezávisle na těchto příponách.
+		Tyto soubory samozřejmě fyzicky neexistují. Například na konci prvního zmíněného souboru přebývá řetězec \texttt{;53c7cd86}. Po jeho vyjmutí z názvu, však získáme cestu ke skutečně existujícímu souboru poskytovanému balíčkem \texttt{kde-plasma-nm}. Obdobně to platí i pro příponu \texttt{.\#prelink\#} a jí následovaný identifikátor, nebo příponu \texttt{\#new}. Je potřeba si také dát pozor na příznak \texttt{(deleted)}, který se může objevit i nezávisle na těchto příponách.
 
 	\subsection{Práce s balíčky}
 		Především nás budou zajímat tři operace. Zjištění seznamu balíčků, které byly od daného času modifikovány, zjištění základních informací o konkrétním balíčku, jako například název, popis, atd. a nakonec zjištění seznamu souborů, které balíček poskytuje. Ukážeme si, že každou z nich lze implementovat několika různými způsoby. Objasníme, který z nich vyhovuje potřebám této práce nejvíce a proč tomu tak je.
@@ -479,7 +481,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		V tomto ukázkovém příkladu nově narážíme na funkci \texttt{fi} její výsledky. Tato funkce pro daný balíček vrací objekt reprezentující seznam, jím poskytovaných souborů včetně jejich atributů. Položkami tohoto seznamu jsou uspořádané n-tice, jejichž první složku tvoří název souboru.
 
 	\subsection{Vyhledání ovlivněných aplikací}
-		V předchozích kapitolách jsme si vysvětlili, jak v programovacím jazyce Python získat všechny data, které algoritmus popsaný v kapitole XY na svém vstupu vyžaduje. Nyní bychom se mohli podívat na konkrétní implementaci tohoto algoritmu. Nicméně, neučiníme tak, protože samotná implementace není ničím zajímavá. Jedná se pouze o přepis pseudokódu z kapitoly XY do zdrojového kódu jazyka Python. Z tohoto důvodu bych případné zájemce rád odkázal přímo na zdrojový kód programu.
+	V předchozích kapitolách jsme si vysvětlili, jak v programovacím jazyce Python získat všechny data, které algoritmus popsaný v kapitole \ref{seznam-ovlivnenych-aplikaci-vylepseni} na svém vstupu vyžaduje. Nyní bychom se mohli podívat na konkrétní implementaci tohoto algoritmu. Nicméně, neučiníme tak, protože samotná implementace není ničím zajímavá. Jedná se pouze o přepis pseudokódu z téže kapitoly do zdrojového kódu jazyka Python. Z tohoto důvodu bych případné zájemce rád odkázal přímo na zdrojový kód programu.
 
 	\newpage
 	\subsection{Rozšíření pro balíčkovací systém DNF}
@@ -524,6 +526,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		Následuje pouze nástin možných případů užití. Kompletní uživatelskou dokumentaci a manuálovou stránku programu naleznete v příloze XY.
 
 		\subsubsection{Standardní použití}
+		\label{standardni-pouziti}
 		Primárním a zároveň nejjednodušším způsobem, jak program spustit, je příkazem\footnote{Oprávnění superuživatele je nutné, protože program potřebuje číst databázi balíčkovacího systému.} \texttt{sudo tracer}. Na výstupu obdržíme seznam ovlivněných aplikací, tak jak byl požadován v zadání. Ukázkový výstup můžeme vidět na následujícím příkladu.
 
 		\lstinputlisting
@@ -532,7 +535,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 			caption={Ukázkový výstup příkazu \texttt{sudo tracer}}
 		]{sources/tracer_standard_usage_output}
 
-		Formát výstupu je koncipován především z pohledu uživatelské přívětivosti, proto jsou nalezené aplikace jsou rozděleny dle kategorií popsaných v kapitole XY. První skupinu aplikací lze restartovat pouhým zkopírováním bloku navrhovaných příkazů do terminálu.
+		Formát výstupu je koncipován především z pohledu uživatelské přívětivosti, proto jsou nalezené aplikace jsou rozděleny dle kategorií popsaných v kapitole \ref{jak-aplikaci-restartovat}. První skupinu aplikací lze restartovat pouhým zkopírováním bloku navrhovaných příkazů do terminálu.
 		\\
 		\\
 		Ve výchozím stavu se vypíše pouze poznámka o nerestartovatelných aplikacích, namísto celého jejich seznamu, protože s nimi uživatel stejně nemůže nic udělat. Z obnobného důvodu jsou vypsány pouze aplikace současného uživatele. Pro vypsání všech aplikací všech uživatelů, lze použít přepínače \texttt{-{}-all} a \texttt{-{}-everyone}.
@@ -553,7 +556,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		V určitých případech může uživatel chtít zobrazit pomocné informace pouze k několika aplikacím, ale nechce vypisovat jejich názvy. Pro tento účel byl zaveden interaktivní režim. Pokud spustíme Tracer s parametrem \texttt{-i}, nebo \texttt{-{}-interactive}, obdržíme na výstupu očíslovaný seznam aplikací zakončený promptem. Postupně zadáváme čísla aplikací, které nás zajímají a dostáváme výpis pomocných informací.
 
 		\subsubsection{DNF plugin}
-		Specialitou program pro uživatele linuxové distribuce Fedora je rozšíření pro balíčkovací systém DNF, spouštějící program Tracer po každé úspěšně provedené transakci. Tedy je spuštěno automaticky po nainstalování, aktualizaci, či odstranění libovolného balíčku. Toto rozšíření nevyžaduje žádnou interakci s uživatelem a není potřeba jej nijak manuálně nastavovat. Výstup vypadá totožně s ukázkou v kapitole XY.
+		Specialitou program pro uživatele linuxové distribuce Fedora je rozšíření pro balíčkovací systém DNF, spouštějící program Tracer po každé úspěšně provedené transakci. Tedy je spuštěno automaticky po nainstalování, aktualizaci, či odstranění libovolného balíčku. Toto rozšíření nevyžaduje žádnou interakci s uživatelem a není potřeba jej nijak manuálně nastavovat. Výstup vypadá totožně s ukázkou v kapitole \ref{standardni-pouziti}.
 
 	\subsection{Licence}
 	Program je vyvíjen pod svobodnou licencí GNU/GPLv2, jejíž plné znění naleznete v příloze číslo XY\@. Tato licence zajišťuje, že každý člověk má právo studovat zdrojový kód tohoto programu. To znamená číst jej, modifikovat a libovolně s ním experimentovat. Původní, nebo pozměněné dílo může dále distribuovat, avšak pod podmínkou, že tyto klony budou poskytovat stejná práva, jako původní software. Licence navíc umožňuje využívat dílo k libovolnému účelu.
@@ -606,7 +609,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 	Původní dokumentace projektu byla kolekce souborů oddělená od zdrojového kódu programu a uživatelům byla poskytována prostřednictvím wiki systému. Nevýhodu tohoto řešení jsem si uvědomil záhy po jeho nasazení. Ve chvíli, kdy je dokumentace oddělena od zdrojového kódu, nastává problém s rozlišováním, pro kterou verzi kódu je určena. Jde-li o vydanou stabilní verzi, lze ji samozřejmě specifikovat někde v textu. Nicméně v případě vývojové větvě lze těžko určit, od kterého commitu popisovaná funkcionalita funguje.
 	\\
 	\\
-	Mnohem lepším řešením je vedení dokumentace přímo v adresáři zdrojového kódu programu. O oboje se pak stará stejný verzovací systém a tím pádem je k dispozici dokumentace věrně odpovídající zdrojovému kódu v libovolném okamžiku. Projekt nyní využívá nástroj sphinx, který na základě souborů ve formátu rst\footnote{reStructuredText -- plaintextový formát umožňující intiutivní strukturování dokumentu} dokáže vygenerovat dokumentaci v několika výstupních formátech, jako například HTML, či PDF. Do jednotlivých stránek navíc umožňuje vkládat konkrétní entity zdrojového kódu. Odkaz na webovou dokumentaci projektu naleznete v kapitole XY. Vlastní verzi si můžete vygenerovat pomocí příkazů:
+	Mnohem lepším řešením je vedení dokumentace přímo v adresáři zdrojového kódu programu. O oboje se pak stará stejný verzovací systém a tím pádem je k dispozici dokumentace věrně odpovídající zdrojovému kódu v libovolném okamžiku. Projekt nyní využívá nástroj sphinx, který na základě souborů ve formátu rst\footnote{reStructuredText -- plaintextový formát umožňující intiutivní strukturování dokumentu} dokáže vygenerovat dokumentaci v několika výstupních formátech, jako například HTML, či PDF. Do jednotlivých stránek navíc umožňuje vkládat konkrétní entity zdrojového kódu. Odkaz na webovou dokumentaci projektu naleznete v kapitole \ref{odkazy}. Vlastní verzi si můžete vygenerovat pomocí příkazů:
 
 	\lstinputlisting
 	[
@@ -634,6 +637,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		Zdrojový kód projektu je prověřován pomocí jednotkových testů, i testů uživatelského rozhraní. Oboje jsou realizovány pomocí modulu FOO. Testy však nepokrývají každou jednotlivou řádku kódu a negarantují stoprocentní spolehlivost, nicméně za určitých okolností, například při refaktorování, jsou velmi nápomocné. Navíc jsou pomocí CI spouštěny automaticky při uložení libovolné změny do verzovacího systému. Ručně, v příkazové řádce, lze testy spustit například pomocí nástrojů FOO, nebo BAR.
 
 	\subsection{Odkazy}
+	\label{odkazy}
 	V tuto chvíli bych rád uvedl přehledovou tabulku s odkazy na všechny důležité služby, které projekt využívá.
 
 	\begin{table}[h]
@@ -649,6 +653,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 
 \newpage
 \section{Porovnání s konkurencí}
+	\label{porovnani-s-konkurenci}
 	Rád bych se pokusil objektivně srovnat svou práci s konkurenčními projekty. Během počátečního průzkumu, než jsem se vůbec začal touto problematikou zabývat, hledal jsem již existující projekt, který bych mohl podpořit, či na něj navázat. Ovšem nenašel jsem jediný a tak vznikl Tracer. V průběhu jeho vývoje jsem postupně narazil na čtyři různé existující nástroje, z nichž některé tu byly již dříve a některé vznikly teprve nedávno.
 	\\
 	\\
