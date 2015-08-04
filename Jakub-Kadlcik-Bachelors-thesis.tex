@@ -220,6 +220,7 @@ V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritm
 	\subsection{Seznam ovlivněných aplikací -- Ilustrativně}
 	Hlavním účelem programu bude nalezení aktualizacemi ovlivněných, běžících aplikací. Řešení se zdá být velmi přímočaré. Nejdříve zjistit seznam balíčků, které byly od spuštění systému modifikovány. Následně pro každý balíček zjistit seznam souborů, které poskytuje. Poté zjistit, které procesy využívají některý z množiny modifikovaných souborů. Tedy pro každý spuštěný proces zjistit seznam souborů jež využívá a najít shodu se soubory poskytovanými modifikovanými balíčky.
 
+	\newpage
 	\lstinputlisting
 	[
 		language={Python},
@@ -244,6 +245,7 @@ V této kapitole rozebereme problematiku na dílčí části, navrhneme algoritm
 
 	Tento nedostatek můžeme řešit tak, že nebudeme zkoumat proces po procesu, ale místo toho vezmeme množinu všech souborů v paměti, přičemž ke každému souboru si poznačíme procesy, které jej využívají. Pro nejrychlejší možné vyhledávání v množině souborů, zvolíme strom typu BTree jako strukturu pro uložení dat. Zaplatíme sice zvýšenou spotřebou paměti, ale jak si ukážeme v kapitole XY, rychlostní zlepšení bude na první pohled zjevné.
 
+	\newpage
 	\lstinputlisting
 	[
 		language={Python},
