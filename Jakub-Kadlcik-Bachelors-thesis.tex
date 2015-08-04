@@ -417,7 +417,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		Ukázkový kód je natolik sebevysvětlující, že se obejde bez většího komentáře. Za pozornost stojí především metoda \texttt{fetchall()}, která vrací seznam všech záznamů výsledku. Ve výchozím nastavení jsou jednotlivé záznamy reprezentovány datovou strukturou \texttt{tuple}. Jedná se o strukturu, která by se dala nejlépe popsat jako uspořádaná n-tice. Při přístupu k hodnotám atributů potom záleží na jejich pořadí v n-tici. Tento přístup má velké nevýhody, proto na třetím řádku ukázkového kódu specifikujeme, že chceme jednotlivé záznamy vracet reprezentované pomocí objektů třídy \texttt{sqlite3.Row}. To umožní přístup k atributům pomocí jejich názvů.
 
 		\subsubsection{Informace o balíčku}
-		V předchozí kapitole jsme pracovali s databázovým souborem, uchovávajícím informace o proběhlých operacích s balíčky. Odtud jsme dokázali zjistit například jejich název, verzi a pár dalších. Nicméně o balíčcích lze zjišťovat informací mnohem více. Jsou však uloženy na jiném místě\footnote{@TODO Kde?} a proto musíme k problému přistupovat novým způsobem.
+		V předchozí kapitole jsme pracovali s databázovým souborem, uchovávajícím informace o proběhlých operacích s balíčky. Odtud jsme dokázali zjistit například jejich název, verzi a pár dalších. Nicméně o balíčcích lze zjišťovat informací mnohem více. Jsou však uloženy na jiném místě\footnote{V databázi RPMDB umístěné v adresáři \texttt{/var/lib/rpm/}} a proto musíme k problému přistupovat novým způsobem.
 		\\
 		Pro zjištění všech, o balíčku dostupných informací, můžeme použít příkaz:
 
