@@ -368,7 +368,6 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		K prvnímu výraznému jevu dochází, když je vytvořen objekt reprezentující proces, poté je daný proces ukončen a následovně dojde k pokusu o přístup k atributu jeho objektu. Obdobná situace nastává v případě získání seznamu identifikátorů všech spuštěných procesů a následného vytvoření objektů na jejich základě. Může se totiž stát, že došlo k ukončení některých procesů mezi časem získání jejich identifikátoru a časem vytváření objektů. V těchto případech dochází k výjimce, se kterou však není potřeba si příliš lámat hlavu. Proces byl již ukončen, takže pro naše účely není ničím zajímavý\footnote{Ukončený proces zjevně aktualizací ovlivněn nebude}. Je však důležité si tuto problematiku uvědomit.
 		\\
 		\\
-		% @TODO Projít zdrojáky lsof, jeslti se dá množina všech přípon určit
 		Dále si lze všimnout poměrně zvláštního jevu. Tím jsou podivné řetězce na konci názvů, některých procesem používaných, souborů. Množinu všech možných přípon, které se mohou vyskytnout, nedovedu přesně určit, nicméně v průběhu tohoto projektu jsem se setkal s následujícími případy:
 
 		\lstinputlisting
@@ -692,7 +691,6 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 	% + rychlý
 
 	\subsection{Shrnutí}
-	% @TODO Implementovat funkcionalitu --daemons-only pro pokrití 100% funkcionality jednoho z ^^
 	% - nejhorší UI má checkrestart
 	% - checkrestart vypadává kvůli debian-only
 	% - doposud se ve fedoře primárně používal needs-restarting
@@ -707,7 +705,6 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 \newpage
 \section{Život projektu}
 % @TODO Přesunout před srovnání s konkurencí?
-% @TODO Možná závěr nebo shrnutí?
 Projekt tracer spatřil světlo světa v říjnu roku 2013. Už v této době poskytoval většinu současné funkcionality, avšak se v průběhu let výrazně vyvinul. Doposud vyšlo 21 verzí, přičemž nejnovější nese označení 0.6.1. Když vývoj započal, používala se Fedora 19 a jazyk Python byl masivně rozšířený ve verzi 2.7. Nyní jsme se posunuli k Fedoře 22, která je poslední, jež používá tuto verzi Pythonu jako výchozí. Tracer se musel přizpůsobit a nyní je připraven běžet ve Fedoře 23 na Pythonu 3.x. Přiští Fedoru také čeká další významná změna, kterou je nahrazení původního balíčkovacího systému YUM novým nástrojem DNF. Tracer původně fungoval výhradně s YUMem, avšak jak DNF začal získávat na důležitosti, projekt začal podporovat oba systémy současně, aniž by se o to musel uživatel zajímat. Nové verze však od podpory YUMu ze zjevných důvodů upustí.
 \\
 \\
