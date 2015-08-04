@@ -120,6 +120,7 @@
 %%%
 %%%  !! Není v oficiálním stylu !!
 %%%
+\usepackage{import}
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
@@ -525,7 +526,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 \section{Tracer}
 	V předchozích kapitolách jsme představili problematiku hledání aktualizacemi ovlivněných aplikací, popsali algoritmy pro jejich hledání a způsob, jak je lze implementovat v jazyce python pro linuxovou distribuci Fedora. Nyní se podíváme na projekt nesoucí název Tracer, jenž na těchto základech vznikl.
 	\subsection{Uživatelská příručka}
-		Následuje pouze nástin možných případů užití. Kompletní uživatelskou dokumentaci a manuálovou stránku programu naleznete v příloze XY.
+		Následuje pouze nástin možných případů užití. Kompletní manuálovou stránku programu naleznete v příloze \ref{manualova-stranka-programu-tracer}.
 
 		\subsubsection{Standardní použití}
 		\label{standardni-pouziti}
@@ -561,7 +562,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 		Specialitou program pro uživatele linuxové distribuce Fedora je rozšíření pro balíčkovací systém DNF, spouštějící program Tracer po každé úspěšně provedené transakci. Tedy je spuštěno automaticky po nainstalování, aktualizaci, či odstranění libovolného balíčku. Toto rozšíření nevyžaduje žádnou interakci s uživatelem a není potřeba jej nijak manuálně nastavovat. Výstup vypadá totožně s ukázkou v kapitole \ref{standardni-pouziti}.
 
 	\subsection{Licence}
-	Program je vyvíjen pod svobodnou licencí GNU/GPLv2, jejíž plné znění naleznete v příloze číslo XY\@. Tato licence zajišťuje, že každý člověk má právo studovat zdrojový kód tohoto programu. To znamená číst jej, modifikovat a libovolně s ním experimentovat. Původní, nebo pozměněné dílo může dále distribuovat, avšak pod podmínkou, že tyto klony budou poskytovat stejná práva, jako původní software. Licence navíc umožňuje využívat dílo k libovolnému účelu.
+	Program je vyvíjen pod svobodnou licencí GNU/GPLv2, jejíž plné znění naleznete v příloze \ref{gnu-gpl-v2}. Tato licence zajišťuje, že každý člověk má právo studovat zdrojový kód tohoto programu. To znamená číst jej, modifikovat a libovolně s ním experimentovat. Původní, nebo pozměněné dílo může dále distribuovat, avšak pod podmínkou, že tyto klony budou poskytovat stejná práva, jako původní software. Licence navíc umožňuje využívat dílo k libovolnému účelu.
 	\\
 	\\
 	Při použití této licence můžeme o Traceru hovořit jako o otevřeném, či ještě lépe, svobodném software.
@@ -758,11 +759,14 @@ Software changes constantly and it is always possible to improve it and extend i
 %% Přílohy obsahu textu práce, za makrem \appendix.
 \appendix
 
-\section{První příloha}
-Text první přílohy
+\section{Manuálová stránka programu Tracer}
+\label{manualova-stranka-programu-tracer}
+\import{appendix/}{manpage.tex}
 
-\section{Druhá příloha}
-Text druhé přílohy
+\newpage
+\section{Licence GNU/GPLv2}
+\label{gnu-gpl-v2}
+\import{appendix/}{gpl-2.0}
 
 %% Obsah přiloženého CD/DVD. Poslední příloha. Upravte podle vlastní
 %% práce!
