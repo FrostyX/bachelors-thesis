@@ -662,52 +662,54 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 	Rád bych se pokusil objektivně porovnat svou práci s konkurenčními projekty. Během počátečního průzkumu, než jsem se vůbec začal touto problematikou zabývat do hloubky, hledal jsem již existující projekt, který bych mohl podpořit, či na něj navázat. Několik jsem jich našel, avšak žádný z nich nebyl dostatečně vyhovující a tak vznikl Tracer. V průběhu jeho vývoje jsem postupně narazil na několik dalších, existujících nástrojů, které vznikly teprve nedávno.
 	\\
 	\\
-	Nyní si jeden po druhém projdeme, zaměříme se na jejich cíle, vlastnosti, podporované operační systémy, uživatelské rozhraní a podobně.
+	Nyní si vybrané z nich projdeme, zaměříme se na jejich cíle, vlastnosti, podporované operační systémy, uživatelské rozhraní a podobně.
+
+
 	\subsection{needs-restarting}
-	% - potřebuje roota
-	% - vypisuje duplicitní aplikace (různé pid)
-	% - pouze pro yum
-	% - deprecated
-	% - o hodně pomalejší než tracer?
-	% - zabalíčkováno v yum-utils v Date:   Wed Nov 4 12:44:20 2009 -0500 viz:
-	% git://yum.baseurl.org/yum-utils.git commit 43e630fb134e78fc44651c203e3fad364acf1b64
+	Nástroj \texttt{needs-restarting} je od roku 2009 součástí balíčku \texttt{yum-utils}. Viz commit \texttt{43e630f} v repozitáři \url{git://yum.baseurl.org/yum-utils.git}. Jak napovídá samotný název balíčku, jedná se o plugin pro zastaralý balíčkovací systém YUM.
+
+	\lstinputlisting
+	[
+		label=needs-restarting-output,
+		caption={Ukázka výstupu nástroje \texttt{needs-restarting}}
+	]{sources/rival_needs_restarting_output}
+
 
 	\subsection{checkrestart}
-	% - debian only
-	% - nejmíń user friendly
-	% - v balíčku debian-goodies
-	% - vyžaduje roota
+	Obdobným nástrojem určeným pro linuxovou distribuci Debian je nástroj \texttt{checkrestart} z balíčku \texttt{debian-goodies}.
+
+	\lstinputlisting
+	[
+		label=checkrestart-output,
+		caption={Ukázka výstupu nástroje \texttt{checkrestart}}
+	]{sources/rival_checkrestart_output}
+
 
 	\subsection{needrestart}
-	% Homepage: https://fiasko-nw.net/~thomas/tag/needrestart.html
-	% Date:   Fri Mar 29 00:12:15 2013 +0100 viz
-	% https://github.com/liske/needrestart.git commit 68891433e1e525087cbe57b7e0854cbc9c83afc5
-	% - kontroluje jenom daemony
-	% + hooky pro dpkg, rpm, pacman
-	% - perl
-	% - není ve fedoře
-	% + kontejnery
-	% + interpretery
-	% + lze vyhledat starý kernel
-	% + nepotřebuje roota
-	% + rychlý
-	% - původně určený pouze k vyhledání serviců (změna ve 2.0)
+	Univerzálnějším nástrojem podporujícím balíčkovací systémy DPKG, RPM a Pacman je \texttt{needrestart}. Tento projekt vznikl v březnu roku 2013. Viz commit \texttt{6889143} v repozitáři \url{https://github.com/liske/needrestart.git}. Tento program bohužel nemá instalační balíček pro distribuci Fedora.
+	\\
+	\\
+	Původním cílem, který přetrval až do verze 2.0, tedy po většinu života tohoto projektu, bylo vyhledání pouze systémových služeb. Avšak nyní disponuje velmi zajímavými vlastnostmi jako například podporou vyhledávání v kontejnerech, kontrolou jádra systému, podporou pro interpretované aplikace, či možností navázat automatické spuštění programu po spuštění daného balíčkovacího systému.
+
+	\lstinputlisting
+	[
+		label=needrestart-output,
+		caption={Ukázka výstupu nástroje \texttt{needrestart}}
+	]{sources/rival_needrestart_output}
+
 
 	\subsection{Shrnutí}
-	% - nejhorší UI má checkrestart
-	% - checkrestart vypadává kvůli debian-only
-	% - doposud se ve fedoře primárně používal needs-restarting
-	% - needsrestarting je obsolete kvuli yumu
-	% - moje snaha o jeho nahrazení pomocí traceru
-	% - needrestart se zdá být hodně dobrý
-	% - needsrestart vznikl současně s tracerem a funkcionalitou si konkurují
-	% - needsrestart ale není zabalíčkovaný
-	% - nelze určit nejlepší nástroj, hodně bude záležet na osobních preferencích každého uživatele
+	Nejdříve, \texttt{checkrestart} je určen výhradně pro distribuci Debian a jeho deriváty. Navíc, subjektivně mi přijde jeho uživatelské rozhraní jako nejhorší ze všech zkoumaných nástrojů. Jeho alternativou pro distribuci Fedora doposud byl \texttt{needs-restarting}, který je ale nyní zastaralý kvůli plánovanému odstranění YUMu z distribuce. Mým cílem je zaujmutí uživatelů tohoto programu a jejich následný přeliv k Traceru.
+	\\
+	\\
+	Oproti tomu \texttt{needrestart} je velmi perspektivní projekt, který stále rozšiřuje svou funkcionalitu. Tracer ji kdysi dokázal použitím přepínače \texttt{-{}-services-only} pokrýt téměř celou, nicméně aktuální verze \texttt{needrestart} poskytuje například podporu kontejnerů, nebo kontrolu jádra systému, kterou Tracer zatím neumí. Tento nástroj mě oslovil a nejspíš bych se připojil k jeho vývoji namísto založení nového projektu. Bohužel \texttt{needrestart} i Tracer vznikly oba v roce 2013 a po většinu vývoje koexistovali ve vzájemné anonymitě. Největší nevýhodou tohoto nástroje vidím v chybějícím balíčku pro distribuci Fedora.
+	\\
+	\\
+	Určit nejlepší nástroj není možné a vždy bude záležet na konkrétních preferencích daného uživatele. Program \texttt{needrestart} na rozdíl od všech ostatních sází na interaktivní režim ve výchozím stavu, nicméně podporuje i režim pouhého výpisu pomocí přepínače \texttt{-r l}. Ovšem i v tomto režimu vyžaduje interakci s uživatelem pro potvrzení neaktuálního kernelu. To může být v určitých situacích poněkud nepříjemné. Tracer k uživatelskému rozhraní přistupuje obráceně a vyžaduje interakci s uživatelem pouze při použití přepínače \texttt{-i}. Ostatní konkurenční nástroje podporují pouze režim výpisu, přesto však dovedou být rozdílné. Program \texttt{needs-restarting} rozlišuje vypsané procesy pomocí jejich identifikátoru PID a může se tedy stát, že bude vypsáno několik, stejně se jmenujících, procesů. Podobně tomu je i u \texttt{checkrestart}, který tento seznam navíc obohatí o název balíčku, který ovlivnil dané procesy.
 
 
 \newpage
-\section{Život projektu}
-% @TODO Přesunout před srovnání s konkurencí?
+\section{Život projektu Tracer}
 Projekt Tracer spatřil světlo světa v říjnu roku 2013. Už v této době poskytoval většinu současné funkcionality, avšak se v průběhu let výrazně vyvinul. Doposud vyšlo 21 verzí, přičemž nejnovější nese označení 0.6.1. Když vývoj započal, používala se Fedora 19 a jazyk Python byl masivně rozšířený ve verzi 2.7. Nyní jsme se posunuli k Fedoře 22, která je poslední, jež používá tuto verzi Pythonu jako výchozí. Tracer se musel přizpůsobit a nyní je připraven běžet ve Fedoře 23 na Pythonu 3.x. Přiští Fedoru také čeká další významná změna, kterou je nahrazení původního balíčkovacího systému YUM novým nástrojem DNF. Tracer původně fungoval výhradně s YUMem, avšak jak DNF začal získávat na důležitosti, projekt začal podporovat oba systémy současně, aniž by se o to musel uživatel zajímat. Nové verze však od podpory YUMu ze zjevných důvodů upustí.
 \\
 \\

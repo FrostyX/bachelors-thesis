@@ -1,6 +1,4 @@
-root@jan-desktop:/home/jan# checkrestart
-lsof: WARNING: can't stat() fuse.gvfsd-fuse file system /run/user/1000/gvfs
-      Output information may be incomplete.
+$[jkadlcik needrestart]-> checkrestart
 Found 5 processes using old versions of upgraded files
 (4 distinct programs)
 (4 distinct packages)
@@ -14,4 +12,3 @@ mysql-server-core-5.5:
         21380   /usr/sbin/mysqld
 akonadi-server:
         10724   /usr/bin/akonadiserver
-root@jan-desktop:/home/jan#

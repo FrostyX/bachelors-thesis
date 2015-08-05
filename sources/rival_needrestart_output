@@ -1,7 +1,7 @@
-[jkadlcik@unused-4-222 needrestart]$ ./needrestart
+$[jkadlcik needrestart]-> ./needrestart
 Scanning processes...
 Services to be restarted:
 Restart NetworkManager.service? [yNas?] n
 Restart accounts-daemon.service? [Ynas?] n
 Your outdated processes:
-bash[2677], chrome[18513, 2249, 15420, 31032, 2315, 2420, 5233, 2329, 2216, 2267, 2244, 2292, 31605, 2339, 23420, 22256], dbus-daemon[1877, 1956], gnome-terminal-[2666], gvfs-afc-volume[2066], hexchat[2167], nacl_helper[2246], systemd[1723], Xorg[1825]
+bash[2677], chrome[18513, 2249, 15420], dbus-daemon[1877, 1956], ...
