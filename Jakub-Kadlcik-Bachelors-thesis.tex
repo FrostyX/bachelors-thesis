@@ -383,21 +383,18 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 	\subsection{Práce s balíčky}
 		Především nás budou zajímat tři operace. Zjištění seznamu balíčků, které byly od daného času modifikovány, zjištění základních informací o konkrétním balíčku, jako například název, popis, atd. a nakonec zjištění seznamu souborů, které balíček poskytuje. Ukážeme si, že každou z nich lze implementovat několika různými způsoby. Objasníme, který z nich vyhovuje potřebám této práce nejvíce a proč tomu tak je.
 
-		\subsubsection{Databáze balíčků}
-		Úvodem uděláme drobnou odbočku a podíváme se, jakým způsobem jsou v systému reprezentovány informace o balíčcích.
-		\\
-		\\
-		Balíčkovacím systémem distribuce Fedora je program zvaný DNF\@, který pro uchovávání historie operací, prováděných s balíčky, využívá sqlite databázi v adresáři \texttt{/var/lib/dnf/history}. Z ní se můžeme dozvědět informace o všech proběhlých transakcích. Schéma databáze vypadá následovně.
+		\subsubsection{Historie balíčků}
+		Balíčkovací systém distribuce Fedora, DNF využívá pro uchovávání historie operací, prováděných s balíčky, sqlite databázi v adresáři \texttt{/var/lib/dnf/history}. Z ní se můžeme dozvědět informace o všech proběhlých transakcích. Schéma databáze vypadá následovně.
 
 		\begin{figure}[h]
-			\centerline{\includegraphics[scale=0.45]{images/dnf-database.png}}
+			\centerline{\includegraphics[scale=0.40]{images/dnf-database.png}}
 			\caption{Schéma databáze balíčkovacího systému DNF}
 		\end{figure}
 
 		My se budeme zajímat výhradně o úspěšně proběhlé transakce, proto nás tabulky, zabývající se chybovýmy stavy, nebudou zajímat. Nám užitečné informace se nacházejí především v tabulkách \texttt{trans\_beg}, \texttt{trans\_end}, \texttt{trans\_data\_pkgs} a \texttt{pkgtups}. Z prvních dvou lze zjistit, kdy byly proběhlé transakce spuštěny a dokončeny. Kterých balíčků se týkali a jaké operace s nimi byly prováděny, popisuje tabulka \texttt{trans\_data\_pkgs}. Dané balíčky ovšem rozlišuje pouze pomocí jejich unikátního identifikátoru \texttt{pkgtupid}. Pro zjištění více informací o daném balíčku je nutné nalézt jeho záznam v poslední zmíněné tabulce \texttt{pkgtups}.
-
-		\subsubsection{Historie balíčků}
-		Na základě znalostí z předchozí kapitoly můžeme bez dalších odboček přejít přímo ke zkoumání historie balíčků. V programovacím jazyce Python máme pro práci se sqlite databázemi k dispozici balíček \texttt{sqlite3}. Ten umožní dotazování se vůči databázi pomocí vlastních SQL dotazů. Nejdříve se tedy zaměříme na vytvoření dotazu pro získání všech balíčků modifikovaných od určitého bodu v čase.
+		\\
+		\\
+		Na základě znalostí těchto znalostí můžeme bez dalších odboček přejít přímo ke zkoumání historie balíčků. V programovacím jazyce Python máme pro práci se sqlite databázemi k dispozici balíček \texttt{sqlite3}. Ten umožní dotazování se vůči databázi pomocí vlastních SQL dotazů. Nejdříve se tedy zaměříme na vytvoření dotazu pro získání všech balíčků modifikovaných od určitého bodu v čase.
 		\\
 		\\
 		Informace o balíčcích, jako například jeho název, nebo verze, jsou uloženy v tabulce \texttt{pkgtups}. Není zde však datum jeho změny, proto musíme začít z druhého konce. Provedené transakce včetně času jejich spuštění se nacházejí v tabulce \texttt{trans\_beg}. Odtud dovedeme transakce spojit s relacemi v tabulce \texttt{trans\_data\_pkgs} přes atribut \texttt{tid}. Výsledkem spojení budou relace obsahující atribut \texttt{pkgtupid}, pomocí jenž můžeme provést spojení s tabulkou \texttt{pkgtups}, o kterou nám z počátku šlo.
