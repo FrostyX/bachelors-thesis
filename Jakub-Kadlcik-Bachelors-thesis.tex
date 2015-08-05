@@ -600,7 +600,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 	Tyto příkazy zajistí stažení a instalaci balíčků, včetně všech potřebných závislostí. Získány budou z oficiálního repozitáře distribuce Fedora. Pravděpodobně tedy nebude nainstalována stejná verze programu, jako ta, která se nachází na přílohovém CD k této práci.
 	\\
 	\\
-	Přibalenou verzi lze nainstalovat spuštěním následujícího příkazu:
+	Přibalenou verzi lze nainstalovat spuštěním následujících příkazu:
 
 	\lstinputlisting
 	[
@@ -710,7 +710,7 @@ Již jsme se seznámili s prostředím linuxových systémů a problematikou hle
 
 \newpage
 \section{Život projektu Tracer}
-Projekt Tracer spatřil světlo světa v říjnu roku 2013. Už v této době poskytoval většinu současné funkcionality, avšak se v průběhu let výrazně vyvinul. Doposud vyšlo 21 verzí, přičemž nejnovější nese označení 0.6.1. Když vývoj započal, používala se Fedora 19 a jazyk Python byl masivně rozšířený ve verzi 2.7. Nyní jsme se posunuli k Fedoře 22, která je poslední, jež používá tuto verzi Pythonu jako výchozí. Tracer se musel přizpůsobit a nyní je připraven běžet ve Fedoře 23 na Pythonu 3.x. Přiští Fedoru také čeká další významná změna, kterou je nahrazení původního balíčkovacího systému YUM novým nástrojem DNF. Tracer původně fungoval výhradně s YUMem, avšak jak DNF začal získávat na důležitosti, projekt začal podporovat oba systémy současně, aniž by se o to musel uživatel zajímat. Nové verze však od podpory YUMu ze zjevných důvodů upustí.
+Projekt Tracer spatřil světlo světa v říjnu roku 2013. Už v této době poskytoval většinu současné funkcionality, avšak se v průběhu let výrazně vyvinul. Doposud vyšlo 22 verzí, přičemž nejnovější nese označení 0.6.1. Když vývoj započal, používala se Fedora 19 a jazyk Python byl masivně rozšířený ve verzi 2.7. Nyní jsme se posunuli k Fedoře 22, která je poslední, jež používá tuto verzi Pythonu jako výchozí. Tracer se musel přizpůsobit a nyní je připraven běžet ve Fedoře 23 na Pythonu 3.x. Přiští Fedoru také čeká další významná změna, kterou je nahrazení původního balíčkovacího systému YUM novým nástrojem DNF. Tracer původně fungoval výhradně s YUMem, avšak jak DNF začal získávat na důležitosti, projekt začal podporovat oba systémy současně, aniž by se o to musel uživatel zajímat. Nové verze však od podpory YUMu ze zjevných důvodů upustí.
 \\
 \\
 Zajímavé je také ohlédnutí na způsob distribuce tohoto programu. Od svého počátku byl projekt umístěn ve veřejném repozitáři na GitHubu a uživatelé si mohli zdrojové kódy několika způsoby stáhnout. Tento způsob byl vhodný pouze zpočátku, protože uživatelé samořejmě nechtějí instalovat a spravovat závislosti manuálně. V brzké době se proto přešlo na distribuci pomocí vlastního repozitáře v systému Copr\footnote{Copr (Cool Other Package Repo) slouží k vytváření repozitářů pro balíčky třetích stran}. Tato varianta přetrvala dodnes, avšak slouží pouze k vytváření testovacích balíčků. Stabilní verze jsou distribuovány skrze oficiální softwarové repozitáře distribuce Fedora. Autor této práce se stal \uv{balíčkářem} distribuce a o balíček nástroje Tracer se stará osobně. Plugin pro systém DNF se podařilo připojit k oficiálně podporovaným komunitním pluginům a jeho distribuci zajišťuje správce této sbírky.
@@ -785,12 +785,14 @@ Software changes constantly and it is always possible to improve it and extend i
   dokumentu textu (v~ZIP archivu), tj.~zdrojový text textu, vložené
   obrázky, apod.
 
-\item[\texttt{src/}] \hfill \\
-  Kompletní zdrojové texty programu \textsc{Program} / webové aplikace
-  \textsc{Webovka} se všemi potřebnými (příp.~převzatými) zdrojovými
-  texty, knihovnami a~dalšími soubory potřebnými pro bezproblémové
-  vytvoření spustitelných verzí programu / adresářové struktury pro
-  zkopírování na webový server.
+\item[\texttt{src/tracer}] \hfill \\
+Kompletní zdrojové kódy programu Tracer včetně spustitelného souboru \texttt{bin/tracer.py} a programové dokumentace v podadresáři \texttt{doc/}
+
+\item[\texttt{src/dnf-plugins-extras}] \hfill \\
+Zdrojové kódy sbírky rozšíření \texttt{dnf-plugins-extras} obsahující mimo jiné soubory \texttt{plugins/tracer.py} a \texttt{doc/tracer.rst}
+
+\item[\texttt{install}] \hfill \\
+Adresář obsahující instalační balíčky programu Tracer a jeho DNF pluginu pro Fedoru 22
 
 \end{description}
 
